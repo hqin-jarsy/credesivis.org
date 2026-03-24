@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第一章 星星上有人吗 · Crede Si Vis</title>
+  <meta name="description" content="Alice，我刚才问了你什么？——那些球在转，转给谁看呢。" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@300;400;600;700&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #04040a;
+      --bg2: #080810;
+      --surface: #0e0e18;
+      --border: rgba(255,255,255,0.07);
+      --text: #e0e0f5;
+      --text-muted: rgba(224,224,245,0.45);
+      --accent: #8b6aff;
+      --accent2: #ff6a8b;
+      --accent3: #6af0ff;
+      --gold: #f0d06a;
+      --grad: linear-gradient(135deg, #8b6aff 0%, #6af0ff 100%);
+      --grad2: linear-gradient(135deg, #ff6a8b 0%, #f0d06a 100%);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* ── NEBULA BACKGROUND ── */
+    #nebula {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(139,106,255,0.10) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 70%, rgba(106,240,255,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(255,106,139,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    #nebula canvas { display: block; width: 100%; height: 100%; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(4,4,10,0.80);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.3rem; font-style: italic;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-back {
+      color: var(--text-muted); text-decoration: none;
+      font-size: 0.82rem; letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 8px;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+    .nav-back svg { width: 14px; height: 14px; }
+
+    /* ── HERO ── */
+    .chapter-hero {
+      min-height: 52vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      text-align: center;
+      padding: 120px 24px 64px;
+      position: relative; z-index: 1;
+    }
+    .chapter-eyebrow {
+      font-size: 0.70rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--accent3);
+      margin-bottom: 20px; font-family: 'Space Grotesk', sans-serif;
+    }
+    .chapter-number {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      font-style: italic;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .chapter-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(2rem, 6vw, 3.6rem);
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 32px;
+      background: var(--grad2);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .chapter-divider {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139,106,255,0.5), transparent);
+    }
+
+    /* ── BODY TEXT ── */
+    .chapter-body {
+      position: relative; z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 60px 28px 120px;
+    }
+
+    .chapter-body p {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(1rem, 2.2vw, 1.08rem);
+      font-weight: 300;
+      line-height: 2.05;
+      color: rgba(224,224,245,0.88);
+      margin-bottom: 1.6em;
+      text-indent: 2em;
+    }
+
+    /* dialogue lines — no indent */
+    .chapter-body p.dialogue {
+      text-indent: 0;
+    }
+
+    /* section break */
+    .section-break {
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px;
+      margin: 52px 0;
+    }
+    .section-break span {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: rgba(139,106,255,0.45);
+    }
+    .section-break span:nth-child(2) {
+      background: rgba(106,240,255,0.45);
+      width: 5px; height: 5px;
+    }
+    .section-break span:nth-child(3) {
+      background: rgba(255,106,139,0.35);
+    }
+
+    /* final line */
+    .chapter-end {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.08rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 64px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── FOOTER NAV ── */
+    .chapter-nav {
+      position: relative; z-index: 1;
+      max-width: 680px; margin: 0 auto;
+      padding: 0 28px 80px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 40px;
+    }
+    .chapter-nav-link {
+      color: var(--text-muted); text-decoration: none;
+      font-size: 0.82rem; letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 8px;
+      transition: color 0.2s;
+    }
+    .chapter-nav-link:hover { color: var(--text); }
+    .chapter-nav-series {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; }
+      .chapter-body { padding: 40px 20px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="nebula"><canvas id="stars"></canvas></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Crede Si Vis</a>
+  <a href="scifi.html" class="nav-back">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M10 3L5 8l5 5"/>
+    </svg>
+    科幻系列
+  </a>
+</nav>
+
+<header class="chapter-hero">
+  <div class="chapter-eyebrow">Crede Si Vis · Sci-Fi Series</div>
+  <div class="chapter-number">Chapter One &nbsp;·&nbsp; 第一章</div>
+  <h1 class="chapter-title">星星上有人吗</h1>
+  <div class="chapter-divider"></div>
+</header>
+
+<article class="chapter-body">
+
+  <p>Dinah的手肘怼了一下Alice的胳膊。</p>
+
+  <p>Alice抬起头。老师站在讲台上看着她，全班都在看着她。教室里突然那种特别安静的安静——不是没声音，是所有声音都一下子憋了回去，等着看她出丑。</p>
+
+  <p class="dialogue">"Alice，我刚才问了你什么？"</p>
+
+  <p>她不知道。她刚才的脑子不在这里。</p>
+
+  <p>老师在讲太阳系。大屏幕上有一张图，一颗一颗的球排成一行，水星金星地球火星木星土星，每一颗下面标着密密麻麻的名字和数据。老师用红色的激光笔一颗一颗地点过去，像在点名。Alice坐在后排靠窗的位置，看着那些球。</p>
+
+  <p>它们在转。图上画了虚线和箭头表示它们在转，有的快有的慢，有的大圈有的小圈。Alice盯着那些箭头看了一会儿，突然想到了一件事——</p>
+
+  <p>那些球在转，可它们到底转给谁看呢。</p>
+
+  <p>不是"谁让它们转的"，那个问题科学课会回答，引力，轨道，角动量。是"转给谁看的"。如果没有人在看，那些球还是在转。如果整个太阳系里一个活的东西都没有，那些球还是在转。到底转给谁看呢。给谁。</p>
+
+  <p>她就这么掉进去了。像踩空了一级楼梯，脑子往下沉了一层，到了一个跟教室完全无关的地方。</p>
+
+  <p class="dialogue">"太阳系，"Alice说。"您在讲太阳系。"</p>
+
+  <p class="dialogue">"我问的是火星有几颗卫星。"</p>
+
+  <p class="dialogue">"两颗。"Alice说。这个她碰巧知道。不是上课听到的，是她自己在家看过一本书，书上有一张照片，火卫一和火卫二，一颗像土豆一颗像核桃。</p>
+
+  <p>老师看了她一会儿。那种老师特有的看法——不是生气，是在判断你到底是故意走神还是哪里出了点问题。Alice扛着那个目光，觉得自己的脸在发热。</p>
+
+  <p class="dialogue">"下次注意听讲。"老师转回去继续讲了。</p>
+
+  <p>Alice松了一口气。Dinah在旁边立起课本挡着脸，肩膀在抖。不是笑话她——Alice知道那种抖法，是Dinah在忍，忍那种"你又来了"的笑。</p>
+
+  <p>Dinah是Alice唯一的朋友。</p>
+
+  <p>不是那种整天黏在一起发消息打电话的朋友，是那种坐在你旁边不说话也不尴尬的朋友。她们从三年级就坐在一起了，那时候Alice刚转来这个学校，谁也不认识，第一天被安排坐在Dinah旁边。Dinah看了她一眼，没说话，继续写作业。Alice也没说话。就这么开始了。</p>
+
+  <p>后来别的同学换来换去，她们没换过。不是谁规定的，是自然的，像水往低处流。老师排座位的时候看到她们坐一起就不动了，也许是觉得两个安静的女生放一起省事。</p>
+
+  <p>Alice跟Dinah之间不需要说很多话。有的朋友在一起必须一直聊天，一安静就觉得哪里不对，要找话题要讲笑话。Alice和Dinah不是。她们可以蹲在花坛边上看一只蚂蚁搬东西，看了五分钟，谁都没说话，然后一起站起来继续走。她们可以并排走完整条回家的路一句话不说，到了岔路口说一声"明天见"，就各走各的。第二天到了学校，Dinah坐在那里，Alice坐下来，什么都不用解释。</p>
+
+  <p>Alice觉得这是世界上最舒服的事情之一。</p>
+
+  <p>下课铃一响，前排的男生马上开始闹，有人用橡皮扔人，有人把椅子转过来骑着坐，教室一下子从安静炸成了菜市场。Alice没听见。她还在想那件事。那些球在转，转给谁看呢。</p>
+
+  <p>Dinah收拾好书包，看了她一眼。她认识Alice这个表情——眼睛看着前面但焦点没落在任何东西上，嘴微微抿着，手指在无意识地转笔。又开始了。</p>
+
+  <p class="dialogue">"想什么？"</p>
+
+  <p class="dialogue">"那些星球在转。"</p>
+
+  <p class="dialogue">"嗯。"</p>
+
+  <p class="dialogue">"转给谁看呢。"</p>
+
+  <p>Dinah歪着头想了一下。她看了看窗外的天——下午四点的天，那种还没完全蓝起来的灰蓝色。</p>
+
+  <p class="dialogue">"也许不是给谁看的，"Dinah说。"就是在转。"</p>
+
+  <p>Alice摇了摇头。不是Dinah说得不对。Dinah说的可能就是正确答案。但Alice要的不是正确答案。她要的是正确答案背后的那个东西。那个东西她看不到，但她能感觉到它在。就像一个房间里，隔着一堵墙，有人在放音乐，你听不清旋律，但你知道好听。</p>
+
+  <p>Dinah也没追问。这是她最好的地方。别人看到Alice摇头会说"那你到底想问什么"，或者"你想太多了"，或者干脆不理她了。Dinah不会。她看了看窗外，把水壶装进书包侧袋，拉上拉链。她不急。她好像从来不急。</p>
+
+  <p>Alice有时候觉得Dinah身上有一种她没有的东西。一种"总会知道的"的安心。好像这个世界上所有的问题都会有答案，不是现在就是以后，不用抢，慢慢来。Alice做不到。Alice是"现在就要知道"。不知道就睡不着，睡不着就翻来覆去，翻来覆去就越想越多，越想越多就越睡不着。</p>
+
+  <p>她们走出教学楼，穿过操场。周五下午的操场比平时吵——所有人都在庆祝周末要来了，有人在打篮球，有人在追着跑，球撞在地上的声音一下一下的。Alice走在Dinah旁边，两个人都没说话。风吹过来，Alice的头发飘了一下挡住了眼睛，她用手胡乱拨开。</p>
+
+  <p>到了校门口，Dinah停下来。</p>
+
+  <p class="dialogue">"明天还去天文台吗？"</p>
+
+  <p class="dialogue">"去。"</p>
+
+  <p class="dialogue">"你查好怎么坐车了吗？"</p>
+
+  <p class="dialogue">"查了。两趟公交，一个半小时。先坐37路到转运站，再换山上那趟。"</p>
+
+  <p class="dialogue">"那么远？"</p>
+
+  <p class="dialogue">"不远。"Alice说。对她来说不远。她已经在脑子里走过那条路好多遍了——她查了公交时刻表，查了天文台的开放时间，查了周六晚上的天气预报。天文台在城外的山上，晚上没有光污染，能看到很多星星，比城里多得多。</p>
+
+  <p>她在网上看过天文台的照片。圆顶打开之后，里面那架巨大的望远镜对着天空，像一只睁开的眼睛。她已经盯着那张照片看了好几天了。那只眼睛让她觉得——不是兴奋，是一种更安静的东西——好像去了那里之后，她那些没有答案的问题会离答案近哪怕一厘米。也许还是够不到。但会近一点。</p>
+
+  <p class="dialogue">"那周六早上我来找你，"Dinah说。</p>
+
+  <p class="dialogue">"好。"</p>
+
+  <p class="dialogue">"别睡过头。"</p>
+
+  <p class="dialogue">"不会。"</p>
+
+  <p>Dinah笑了一下，很小的一下，嘴角往上翘了一点就收回去了。这是她的笑法。不大，但Alice每次都看得清清楚楚。</p>
+
+  <p class="dialogue">"明天见。"</p>
+
+  <p class="dialogue">"明天见。"</p>
+
+  <p>Dinah往左拐，Alice往右拐。每天都是这样。Dinah的书包上挂了一个毛绒小挂件，走路的时候一晃一晃的。Alice看着那个挂件晃了几下，然后Dinah拐弯了，连着挂件一起看不见了。</p>
+
+  <p>回家的路上Alice一直在想那些星球。天暗下来了，路灯亮了，路灯的光是黄的，把人的影子拉得很长。Alice走在自己的影子前面，影子紧紧跟着她，怎么走都甩不掉。</p>
+
+  <p>回家，吃饭，洗澡，换衣服，坐在床上，还在想。不是想不出来——是她想到了一个地方，那个地方后面还有更深的地方，像一条没有尽头的路。她已经走了一整天了，还在走。</p>
+
+  <div class="section-break">
+    <span></span><span></span><span></span>
+  </div>
+
+  <p>Alice睡不着。</p>
+
+  <p>她抱着Catty翻了个身。Catty是一只猫，毛绒的，灰白色，耳朵已经被她摸得有点塌了。她从五岁就抱着Catty睡觉，七年了，Catty身上的毛从蓬松变成了贴服的，鼻子上的粉色褪成了淡淡的肉色，肚子里的填充棉从硬变软又从软变成了一种只有Alice知道的形状——刚好是她一只手攥着的形状。</p>
+
+  <p>Alice知道自己12岁了还抱着毛绒玩具有点幼稚。班上的女生已经开始聊明星和手机壳了，没有人还抱着五岁时候的东西睡觉。但她不在乎。Catty不会觉得她奇怪。Catty什么都不会觉得，这就是Catty最好的地方。</p>
+
+  <p>她又翻了个身。天花板是白的，有一小块发黄的水渍，边缘晕染开来，形状像一只耳朵。她每天晚上都看到那只耳朵。那只耳朵每天晚上都看到她。</p>
+
+  <p>那些球在转，转给谁看呢。</p>
+
+  <p class="dialogue">"Alice，该睡了。"</p>
+
+  <p>妈妈站在门口。她穿着那件灰蓝色的睡衣，头发松松地扎在后面，手里端着一杯水，是给Alice的。每天晚上都是这样。水杯是白色的，上面印了一朵小花，花的颜色已经快洗没了，只剩一个铅笔稿一样的淡淡的轮廓。</p>
+
+  <p>Alice觉得妈妈像一样每天出现的东西，不是因为不重要，是因为太重要了，重要到跟空气一样。你不会每天感谢空气，但你没有它就不行。</p>
+
+  <p>妈妈走进来，把水放在床头柜上，在床边坐下来。床垫凹了一下。Alice抱着Catty往妈妈那边蹭了蹭。</p>
+
+  <p class="dialogue">"怎么还没睡？明天不是要去天文台吗？"</p>
+
+  <p class="dialogue">"睡不着。"</p>
+
+  <p class="dialogue">"想什么呢？"</p>
+
+  <p>Alice想了想怎么说。"转给谁看呢"这个问题她在脑子里转了一天了，但她不想把这个问出来。妈妈会担心的。妈妈每次看到她睡不着都会担心，看到她又在想那些停不下来的问题会更担心。Alice知道那个担心长什么样——妈妈的眼睛会变柔，嘴角的弧度会往下掉一点点，然后声音会变得特别轻特别慢，像在哄一个生病的孩子。Alice不想看到那个表情。不是今晚。</p>
+
+  <p>她想问一个不一样的问题。跟"转给谁看"有关，但更简单一点，更像一个12岁的孩子会在睡前问妈妈的话。</p>
+
+  <p class="dialogue">"妈妈。"</p>
+
+  <p class="dialogue">"嗯？"</p>
+
+  <p class="dialogue">"星星上有人吗？"</p>
+
+  <p>妈妈没有马上回答。她把Alice额前的头发拨到耳朵后面，手指顺着头发慢慢滑下来。Alice觉得那个动作很轻，像是妈妈在想的时候手会自己动。</p>
+
+  <p class="dialogue">"古时候人们觉得有，"妈妈说。"希腊人觉得星星是神的火把。中国古人觉得每颗星对应一个人，天上一颗星灭了，地上就有一个人走了。"</p>
+
+  <p>Alice听着。她觉得这个答案像一件很漂亮的戏服，她试了一下，但不是她的尺码。太大了，太旧了，穿上身晃荡荡的。</p>
+
+  <p>妈妈看了她一眼，读懂了她的表情，换了个角度。</p>
+
+  <p class="dialogue">"也有人觉得是上帝造的。造了地球，造了我们，也许也造了别的地方，别的人。"</p>
+
+  <p>Alice还是没说话。这个答案像一扇画在墙上的门，门后面可能有答案，但门是锁着的，钥匙是"信"。Alice不是不想信，是她不知道怎么信一个她没见过的东西。她不是故意的。她就是做不到。</p>
+
+  <p>妈妈又想了想。Alice看到妈妈的眉毛微微皱了一下——不是不耐烦，是在努力。妈妈在很认真地想怎么回答她的女儿。</p>
+
+  <p class="dialogue">"科学家在找，"妈妈说。"他们造了很大很大的望远镜，对着天上听，看有没有谁在发信号。有一个项目叫SETI，专门做这个。到目前为止还没听到。但他们还在听。"</p>
+
+  <p>Alice听完了。三个答案。神话，信仰，科学。每一个都是认真的，都是妈妈能给的最好的。妈妈不是在敷衍她，妈妈真的在想。</p>
+
+  <p>但是不对。</p>
+
+  <p>不是妈妈答错了。每一个答案在它自己的世界里都是对的。但Alice要的不是任何一个世界里的答案。她要的是那三个世界后面的东西。那个东西在神话的后面，也在信仰的后面，也在科学的后面。它们三个像三条路，都走到了同一堵墙面前停下了。Alice想看的是墙后面。</p>
+
+  <p>她说不清。她只是觉得，差一点。每一个答案都差一点。差的不是信息，不是证据，是别的什么。</p>
+
+  <p>妈妈看到Alice的表情没有亮起来。她没有着急，没有再换一个角度。她等了一会儿。</p>
+
+  <p class="dialogue">"那你觉得呢？"</p>
+
+  <p>Alice看着窗帘。窗帘是浅蓝色的，吸满了外面的夜色，被风吹得微微鼓起来又落下去，像在呼吸。窗帘外面是黑的，但她知道天上有星星，只是从这个角度看不见。</p>
+
+  <p class="dialogue">"我们的星星边上有我们，"Alice说。"那些星星边上也有可能有我们。"</p>
+
+  <p>房间里安静了。</p>
+
+  <p>妈妈没有马上说话。Alice能听到走廊那头冰箱的嗡嗡声，很轻很远。</p>
+
+  <p>过了几秒，妈妈伸手把Alice的头发拢了一下。Alice觉得妈妈的手指有一点凉，有一点慢，像是在想什么。</p>
+
+  <p>然后妈妈低下头，亲了一下Alice的额头。嘴唇碰到皮肤的时候Alice闻到了妈妈身上的味道，洗完澡之后的那种，干净的，暖的。</p>
+
+  <p class="dialogue">"也许我不知道答案，"妈妈说。她的声音变轻了一点。"但是我爱你。你要睡了，我爱你。你睡着了，我爱你。明早你醒了，我还爱你。"</p>
+
+  <p>Alice把脸从枕头里抬起来一点。Catty被她夹在胳膊和枕头之间，挤成了一个扁扁的形状。</p>
+
+  <p class="dialogue">"妈妈，我也一直都爱你。"</p>
+
+  <p>妈妈的手停了一下。就一下。然后她又低下头，这次亲的是Alice的头发。</p>
+
+  <p class="dialogue">"我知道，"妈妈说。声音更轻了。</p>
+
+  <p>Alice把脸埋回枕头里，闻到了洗衣液的味道。Catty被她重新抱好了，塌掉的耳朵贴着她的下巴。妈妈的手放在她的后背上，暖的，轻的，像一样东西盖在了另一样东西上面。过了一会儿，手拿开了。</p>
+
+  <p>她听到妈妈站起来。床垫缓缓弹回去了一点。脚步声，很轻的，妈妈穿的是棉拖鞋，走在地板上几乎没有声音。灯关了。房间一下子暗了，只有台灯还亮着——Alice忘了关台灯。</p>
+
+  <p>门没有完全关上，留了一条缝。妈妈每天晚上都留这条缝。走廊的暖光从缝里漏进来，在地板上画了一道笔直的线。</p>
+
+  <p>Alice盯着那道光。</p>
+
+  <p>她想：星星上有人吗。</p>
+
+  <p>她想：如果有，他们也有妈妈吗。</p>
+
+  <p>她想：他们的妈妈也会说我爱你吗。</p>
+
+  <p>她想：他们也有一个Catty吗。有一个Dinah吗。明天也有一个天文台要去吗。</p>
+
+  <p>她想到这里的时候，眼睛已经开始模糊了。不是哭——是困了。那些问题还在转，但转得慢了，像那些星球一样慢，慢到边缘都融化在了一起，快看不见了。</p>
+
+  <p>她的手松了一点。Catty从她的胳膊弯里滑了一点，贴着枕头。</p>
+
+  <p>那条光变成了一根很亮的线，线的尽头好像有什么东西在跳动。</p>
+
+  <p>然后她睡着了。</p>
+
+  <div class="section-break">
+    <span></span><span></span><span></span>
+  </div>
+
+  <p>她不知道自己是怎么到这里的。</p>
+
+  <p>上一秒她还在看那条光，那条从门缝漏进来的走廊的光。光在变，变长，变亮，像画布上没干的颜料被什么东西抹着往远处拖。她的眼睛跟着那条光走了，走着走着，身体也跟着走了。</p>
+
+  <p>现在她在这里。</p>
+
+  <p>"这里"是什么地方，她不知道。到处都是暗的，但不是房间关了灯的那种暗——那种暗是有边的，你知道墙在哪里，门在哪里，伸手能碰到床头柜。这种暗没有边，让你根本分不清那是无限远，还是就贴在眼皮底上。它往四面八方延伸，没有墙，没有地板，没有天花板。但也不是空的。这种暗里面有东西，很远很远的地方有一些光，像黑色卡纸上扎透的针孔，漏出一点极细的冷光，一动不动。</p>
+
+  <p>Alice低头看自己。她还穿着睡衣——那件旧的，洗了很多次的，上面的小熊图案已经掉色成了一团边缘模糊的色块。脚是光的。她在家里从来不穿袜子睡觉。</p>
+
+  <p>她的手里是空的。</p>
+
+  <p>Catty不在。</p>
+
+  <p>她左手看了一下，右手看了一下，又看了一下。不在。Catty在床上，在现实里的枕头旁边，跟她的手的形状还贴在一起。她在这里。Catty在那里。</p>
+
+  <p>一种很轻的、像雕塑被意外挖空了一块的感觉从她胸口滑过去。不是害怕，是少了什么。手里应该有一样东西的，现在没有了。</p>
+
+  <p>然后她听到了声音。</p>
+
+  <p>不是吵。是一种急匆匆的、毛茸茸的声音，像一团干燥的绒球贴着纸面急促地擦过，像什么很小的东西在赶时间。脚步声，但不是人的脚步声——太轻了，太快了，频率不对。</p>
+
+  <p>有什么东西从她身边跑过去了。</p>
+
+  <p>Alice看到了它的轮廓。不大，比她的书包还小，跑得很快，耳朵很长，在跑动中一颠一颠的，像两片叶子被风吹着。它好像知道自己要去哪，急得很，根本没看到她。</p>
+
+  <p>形状有点像——兔子？</p>
+
+  <p>Alice不知道自己为什么站了起来。脚下没有地面那种硬，是一种说不出来的踏实——像踩在一层极有张力的半透明薄膜上，薄膜往下深深凹陷，但就是踩不破。</p>
+
+  <p>那只兔子跑得更远了。它的轮廓在暗里越来越小。</p>
+
+  <p>她跟了上去。</p>
+
+  <p>不是因为好奇。不是因为胆子大。是因为她的脚自己在动，好像它们比她的脑子先做了决定。她的脑子还在想"这是什么地方""我怎么到这里的""那是兔子吗"，她的脚已经在跑了。她不知道为什么要跟，但她知道应该跟。就像你在一个你从没来过的地方闻到了一股味道，那股味道你说不出是什么，但你的脚会自己往那个方向走。</p>
+
+  <p>她跑了起来。光脚踩在那层看不见的水面上，没有声音，但有一种微微的弹性，像跑在很结实的草地上。</p>
+
+  <p>那只兔子很快，但没有快到她追不上。它拐了一个弯，又拐了一个弯，好像在绕开一些看不见的庞大几何体。Alice觉得这只兔子不是在逃她——如果它想跑掉，它早就没影了。它更像是在跑自己的路，但速度刚好让她跟得上。</p>
+
+  <p>Alice追了上去。</p>
+
+  <p>兔子停了。</p>
+
+  <p>它站在那里，背对着她，耳朵竖着。然后它慢慢转过来，看了她一眼。</p>
+
+  <p>Alice这辈子被很多人看过。被妈妈看，温暖的，带着担心的。被老师看，判断的，测量的。被同学看，好奇的，然后很快移开的。但这只兔子看她的方式跟所有人都不一样。它的眼睛很黑，很圆，里面有一种Alice没见过的东西——不是好奇，不是判断，更像是确认。像你找了很久的一把钥匙，突然发现它就在桌子上，你盯着它看了一会儿，确认是它。</p>
+
+  <p class="dialogue">"你跑得不慢，"兔子说。"大多数人看到我都愣在原地。"</p>
+
+  <p>Alice愣了一下。不是因为兔子会说话——在梦里这好像没什么奇怪的。梦里什么都能说话，水龙头能说话，书包能说话，上次她梦到过一双拖鞋在唱歌。她愣的是那个声音。干干的，轻轻的，像一块烤得很脆的饼干突然掰开的声音。很好听，但是不郑重。不像大人跟小孩说话的那种郑重，更像同学之间的随便。</p>
+
+  <p class="dialogue">"你是谁？"Alice问。</p>
+
+  <p class="dialogue">"Rabbit。"</p>
+
+  <p class="dialogue">"就叫Rabbit？"</p>
+
+  <p class="dialogue">"你想让我叫什么？华丽长毛闪光兔？"</p>
+
+  <p>Alice差点笑出来。在这种不知道自己在哪里、脚底下踩着看不见的水面、周围一片无边无际的暗里，她差点笑出来了。这让她觉得这只兔子可能不是太危险。</p>
+
+  <p class="dialogue">"你去哪？"</p>
+
+  <p class="dialogue">"带你去看一些东西。"</p>
+
+  <p class="dialogue">"什么东西？"</p>
+
+  <p>Rabbit的耳朵动了一下。左边那只先动的，像在调整天线的方向。然后幽默突然收了，像舞台上的追光灯啪地被掐断。</p>
+
+  <p class="dialogue">"你刚才问你妈妈的那个问题。"</p>
+
+  <p>Alice的心跳了一下。她下意识地往后退了半步。它怎么知道的。它怎么知道她问了什么。</p>
+
+  <p class="dialogue">"星星上有人吗，"Rabbit说。"你想不想自己去看看？"</p>
+
+  <p>Alice张了张嘴。她想说想，当然想，这是她今天从早上就开始想的事，从那些转来转去的球开始的，从"转给谁看呢"开始的。但这个字没出来。出来的是另一句话，像一滴意外滑出笔尖的墨水，她自己也不知道从哪里冒出来的：</p>
+
+  <p class="dialogue">"我妈妈会知道我不在吗？"</p>
+
+  <p>Rabbit看着她。他的眼睛还是那么黑，那么圆。但刚才那种锐利的"确认"变了，慢慢晕染成了一种Alice更熟悉的东西——不是同情，是理解。像Dinah看她的那种方式。知道你在想什么，不催你，等着你自己决定。</p>
+
+  <p>他这次没有开玩笑。</p>
+
+  <p class="dialogue">"她说过，你睡着了她也爱你。"</p>
+
+  <p>Alice站在那里。脚下是看不见的水面，周围是无边的暗，面前是一只会说话的兔子，它知道她妈妈说了什么。她应该害怕的。但她不怕。</p>
+
+  <p>那句话——"你睡着了她也爱你"——像一只手从很远的地方伸过来，摸了一下她的后背。跟妈妈的手一样。暖的，轻的。</p>
+
+  <p class="dialogue">"走吧，"她说。</p>
+
+  <div class="section-break">
+    <span></span><span></span><span></span>
+  </div>
+
+  <p>他们在往上走。</p>
+
+  <p>不是走楼梯那种上，也不是坐电梯那种上。是整个人在离开什么东西。Alice感觉到了——不是身体变轻了，是身体下面的那些东西在变远。</p>
+
+  <p>她低头看。</p>
+
+  <p>地面在下沉。不对，不是地面在沉，是她在升。她能看到楼房的屋顶，一排一排的，灰色的，有的上面放着水箱，有的上面晾着衣服。路变成了线，车变成了光点，在线上面慢慢挪动。</p>
+
+  <p>然后线也看不见了。城市的灯光从一块一块的亮变成一片一片的亮。一片一片的亮变成了一团。一团变成了许多团，散在一块巨大的暗色的布上面，像有人把一把细碎的粗盐撒在了黑绒布上。</p>
+
+  <p>Alice能分辨出哪团是她的城市。那团亮的左边有一块特别暗的地方——那是城外的山。天文台在那座山上。明天她本来要跟Dinah去的。</p>
+
+  <p>那团亮还在变小。</p>
+
+  <p>她没有害怕。也许梦里的人不会怕。也许是Rabbit在旁边。也许两个都是。也许是妈妈那句话还在身体里面，像一层看不见的东西裹着她，怕不起来。</p>
+
+  <p>Rabbit在她旁边走着，步速没变，耳朵没动，好像从一间房间走到另一间房间一样普通。Alice觉得他好像不是第一次走这条路。</p>
+
+  <p>然后她看到了地球。</p>
+
+  <p>不是一下子看到的。是那些亮团继续缩小，缩到了一个弧线出现了——不是地平线，是一个弯，一个蓝色的弯。然后弯越来越大，变成了一个弧，弧的两头往两边展开，最后合在了一起。</p>
+
+  <p>一颗球。</p>
+
+  <p>Alice在课本上看过地球的照片。蓝的，圆的，白色的云像纱一样裹在上面。但课本上的地球是平的，印在纸上的，跟旁边那段关于臭氧层的文字一样平。这个不一样。这个是一颗球，真的是球。她能看到它的弧度，能看到白天那半边的蓝和晚上这半边的暗之间的交界线。边缘的大气层薄薄地发着光，像用水彩在球的轮廓外轻轻晕开了一圈极细的亮边。</p>
+
+  <p>它在转。很慢。慢到你盯着看才能看出来。像教室大屏幕上那些球一样在转。但这颗是真的。这颗上面有她。</p>
+
+  <p>Alice停住了。</p>
+
+  <p>不是决定停的——是脚停了。脚比脑子先知道了什么，在她反应过来之前，整个人已经站住了。</p>
+
+  <p>她看着那颗球。蓝的。亮的。比她想象的小。比课本上好看一万倍，但也比课本上小一万倍。她不知道为什么觉得小。也许是因为远。也许是因为她刚才还在上面，觉得世界很大，现在发现整个世界就这么一颗。</p>
+
+  <p>她想到了台灯。</p>
+
+  <p>她今晚又忘了关台灯。白色的，圆头的，夹在床头柜边上的那盏。妈妈跟她说过很多次"睡觉前记得关灯"，她每次都忘。妈妈一会儿可能会进来帮她关。进来的时候会看到她侧着躺，被子蹬了一半，Catty被她挤在胳膊下面。妈妈会帮她把被子拉好。然后关灯。然后轻轻带上门，还是留一条缝。</p>
+
+  <p>她想到了妈妈。妈妈现在可能已经睡了。也可能还没睡，在客厅的沙发上看手机，看到一半睡着了，手机滑到沙发缝里。明天早上她会找不到手机，在沙发垫底下摸。Alice见过很多次。</p>
+
+  <p>她想到了那杯水。白色杯子，上面那朵快洗没的花。妈妈放在床头柜上的。她没喝。水现在可能还是温的。再过一会儿就凉了。</p>
+
+  <p>她想到了Catty。灰白色的，塌着耳朵，贴着枕头。还保持着她抱着的那个形状，但没有人抱着了。七年来第一次没有人抱着它睡觉。Catty不会知道。Catty什么都不会知道。但Alice知道。</p>
+
+  <p>她想到了Dinah。明天早上Dinah会来找她。会按门铃。会站在门口，书包上挂着那个一晃一晃的小挂件。会说"走吧"。Alice应该在。Alice应该在门后面，穿好衣服，背着包，说"走吧"。</p>
+
+  <p>她想到了那条缝。门没有关严，走廊的光漏进来。如果妈妈来关台灯，她会从那条缝里走进来。那条缝是妈妈每天晚上留的。不是忘了关，是故意留的。Alice小时候怕黑，妈妈就开始留这条缝。后来Alice不怕黑了，妈妈还是留着。有些习惯不是因为还有用，是因为停不下来了。</p>
+
+  <p>这些东西——台灯，水杯，Catty，Dinah，门缝，妈妈的灰蓝色睡衣——突然变得很重。不是因为远了才觉得重。是因为她从来没有完完全全地退到它们外面过。你在一间房子里住了十二年，你不会觉得房子有多重。但当你第一次站在房子外面，从很远的地方看它，你才发现它有多大，里面装了多少东西。</p>
+
+  <p>她一直在里面。所以看不出它们的形状。</p>
+
+  <p>现在她在外面了。</p>
+
+  <p>那颗蓝色的球上面有她的台灯。有她没喝的那杯水。有一只没人抱的灰白色的猫。有一个明天早上会来按门铃的朋友。有一条门缝，和一个穿灰蓝色睡衣的人。</p>
+
+  <p>Alice的眼睛湿了。</p>
+
+  <p>不是难过。不是害怕。是有一种东西她说不出名字。它从胸口的某个地方涌上来，让她的胸腔变大了一瞬间，大到她觉得自己的身体装不下了。然后它缩回去了，留下了一种很轻很轻的疼。不疼。但它在。</p>
+
+  <p>Rabbit在她旁边。他没有催她。他站在那里，安静地等着，耳朵偶尔动一下，像是在听什么很远的东西。也许他在听那颗球。也许他什么都没在听，只是耳朵自己会动。</p>
+
+  <p>Alice看了很久。</p>
+
+  <p>她不知道看了多久。梦里的时间不太对——也许是一分钟，也许是一个小时，也许两个都不是。那颗球慢慢在转，白天的部分和黑夜的部分交替着，像呼吸。</p>
+
+  <p>最后她深吸了一口气。</p>
+
+  <p class="dialogue">"走吧，"她说。这是她今晚第二次说"走吧"。第一次是对Rabbit说的。这次不知道是对谁说的。</p>
+
+  <p>Rabbit没动。Alice觉得他在等她。</p>
+
+  <p>Alice又看了一眼那颗蓝色的球。她找了一下她的城市——那团亮的左边有一块暗的地方，是山，天文台在那座山上。她找到了。</p>
+
+  <p class="dialogue">"我会回来的，"她说。</p>
+
+  <p>不是对Rabbit说的。是对那颗球说的。对台灯说的。对那杯水说的。对那只没人抱的猫说的。对那个明天会按门铃的朋友说的。对门缝后面那个穿灰蓝色睡衣的人说的。</p>
+
+  <p>然后她转过身，跟着Rabbit往前走了。</p>
+
+  <p>她没有回头。</p>
+
+  <p>不是不想。是她知道，如果再回头一次，她可能就走不了了。</p>
+
+  <div class="section-break">
+    <span></span><span></span><span></span>
+  </div>
+
+  <p class="chapter-end">她们走进了星星里。</p>
+
+</article>
+
+<footer class="chapter-nav">
+  <a href="scifi.html" class="chapter-nav-link">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M10 3L5 8l5 5"/>
+    </svg>
+    科幻系列
+  </a>
+  <div class="chapter-nav-series">
+    <span style="color:var(--text-muted); font-size:0.78rem;">Crede Si Vis · 爱信不信</span>
+  </div>
+  <span class="chapter-nav-link" style="opacity:0.2; cursor:default;">
+    第二章
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M6 3l5 5-5 5"/>
+    </svg>
+  </span>
+</footer>
+
+<script>
+  // Starfield
+  (function(){
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resize(){
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function initStars(){
+      stars = [];
+      const n = Math.floor((canvas.width * canvas.height) / 5000);
+      for(let i=0;i<n;i++){
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 0.9 + 0.1,
+          a: Math.random(),
+          speed: Math.random() * 0.3 + 0.05
+        });
+      }
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      stars.forEach(s=>{
+        s.a += s.speed * 0.008;
+        if(s.a > 1) s.a = 0;
+        const alpha = Math.sin(s.a * Math.PI) * 0.7 + 0.1;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(200,200,255,${alpha})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    initStars();
+    draw();
+    window.addEventListener('resize', ()=>{ resize(); initStars(); });
+  })();
+</script>
+</body>
+</html>
