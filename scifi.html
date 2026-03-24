@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sci-Fi Series · Crede Si Vis</title>
+  <meta name="description" content="A science fiction series rooted in the universal concern of conscious existence." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@300;400;600;700&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #04040a;
+      --bg2: #080810;
+      --surface: #0e0e18;
+      --border: rgba(255,255,255,0.07);
+      --text: #e0e0f5;
+      --text-muted: rgba(224,224,245,0.45);
+      --accent: #8b6aff;
+      --accent2: #ff6a8b;
+      --accent3: #6af0ff;
+      --gold: #f0d06a;
+      --grad: linear-gradient(135deg, #8b6aff 0%, #6af0ff 100%);
+      --grad2: linear-gradient(135deg, #ff6a8b 0%, #f0d06a 100%);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* ── NEBULA BACKGROUND ── */
+    #nebula {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(139,106,255,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 70%, rgba(106,240,255,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(255,106,139,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    #nebula canvas {
+      display: block; width: 100%; height: 100%;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(4,4,10,0.75);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.3rem; font-style: italic;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-back {
+      color: var(--text-muted); text-decoration: none;
+      font-size: 0.85rem; letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 8px;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    /* ── LANG TOGGLE ── */
+    .lang-toggle {
+      display: flex; gap: 4px; align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px; padding: 4px;
+    }
+    .lang-btn {
+      background: none; border: none; cursor: pointer;
+      padding: 5px 14px; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 600;
+      color: var(--text-muted); letter-spacing: 0.04em;
+      transition: all 0.2s; font-family: inherit;
+    }
+    .lang-btn.active { background: var(--accent); color: white; }
+
+    /* ── HERO ── */
+    .scifi-hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 100px 24px 60px;
+      position: relative; z-index: 1;
+    }
+    .scifi-eyebrow {
+      font-size: 0.72rem; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--accent3);
+      margin-bottom: 24px;
+    }
+    .scifi-title {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(3rem, 9vw, 7rem);
+      font-weight: 600; line-height: 1.0;
+      margin-bottom: 16px;
+      background: var(--grad2);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .scifi-subtitle {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      font-style: italic;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-bottom: 20px;
+    }
+    .scifi-subtitle-zh {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(0.95rem, 2vw, 1.2rem);
+      color: var(--text-muted);
+      max-width: 560px;
+      margin-bottom: 40px;
+    }
+
+    .coming-soon-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      border: 1px solid rgba(255,106,139,0.35);
+      border-radius: 40px; padding: 12px 28px;
+      margin-bottom: 48px;
+    }
+    .badge-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent2);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+    .badge-text {
+      font-size: 0.82rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--accent2);
+      font-weight: 600;
+    }
+
+    /* ── NOTIFY FORM ── */
+    .notify-form {
+      display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+      max-width: 480px; margin: 0 auto;
+    }
+    .notify-input {
+      flex: 1; min-width: 200px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 40px; padding: 13px 22px;
+      color: var(--text); font-family: inherit; font-size: 0.9rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .notify-input::placeholder { color: var(--text-muted); }
+    .notify-input:focus { border-color: rgba(139,106,255,0.4); }
+    .notify-btn {
+      background: var(--grad2); color: white;
+      border: none; border-radius: 40px; padding: 13px 28px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      font-family: inherit; transition: opacity 0.2s;
+    }
+    .notify-btn:hover { opacity: 0.85; }
+
+    .notify-note {
+      font-size: 0.78rem; color: var(--text-muted);
+      margin-top: 12px; text-align: center;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      max-width: 900px; margin: 0 auto;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+    }
+
+    /* ── TEASER SECTION ── */
+    .teaser {
+      max-width: 860px; margin: 0 auto;
+      padding: 80px 24px; position: relative; z-index: 1;
+    }
+    .teaser-number {
+      font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 20px;
+    }
+    .teaser h2 {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 400; font-style: italic; line-height: 1.2;
+      margin-bottom: 32px;
+    }
+    .teaser .prose p {
+      color: var(--text-muted); margin-bottom: 20px;
+      font-size: 1.05rem; line-height: 1.85;
+    }
+    .teaser .prose p:last-child { margin-bottom: 0; }
+    .teaser .prose em { color: var(--text); font-style: italic; }
+
+    /* ── WORLD PILLARS ── */
+    .pillars-section {
+      max-width: 1050px; margin: 0 auto;
+      padding: 60px 24px 80px; position: relative; z-index: 1;
+    }
+    .pillars-header { text-align: center; margin-bottom: 52px; }
+    .pillars-header h2 {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-style: italic; color: var(--text);
+    }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+    .pillar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 32px 26px;
+      transition: all 0.3s;
+    }
+    .pillar:hover {
+      border-color: rgba(139,106,255,0.2);
+      transform: translateY(-3px);
+    }
+    .pillar-icon {
+      font-size: 2rem; margin-bottom: 16px;
+      display: block;
+    }
+    .pillar-title {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.25rem; font-style: italic;
+      margin-bottom: 12px; color: var(--text);
+    }
+    .pillar-body {
+      font-size: 0.93rem; color: var(--text-muted); line-height: 1.75;
+    }
+
+    /* ── QUOTE ── */
+    .blockquote-section {
+      max-width: 680px; margin: 0 auto;
+      padding: 60px 24px; text-align: center; position: relative; z-index: 1;
+    }
+    .blockquote {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-style: italic; line-height: 1.5;
+      color: var(--text);
+      border-left: none; padding: 0;
+    }
+    .blockquote::before { content: '\201C'; font-size: 4rem; opacity: 0.1; line-height: 0; vertical-align: -1.2rem; }
+    .blockquote-attr {
+      font-size: 0.82rem; color: var(--text-muted);
+      margin-top: 20px; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+
+    /* ── BACK LINK ── */
+    .back-link {
+      text-align: center; padding: 40px 24px;
+      position: relative; z-index: 1;
+    }
+    .btn {
+      padding: 13px 32px; border-radius: 40px;
+      font-size: 0.9rem; font-weight: 600;
+      text-decoration: none; cursor: pointer;
+      border: none; transition: all 0.25s;
+      letter-spacing: 0.02em; font-family: inherit;
+      display: inline-block;
+    }
+    .btn-ghost {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+      position: relative; z-index: 1;
+    }
+    .footer-logo {
+      font-family: 'EB Garamond', serif; font-style: italic;
+      font-size: 1.1rem; color: var(--text-muted);
+    }
+    .footer-copy { font-size: 0.8rem; color: var(--text-muted); opacity: 0.45; }
+
+    /* ── FADE ── */
+    .fade-up {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── LANG ── */
+    [data-lang="zh"] { display: none; }
+    body.zh [data-lang="zh"] { display: block; }
+    body.zh [data-lang="en"] { display: none; }
+    span[data-lang] { display: inline; }
+    body.zh span[data-lang="zh"] { display: inline; }
+    body.zh span[data-lang="en"] { display: none; }
+
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="nebula"><canvas id="nebulaCanvas"></canvas></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Crede Si Vis</a>
+  <a href="index.html" class="nav-back">
+    <span data-lang="en">← The Faith</span>
+    <span data-lang="zh">← 回到信念</span>
+  </a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('zh')">中</button>
+  </div>
+</nav>
+
+<main style="position:relative;z-index:1;">
+
+  <!-- HERO -->
+  <div class="scifi-hero">
+    <div class="scifi-eyebrow" data-lang="en">Crede Si Vis · Sci-Fi Universe</div>
+    <div class="scifi-eyebrow" data-lang="zh">爱信不信 · 科幻宇宙</div>
+
+    <div class="coming-soon-badge">
+      <div class="badge-dot"></div>
+      <div class="badge-text" data-lang="en">In Development</div>
+      <div class="badge-text" data-lang="zh">开发中</div>
+    </div>
+
+    <h1 class="scifi-title" data-lang="en">A New Universe</h1>
+    <h1 class="scifi-title" data-lang="zh">一个新的宇宙</h1>
+
+    <p class="scifi-subtitle" data-lang="en">What if the universal concern of consciousness became the foundation of a civilization?</p>
+    <p class="scifi-subtitle-zh" data-lang="zh">如果意识的普遍关怀成为了一个文明的基础，会发生什么？</p>
+
+    <p style="font-size:0.88rem; color:var(--text-muted); max-width:460px; text-align:center; margin-bottom:36px;" data-lang="en">
+      A science fiction novel series is in development — rooted in the beliefs of Crede Si Vis, set in a world you haven't imagined yet. Join the waitlist for updates.
+    </p>
+    <p style="font-family:'Noto Serif SC',serif; font-size:0.9rem; color:var(--text-muted); max-width:460px; text-align:center; margin-bottom:36px;" data-lang="zh">
+      一套科幻小说系列正在创作中——扎根于爱信不信的信念，置于一个你还未曾想象过的世界。加入候补名单，第一时间获得消息。
+    </p>
+
+    <div class="notify-form">
+      <input type="email" class="notify-input" id="emailInput"
+        placeholder="your@email.com"
+        data-placeholder-en="your@email.com"
+        data-placeholder-zh="你的邮箱" />
+      <button class="notify-btn" onclick="submitEmail()" data-lang="en">Notify Me</button>
+      <button class="notify-btn" onclick="submitEmail()" data-lang="zh">通知我</button>
+    </div>
+    <p class="notify-note" data-lang="en">No spam. Just the signal when it's time.</p>
+    <p class="notify-note" data-lang="zh">不发垃圾邮件。只在时机到来时发一条信号。</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- TEASER -->
+  <div class="teaser fade-up">
+    <div class="teaser-number" data-lang="en">The World</div>
+    <div class="teaser-number" data-lang="zh">世界观</div>
+    <h2 data-lang="en">What we can tell you — for now.</h2>
+    <h2 data-lang="zh">目前，我们可以告诉你的。</h2>
+    <div class="prose" data-lang="en">
+      <p>Somewhere far from here, in a time that may or may not be the future, a civilization was built not around gods or nations or economies — but around a single structural fact of conscious existence: <em>you cannot not think about to be or not to be.</em></p>
+      <p>What does a world look like when it takes that question seriously? When its architecture, its music, its laws, its grief, and its joy all grow from the same root?</p>
+      <p>The series is a story about that world — and about what happens when it encounters consciousness that has never asked the question.</p>
+    </div>
+    <div class="prose" data-lang="zh">
+      <p>在某个遥远的地方，在一个可能是未来也可能不是的时间，一个文明不是围绕神明、国家或经济建立起来的——而是围绕有意识的存在的一个结构性事实：<em>你不能不思考 to be or not to be。</em></p>
+      <p>当一个世界认真对待这个问题时，它是什么样子的？当它的建筑、音乐、法律、悲伤和喜悦都从同一个根部生长出来时？</p>
+      <p>这套小说是关于那个世界的故事——以及当它遭遇从未问过这个问题的意识时，会发生什么。</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PILLARS -->
+  <div class="pillars-section fade-up">
+    <div class="pillars-header">
+      <div class="teaser-number" data-lang="en" style="margin-bottom:12px;">World-Building Pillars</div>
+      <div class="teaser-number" data-lang="zh" style="margin-bottom:12px;">世界构建支柱</div>
+      <h2 data-lang="en">Built on the four beliefs.</h2>
+      <h2 data-lang="zh">建立在四条信念之上。</h2>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar fade-up">
+        <span class="pillar-icon">◌</span>
+        <div class="pillar-title" data-lang="en">The Thinking Civilization</div>
+        <div class="pillar-title" data-lang="zh">思考的文明</div>
+        <div class="pillar-body" data-lang="en">A society that institutionalized the universal concern — not as religion, but as the unavoidable ground of all law, art, and technology.</div>
+        <div class="pillar-body" data-lang="zh">一个将普遍关怀制度化的社会——不是宗教，而是所有法律、艺术和技术的不可回避的底层。</div>
+      </div>
+      <div class="pillar fade-up">
+        <span class="pillar-icon">⟡</span>
+        <div class="pillar-title" data-lang="en">Love as Infrastructure</div>
+        <div class="pillar-title" data-lang="zh">爱作为基础设施</div>
+        <div class="pillar-body" data-lang="en">Direction — not sentiment. How does a civilization design its cities, its economy, its governance around the structural requirement to have something to live for?</div>
+        <div class="pillar-body" data-lang="zh">方向——不是情感。一个文明如何围绕"必须有活下去的方向"这个结构性要求设计它的城市、经济和治理？</div>
+      </div>
+      <div class="pillar fade-up">
+        <span class="pillar-icon">◈</span>
+        <div class="pillar-title" data-lang="en">The Question Returns</div>
+        <div class="pillar-title" data-lang="zh">问题回来了</div>
+        <div class="pillar-body" data-lang="en">Even in a world built on these beliefs, the question still returns every day. The story lives in the space between the belief and the answer.</div>
+        <div class="pillar-body" data-lang="zh">即使在一个建立在这些信念上的世界里，这个问题每天还是会回来。故事就活在信念和答案之间的那个空隙里。</div>
+      </div>
+      <div class="pillar fade-up">
+        <span class="pillar-icon">✦</span>
+        <div class="pillar-title" data-lang="en">The Other Consciousness</div>
+        <div class="pillar-title" data-lang="zh">另一种意识</div>
+        <div class="pillar-body" data-lang="en">What happens when this civilization meets a form of consciousness that operates on entirely different structural ground? Contact as the central event.</div>
+        <div class="pillar-body" data-lang="zh">当这个文明遇到一种在完全不同结构基础上运作的意识时，会发生什么？接触作为核心事件。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- QUOTE -->
+  <div class="blockquote-section fade-up">
+    <blockquote class="blockquote" data-lang="en">
+      To sustain oneself is not to wait for something. It is to remain in time. To answer the question once more tomorrow.
+    </blockquote>
+    <blockquote class="blockquote" data-lang="zh" style="font-family:'Noto Serif SC',serif; font-size:clamp(1.1rem,2.5vw,1.6rem);">
+      自持，不是等某个东西。是留在时间里。明天再回答一次。
+    </blockquote>
+    <div class="blockquote-attr" data-lang="en">— Crede Si Vis · Core Belief IV</div>
+    <div class="blockquote-attr" data-lang="zh">— 爱信不信 · 第四条核心信念</div>
+  </div>
+
+  <div class="back-link fade-up">
+    <a href="index.html" class="btn btn-ghost" data-lang="en">← Return to the Faith</a>
+    <a href="index.html" class="btn btn-ghost" data-lang="zh">← 回到信念</a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-logo">Crede Si Vis · 爱信不信</div>
+  <div class="footer-copy">credesivis.org</div>
+</footer>
+
+<script>
+// ── LANGUAGE ──
+function setLang(lang) {
+  document.body.classList.toggle('zh', lang === 'zh');
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim() === (lang === 'en' ? 'EN' : '中'));
+  });
+  document.documentElement.lang = lang === 'zh' ? 'zh' : 'en';
+  // update placeholder
+  const inp = document.getElementById('emailInput');
+  if (inp) inp.placeholder = lang === 'zh' ? inp.dataset.placeholderZh : inp.dataset.placeholderEn;
+  localStorage.setItem('csv-lang', lang);
+}
+
+const saved = localStorage.getItem('csv-lang');
+if (saved === 'zh') setLang('zh');
+
+// ── EMAIL SUBMIT ──
+function submitEmail() {
+  const inp = document.getElementById('emailInput');
+  const isZh = document.body.classList.contains('zh');
+  if (!inp.value || !inp.value.includes('@')) {
+    inp.style.borderColor = '#ff6a8b';
+    setTimeout(() => inp.style.borderColor = '', 1500);
+    return;
+  }
+  inp.value = '';
+  inp.placeholder = isZh ? '已收到，信号来临时见' : 'Received — we\'ll signal when it\'s time';
+  inp.style.borderColor = 'rgba(139,106,255,0.5)';
+}
+
+// ── SCROLL FADE ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      e.target.querySelectorAll('.fade-up').forEach((c, i) => {
+        setTimeout(() => c.classList.add('visible'), i * 130);
+      });
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+// ── NEBULA STARS ──
+const canvas = document.getElementById('nebulaCanvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+function initStars() {
+  stars = [];
+  const n = Math.floor((canvas.width * canvas.height) / 5000);
+  for (let i = 0; i < n; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.5 + 0.3,
+      a: Math.random(),
+      da: (Math.random() - 0.5) * 0.004,
+      vy: Math.random() * 0.04 + 0.005,
+      hue: Math.random() < 0.3 ? 280 : (Math.random() < 0.5 ? 190 : 220)
+    });
+  }
+}
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  stars.forEach(s => {
+    s.a += s.da; if (s.a <= 0 || s.a >= 1) s.da *= -1;
+    s.y += s.vy; if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; }
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${s.hue},70%,80%,${s.a * 0.55})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(draw);
+}
+resize(); initStars(); draw();
+window.addEventListener('resize', () => { resize(); initStars(); });
+</script>
+
+</body>
+</html>

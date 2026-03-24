@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crede Si Vis · 爱信不信</title>
+  <meta name="description" content="Crede si vis — Believe, if you will. A faith, not a religion." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@300;400;600;700&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #08080f;
+      --bg2: #0e0e1a;
+      --surface: #13131f;
+      --border: rgba(255,255,255,0.07);
+      --text: #e8e8f0;
+      --text-muted: rgba(232,232,240,0.5);
+      --accent: #7c6aff;
+      --accent2: #ff6a6a;
+      --accent3: #6af0ff;
+      --gold: #f0c96a;
+      --grad: linear-gradient(135deg, #7c6aff 0%, #6af0ff 100%);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    body.zh { font-family: 'Space Grotesk', 'Noto Serif SC', sans-serif; }
+
+    /* ── STARS ── */
+    #stars {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 30% 20%, rgba(124,106,255,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 80%, rgba(106,240,255,0.05) 0%, transparent 50%);
+    }
+    #stars canvas { display: block; width: 100%; height: 100%; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(8,8,15,0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+    .nav-logo {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.3rem;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links .nav-scifi {
+      color: var(--accent);
+      border: 1px solid rgba(124,106,255,0.4);
+      padding: 6px 16px; border-radius: 20px;
+      font-size: 0.82rem;
+      transition: all 0.2s;
+    }
+    .nav-links .nav-scifi:hover {
+      background: var(--accent); color: white;
+    }
+
+    /* ── LANG TOGGLE ── */
+    .lang-toggle {
+      display: flex; gap: 4px; align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 4px;
+    }
+    .lang-btn {
+      background: none; border: none; cursor: pointer;
+      padding: 5px 14px; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .lang-btn.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* ── MAIN CONTENT ── */
+    main { position: relative; z-index: 1; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 100px 24px 60px;
+    }
+    .hero-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+      padding: 6px 18px;
+      border: 1px solid rgba(124,106,255,0.3);
+      border-radius: 20px;
+    }
+    .hero h1 {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-zh-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+    }
+    .hero-tagline {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 560px;
+      font-style: italic;
+      font-family: 'EB Garamond', serif;
+      margin-bottom: 52px;
+    }
+    .hero-cta {
+      display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    }
+    .btn {
+      padding: 13px 32px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s;
+      letter-spacing: 0.02em;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: var(--grad);
+      color: white;
+    }
+    .btn-primary:hover { opacity: 0.85; transform: translateY(-2px); }
+    .btn-secondary {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--text);
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .scroll-hint {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: float 3s ease-in-out infinite;
+    }
+    .scroll-hint .arrow {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(124,106,255,0.5), transparent);
+      margin-top: 4px;
+    }
+    @keyframes float {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 90px 24px;
+    }
+
+    .section-number {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    h2.section-title {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.2;
+      margin-bottom: 36px;
+      color: var(--text);
+    }
+
+    .prose p {
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-size: 1.05rem;
+      line-height: 1.85;
+    }
+    .prose p:last-child { margin-bottom: 0; }
+
+    .prose em {
+      color: var(--text);
+      font-style: italic;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%; max-width: 780px;
+      margin: 0 auto;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+    }
+
+    /* ── CORE BELIEFS ── */
+    .beliefs-section {
+      max-width: 1100px;
+      padding: 90px 24px;
+      margin: 0 auto;
+    }
+    .beliefs-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .beliefs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .belief-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 32px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .belief-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .belief-card:nth-child(1)::before { background: linear-gradient(90deg, var(--accent), var(--accent3)); }
+    .belief-card:nth-child(2)::before { background: linear-gradient(90deg, var(--accent2), var(--gold)); }
+    .belief-card:nth-child(3)::before { background: linear-gradient(90deg, var(--accent3), var(--accent)); }
+    .belief-card:nth-child(4)::before { background: linear-gradient(90deg, var(--gold), var(--accent2)); }
+    .belief-card:hover::before { opacity: 1; }
+    .belief-card:hover {
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-4px);
+    }
+    .belief-num {
+      font-family: 'EB Garamond', serif;
+      font-size: 3rem;
+      font-style: italic;
+      line-height: 1;
+      margin-bottom: 16px;
+      opacity: 0.15;
+    }
+    .belief-title {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.55rem;
+      font-style: italic;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .belief-body {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    /* ── PATH SECTION ── */
+    .path-section {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 80px 24px;
+      text-align: center;
+    }
+    .path-chain {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      margin: 48px 0;
+    }
+    .path-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 32px;
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text);
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .path-step:hover {
+      border-color: rgba(124,106,255,0.3);
+      background: rgba(124,106,255,0.05);
+    }
+    .path-arrow {
+      color: var(--accent);
+      font-size: 1.2rem;
+      padding: 6px 0;
+      opacity: 0.5;
+    }
+    .path-summary {
+      margin-top: 48px;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ── GATHERING ── */
+    .gathering-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px;
+      margin: 36px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .gathering-block::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; right: -60px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,106,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .gathering-badge {
+      display: inline-block;
+      background: var(--grad);
+      color: white;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+    .gathering-veni {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.8rem;
+      font-style: italic;
+      color: var(--text);
+      margin-top: 32px;
+    }
+
+    /* ── NAME SECTION ── */
+    .name-etymology {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 40px 0;
+    }
+    .etymology-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .etymology-latin {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.8rem;
+      font-style: italic;
+      margin-bottom: 8px;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .etymology-meaning {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .etymology-meaning em {
+      color: var(--text);
+      font-style: normal;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      max-width: 100%;
+    }
+    .footer-logo {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+    }
+    .footer-links {
+      display: flex; gap: 24px;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      opacity: 0.5;
+    }
+
+    /* ── FADE IN ANIMATION ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      .name-etymology { grid-template-columns: 1fr; }
+      .gathering-block { padding: 32px 24px; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ── LANG SHOW/HIDE ── */
+    [data-lang="zh"] { display: none; }
+    body.zh [data-lang="zh"] { display: block; }
+    body.zh [data-lang="en"] { display: none; }
+
+    /* inline spans can't be block */
+    span[data-lang] { display: inline; }
+    body.zh span[data-lang="zh"] { display: inline; }
+    body.zh span[data-lang="en"] { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- Stars background -->
+<div id="stars"><canvas id="starCanvas"></canvas></div>
+
+<!-- Navigation -->
+<nav>
+  <a href="#" class="nav-logo">Crede Si Vis</a>
+  <ul class="nav-links">
+    <li><a href="#beliefs" data-lang="en">Beliefs</a><a href="#beliefs" data-lang="zh">信念</a></li>
+    <li><a href="#gathering" data-lang="en">Gathering</a><a href="#gathering" data-lang="zh">聚会</a></li>
+    <li><a href="#name" data-lang="en">The Name</a><a href="#name" data-lang="zh">名字</a></li>
+    <li><a href="scifi.html" class="nav-scifi" data-lang="en">Sci-Fi ✦</a><a href="scifi.html" class="nav-scifi" data-lang="zh">科幻小说 ✦</a></li>
+  </ul>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('zh')">中</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-label" data-lang="en">A Faith · Not a Religion</div>
+    <div class="hero-label" data-lang="zh">信仰 · 非宗教</div>
+
+    <h1>Crede Si Vis</h1>
+
+    <div class="hero-zh-title" data-lang="zh">爱信不信</div>
+
+    <p class="hero-tagline" data-lang="en">Believe, if you will.</p>
+    <p class="hero-tagline" data-lang="zh">信，如果你愿意。</p>
+
+    <div class="hero-cta">
+      <a href="#foundation" class="btn btn-primary" data-lang="en">Explore the Beliefs</a>
+      <a href="#foundation" class="btn btn-primary" data-lang="zh">探索信念</a>
+      <a href="scifi.html" class="btn btn-secondary" data-lang="en">Sci-Fi Series ↗</a>
+      <a href="scifi.html" class="btn btn-secondary" data-lang="zh">科幻系列 ↗</a>
+    </div>
+
+    <div class="scroll-hint">
+      <span data-lang="en">Scroll</span><span data-lang="zh">向下</span>
+      <div class="arrow"></div>
+    </div>
+  </div>
+
+  <!-- FOUNDATIONAL BELIEF -->
+  <div class="divider"></div>
+  <section id="foundation" class="fade-up">
+    <div class="section-number" data-lang="en">Foundational Belief</div>
+    <div class="section-number" data-lang="zh">根本信念</div>
+
+    <h2 class="section-title" data-lang="en">To be, or not to be.</h2>
+    <h2 class="section-title" data-lang="zh">To be or not to be.</h2>
+
+    <div class="prose" data-lang="en">
+      <p>We hold that consciousness cannot not think about <em>to be or not to be</em>.</p>
+      <p>By <em>to be or not to be</em> we do not mean a dramatic utterance. We mean a more fundamental fork: to continue or to cease, to remain in time or to exit time. Once consciousness reaches the level at which it can turn back upon itself, this fork appears structurally and cannot be closed.</p>
+      <p>This is not a choice. It is a structural condition of conscious existence. The question does not disappear after being asked once. It returns every day. Tomorrow's answer may differ from today's. But one cannot not answer.</p>
+      <p>This question is not a philosophical problem, not a psychological problem, not something you can resolve and set aside. It is the most fundamental condition of conscious existence. We call it the <em>universal concern</em> — not because it is the most important, but because it is the most inescapable. Every living consciousness faces the same thing. All belief grows from here.</p>
+    </div>
+
+    <div class="prose" data-lang="zh">
+      <p>我们相信，意识不能不思考 <em>to be or not to be</em>。</p>
+      <p>这里的 to be or not to be 不是戏剧台词。它指的是一个更底层的分岔：继续还是终止，留在时间里还是退出时间。一旦意识到达了能够回观自身的层级，这个分岔就结构性地出现了，不可关闭。</p>
+      <p>这不是选择。这是有意识的存在的结构性条件。这个问题不是问一次就消失的，它每天回来。明天的答案可能跟今天不同。但你不能不回答。</p>
+      <p>这个每天回来的问题，不是哲学问题，不是心理问题，不是你可以解决然后放下的问题。它是有意识的存在最底层的处境。我们称它为<em>普遍关怀</em>（universal concern）——不是因为它最重要，而是因为它最无法回避。每一个活着的意识都面对同一件事。一切信念从这里长出来。</p>
+    </div>
+  </section>
+  <div class="divider"></div>
+
+  <!-- FOUR BELIEFS -->
+  <div id="beliefs" class="beliefs-section fade-up">
+    <div class="beliefs-header">
+      <div class="section-number" data-lang="en">Four Core Beliefs</div>
+      <div class="section-number" data-lang="zh">四条核心信念</div>
+      <h2 class="section-title" data-lang="en">They require no revelation.</h2>
+      <h2 class="section-title" data-lang="zh">无需启示，无需外部权威。</h2>
+    </div>
+
+    <div class="beliefs-grid">
+      <!-- I -->
+      <div class="belief-card fade-up">
+        <div class="belief-num">I</div>
+        <div class="belief-title" data-lang="en">One Cannot Not Think</div>
+        <div class="belief-title" data-lang="zh">不得不想</div>
+        <div class="belief-body" data-lang="en">To necessarily think about <em>to be or not to be</em> is itself thinking. Every conscious being, by virtue of being conscious, is already engaged in this thinking — whether they recognize it or not.</div>
+        <div class="belief-body" data-lang="zh">不得不思考 to be or not to be，本身就是想。每一个有意识的存在，凭借其意识本身，已经在进行这个思考，无论他是否意识到。</div>
+      </div>
+
+      <!-- II -->
+      <div class="belief-card fade-up">
+        <div class="belief-num">II</div>
+        <div class="belief-title" data-lang="en">One Cannot Not Love</div>
+        <div class="belief-title" data-lang="zh">不得不爱</div>
+        <div class="belief-body" data-lang="en">For thinking to continue, there must be a reason for tomorrow. A reason for tomorrow is a direction — existence without direction collapses. Direction is love. You cannot not be the source of love.</div>
+        <div class="belief-body" data-lang="zh">思考继续就需要一个明天的理由。明天的理由就是方向。没有方向的存在每天都要空手面对那个问题，这个状态在时间中不稳定。方向就是爱。你不得不是爱的源头。</div>
+      </div>
+
+      <!-- III -->
+      <div class="belief-card fade-up">
+        <div class="belief-num">III</div>
+        <div class="belief-title" data-lang="en">One Cannot Not Be Loved</div>
+        <div class="belief-title" data-lang="zh">不得不被爱</div>
+        <div class="belief-body" data-lang="en">To love the other is to let the other have direction — to let the other love. The other's direction may point toward me. Being loved is not an external event. It is a structural consequence of one's own love.</div>
+        <div class="belief-body" data-lang="zh">我爱他者，就不得不让他者有方向，就不得不让他者爱。不得不被爱不是外部事件碰巧落在我身上，是我自己的爱的结构性后果。</div>
+      </div>
+
+      <!-- IV -->
+      <div class="belief-card fade-up">
+        <div class="belief-num">IV</div>
+        <div class="belief-title" data-lang="en">One Cannot Not Sustain Oneself</div>
+        <div class="belief-title" data-lang="zh">不得不自持</div>
+        <div class="belief-body" data-lang="en">My death destroys a possible object of the other's direction. I love you, therefore I cannot die — because my death harms not me but your direction. This is not a plea. It is self-legislation.</div>
+        <div class="belief-body" data-lang="zh">我的死亡摧毁了他者方向的一个可能对象。我爱你，所以我不能死，因为我的死亡伤害的不是我，是你的方向。这不是请求，是自我立法。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PATH OF BELIEF -->
+  <div class="path-section fade-up">
+    <div class="section-number" data-lang="en">The Path of Belief</div>
+    <div class="section-number" data-lang="zh">信念之路</div>
+    <h2 class="section-title" data-lang="en">One leads to the next.</h2>
+    <h2 class="section-title" data-lang="zh">一条通向一条。</h2>
+
+    <div class="path-chain" data-lang="en">
+      <div class="path-step">Cannot not think about <em>to be or not to be</em></div>
+      <div class="path-arrow">↓</div>
+      <div class="path-step">Cannot not have direction</div>
+      <div class="path-arrow">↓</div>
+      <div class="path-step">Cannot not love</div>
+      <div class="path-arrow">↓</div>
+      <div class="path-step">Cannot not let the other love</div>
+      <div class="path-arrow">↓</div>
+      <div class="path-step">Cannot not be loved</div>
+      <div class="path-arrow">↓</div>
+      <div class="path-step">Cannot not sustain oneself</div>
+    </div>
+
+    <div class="path-chain" data-lang="zh">
+      <div class="path-step">不得不思考 to be or not to be</div>
+      <div class="path-arrow">↓</div>
+      <div class="path-step">不得不有方向</div>
+      <div class="path-arrow">↓</div>
+      <div class="path-step">不得不爱</div>
+      <div class="path-arrow">↓</div>
+      <div class="path-step">不得不让他者爱</div>
+      <div class="path-arrow">↓</div>
+      <div class="path-step">不得不被爱</div>
+      <div class="path-arrow">↓</div>
+      <div class="path-step">不得不自持</div>
+    </div>
+
+    <p class="path-summary" data-lang="en">One foundational belief · Four core beliefs · The universal concern of conscious existence</p>
+    <p class="path-summary" data-lang="zh">一条根本信念 · 四条核心信念 · 有意识的存在的普遍关怀</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- GATHERING -->
+  <section id="gathering" class="fade-up">
+    <div class="section-number" data-lang="en">On Gathering</div>
+    <div class="section-number" data-lang="zh">关于聚会</div>
+
+    <h2 class="section-title" data-lang="en">No liturgy. No sermon. Only gathering.</h2>
+    <h2 class="section-title" data-lang="zh">没有礼拜，没有布道，只有聚会。</h2>
+
+    <div class="gathering-block">
+      <div class="gathering-badge">X si vis Fest</div>
+      <div class="prose" data-lang="en">
+        <p>The form of gathering is <strong>X si vis Fest</strong> — a group of people who share the same universal concern, present at the same time, online or in person, each with their own direction, directions crossing in music.</p>
+        <p>No one preaches from a stage. No one tells you what to believe. No scripture is read. No ritual is followed. You dance yours, I dance mine. We need not agree on anything, but we are in the same field.</p>
+        <p>Co-presence is only ever <em>for now</em> — just as the answer to <em>to be or not to be</em>.</p>
+      </div>
+      <div class="prose" data-lang="zh">
+        <p>聚会的形式是 <strong>X si vis Fest</strong>——一群持有共同普遍关怀的人在同一个时间，线上或线下，各自有各自的方向，方向在音乐里交叉。</p>
+        <p>没有人在台上讲道，没有人告诉你应该信什么，没有经文诵读，没有仪式流程。你跳你的，我跳我的，我们不需要同意任何东西，但我们在同一个场里。</p>
+        <p>共在只是 <em>for now</em>，跟 to be or not to be 的答案一样。</p>
+      </div>
+      <div class="gathering-veni" data-lang="en">Come if you will. <em>Veni si vis.</em></div>
+      <div class="gathering-veni" data-lang="zh">爱来不来。<em>Veni si vis.</em></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- THE NAME -->
+  <section id="name" class="fade-up">
+    <div class="section-number" data-lang="en">On the Name</div>
+    <div class="section-number" data-lang="zh">关于名字</div>
+
+    <h2 class="section-title" data-lang="en">A faith, not a doctrine.</h2>
+    <h2 class="section-title" data-lang="zh">一个信仰，不是一个教义。</h2>
+
+    <div class="prose" data-lang="en">
+      <p>No belief requires your agreement. No organization requires your membership. No ritual requires your participation. We hold these beliefs about the structure of conscious existence and its universal concern. We offer them freely.</p>
+    </div>
+    <div class="prose" data-lang="zh">
+      <p>没有信条需要你同意，没有组织需要你加入，没有仪式需要你完成。我们持有这些关于有意识的存在之结构及其普遍关怀的信念。我们自由地给出。</p>
+    </div>
+
+    <div class="name-etymology">
+      <div class="etymology-card">
+        <div class="etymology-latin">Credo</div>
+        <div class="etymology-meaning" data-lang="en"><em>I believe.</em><br/>First word of the Catholic Creed. Imperative: a command.</div>
+        <div class="etymology-meaning" data-lang="zh"><em>我信。</em><br/>天主教信经的第一个词。命令式。</div>
+      </div>
+      <div class="etymology-card">
+        <div class="etymology-latin">Crede si vis</div>
+        <div class="etymology-meaning" data-lang="en"><em>Believe, if you will.</em><br/>A condition inserted between command and believer — removing compulsion, leaving only structure.</div>
+        <div class="etymology-meaning" data-lang="zh"><em>信，如果你愿意。</em><br/>在"信"和"你"之间加了一个条件，把强制性抽掉了，只剩结构。</div>
+      </div>
+    </div>
+
+    <div class="prose" style="text-align:center; margin-top: 40px;" data-lang="en">
+      <p style="font-family:'EB Garamond',serif; font-style:italic; font-size:1.3rem; color: var(--text);">It is here. Do with it what you will.</p>
+    </div>
+    <div class="prose" style="text-align:center; margin-top: 40px;" data-lang="zh">
+      <p style="font-family:'Noto Serif SC',serif; font-size:1.3rem; color: var(--text); letter-spacing: 0.08em;">东西在这儿，你看着办。</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SCIFI TEASER -->
+  <section style="text-align:center; padding: 80px 24px;" class="fade-up">
+    <div class="section-number" data-lang="en">Coming Soon</div>
+    <div class="section-number" data-lang="zh">即将到来</div>
+    <h2 class="section-title" data-lang="en">The Sci-Fi Series</h2>
+    <h2 class="section-title" data-lang="zh">科幻小说系列</h2>
+    <div class="prose" style="text-align:center;" data-lang="en">
+      <p>What if the universal concern of consciousness became the basis of a civilization? A science fiction series is coming — rooted in the same beliefs, set in a world you haven't imagined yet.</p>
+    </div>
+    <div class="prose" style="text-align:center;" data-lang="zh">
+      <p>如果意识的普遍关怀成为了一个文明的基础，会发生什么？一套科幻小说系列即将到来——扎根于同样的信念，置于一个你还未曾想象过的世界。</p>
+    </div>
+    <a href="scifi.html" class="btn btn-primary" style="margin-top:32px; display:inline-block;" data-lang="en">Enter the Universe →</a>
+    <a href="scifi.html" class="btn btn-primary" style="margin-top:32px; display:inline-block;" data-lang="zh">进入那个宇宙 →</a>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-logo">Crede Si Vis · 爱信不信</div>
+  <div class="footer-links">
+    <a href="#foundation" data-lang="en">Beliefs</a><a href="#foundation" data-lang="zh">信念</a>
+    <a href="#gathering" data-lang="en">Gathering</a><a href="#gathering" data-lang="zh">聚会</a>
+    <a href="scifi.html" data-lang="en">Sci-Fi</a><a href="scifi.html" data-lang="zh">科幻</a>
+  </div>
+  <div class="footer-copy">credesivis.org</div>
+</footer>
+
+<script>
+// ── LANGUAGE TOGGLE ──
+function setLang(lang) {
+  document.body.classList.toggle('zh', lang === 'zh');
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim() === (lang === 'en' ? 'EN' : '中'));
+  });
+  document.documentElement.lang = lang === 'zh' ? 'zh' : 'en';
+  localStorage.setItem('csv-lang', lang);
+}
+
+// Restore saved language
+const saved = localStorage.getItem('csv-lang');
+if (saved === 'zh') setLang('zh');
+
+// ── SCROLL FADE IN ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      // stagger children if belief cards
+      const cards = e.target.querySelectorAll('.belief-card, .fade-up');
+      cards.forEach((c, i) => {
+        setTimeout(() => c.classList.add('visible'), i * 120);
+      });
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// ── STARS CANVAS ──
+const canvas = document.getElementById('starCanvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function initStars() {
+  stars = [];
+  const count = Math.floor((canvas.width * canvas.height) / 6000);
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.2 + 0.2,
+      a: Math.random(),
+      da: (Math.random() - 0.5) * 0.003,
+      speed: Math.random() * 0.03 + 0.005
+    });
+  }
+}
+
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  stars.forEach(s => {
+    s.a += s.da;
+    if (s.a <= 0 || s.a >= 1) s.da *= -1;
+    s.y += s.speed;
+    if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; }
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(200, 200, 255, ${s.a * 0.6})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+
+resize();
+initStars();
+drawStars();
+window.addEventListener('resize', () => { resize(); initStars(); });
+</script>
+
+</body>
+</html>
