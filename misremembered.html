@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>记错了？· Misremembered? · Crede Si Vis</title>
+  <meta name="description" content="历史虚构短篇小说集，灵感来自路加福音24章及哥林多前书15:6。A collection of historical fiction, inspired by Luke 24 and 1 Corinthians 15:6." />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@300;400;600;700&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #04040a; --bg2: #080810; --surface: #0e0e18;
+      --border: rgba(255,255,255,0.07);
+      --text: #e0e0f5; --text-muted: rgba(224,224,245,0.45);
+      --accent: #8b6aff; --accent2: #ff6a8b; --accent3: #6af0ff; --gold: #f0d06a;
+      --grad: linear-gradient(135deg, #8b6aff 0%, #6af0ff 100%);
+      --grad2: linear-gradient(135deg, #ff6a8b 0%, #f0d06a 100%);
+      --grad-gold: linear-gradient(135deg, #c8a84b 0%, #f0d06a 100%);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:'Space Grotesk',sans-serif; font-size:17px; line-height:1.75; overflow-x:hidden; }
+
+    /* lang */
+    [data-lang="zh"] { display:none; }
+    body.zh [data-lang="zh"] { display:block; }
+    body.zh [data-lang="en"] { display:none; }
+    span[data-lang] { display:inline; }
+    body.zh span[data-lang="zh"] { display:inline; }
+    body.zh span[data-lang="en"] { display:none; }
+
+    /* nebula */
+    #nebula { position:fixed; inset:0; z-index:0;
+      background: radial-gradient(ellipse at 25% 35%, rgba(139,106,255,0.09) 0%, transparent 55%),
+                  radial-gradient(ellipse at 75% 65%, rgba(240,208,106,0.06) 0%, transparent 50%),
+                  radial-gradient(ellipse at 50% 50%, rgba(255,106,139,0.03) 0%, transparent 60%);
+      pointer-events:none; }
+    #nebula canvas { display:block; width:100%; height:100%; }
+
+    /* nav */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 40px; background:rgba(4,4,10,0.80); backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border); }
+    .nav-logo { font-family:'EB Garamond',serif; font-size:1.3rem; font-style:italic; color:var(--text); text-decoration:none; }
+    .nav-back { color:var(--text-muted); text-decoration:none; font-size:0.82rem; letter-spacing:0.06em; text-transform:uppercase;
+      display:flex; align-items:center; gap:8px; transition:color 0.2s; }
+    .nav-back:hover { color:var(--text); }
+    .lang-toggle { display:flex; gap:4px; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:24px; padding:4px; }
+    .lang-btn { background:none; border:none; cursor:pointer; padding:5px 14px; border-radius:20px;
+      font-size:0.8rem; font-weight:600; color:var(--text-muted); letter-spacing:0.04em; transition:all 0.2s; font-family:inherit; }
+    .lang-btn.active { background:var(--accent); color:white; }
+
+    /* hero */
+    .hero { min-height:46vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+      text-align:center; padding:120px 24px 56px; position:relative; z-index:1; }
+    .hero-eyebrow { font-size:0.70rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--gold); margin-bottom:18px; }
+    .hero-title-zh { font-family:'Noto Serif SC',serif; font-size:clamp(2.2rem,6vw,3.8rem); font-weight:400; line-height:1.15;
+      margin-bottom:10px; background:var(--grad-gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero-title-en { font-family:'EB Garamond',serif; font-size:clamp(2rem,5.5vw,3.5rem); font-weight:600; font-style:italic; line-height:1.1;
+      margin-bottom:10px; background:var(--grad-gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero-note { font-size:0.80rem; color:var(--text-muted); max-width:560px; line-height:1.7; margin-bottom:32px; }
+    .hero-note-zh { font-family:'Noto Serif SC',serif; }
+    .hero-divider { width:60px; height:1px; background:linear-gradient(90deg,transparent,rgba(240,208,106,0.4),transparent); }
+
+    /* story nav */
+    .story-nav { position:relative; z-index:1; display:flex; justify-content:center; gap:0; margin:40px auto 0;
+      border:1px solid var(--border); border-radius:40px; overflow:hidden; width:fit-content; }
+    .story-nav a { padding:10px 24px; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase;
+      color:var(--text-muted); text-decoration:none; transition:all 0.2s; border-right:1px solid var(--border); }
+    .story-nav a:last-child { border-right:none; }
+    .story-nav a:hover { color:var(--text); background:rgba(255,255,255,0.04); }
+
+    /* body */
+    .piece { position:relative; z-index:1; max-width:680px; margin:0 auto; padding:72px 28px 40px; }
+    .piece-header { margin-bottom:48px; }
+    .piece-num { font-size:0.70rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+    .piece-title-zh { font-family:'Noto Serif SC',serif; font-size:clamp(1.4rem,4vw,2rem); font-weight:400; color:var(--text); margin-bottom:0; }
+    .piece-title-en { font-family:'EB Garamond',serif; font-size:clamp(1.3rem,3.5vw,1.9rem); font-weight:600; font-style:italic; color:var(--text); margin-bottom:0; }
+    .piece-rule { width:48px; height:1px; background:rgba(240,208,106,0.3); margin-top:20px; }
+
+    .piece p { font-family:'Noto Serif SC',serif; font-size:1.06rem; font-weight:300; line-height:2.05;
+      color:rgba(224,224,245,0.88); margin-bottom:1.55em; text-indent:2em; }
+    .piece p[data-lang="en"] { font-family:'EB Garamond',serif; font-size:1.12rem; font-weight:400; line-height:1.85; }
+    .piece p.no-indent { text-indent:0; }
+
+    .sec-break { display:flex; align-items:center; justify-content:center; gap:14px; margin:48px 0; }
+    .sec-break span { width:4px; height:4px; border-radius:50%; background:rgba(240,208,106,0.35); }
+    .sec-break span:nth-child(2) { background:rgba(139,106,255,0.45); width:5px; height:5px; }
+    .sec-break span:nth-child(3) { background:rgba(240,208,106,0.25); }
+
+    .piece-divider { border:none; border-top:1px solid var(--border); margin:64px 0; }
+
+    /* footer */
+    .chapter-nav { position:relative; z-index:1; max-width:680px; margin:0 auto;
+      padding:40px 28px 80px; display:flex; justify-content:space-between; align-items:center;
+      border-top:1px solid var(--border); }
+    .chapter-nav-link { color:var(--text-muted); text-decoration:none; font-size:0.82rem; letter-spacing:0.06em;
+      text-transform:uppercase; display:flex; align-items:center; gap:8px; transition:color 0.2s; }
+    .chapter-nav-link:hover { color:var(--text); }
+
+    @media (max-width:600px) { nav { padding:16px 20px; } .piece { padding:48px 20px 32px; } }
+  </style>
+</head>
+<body class="en">
+
+<div id="nebula"><canvas id="stars"></canvas></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Crede Si Vis</a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('zh')">中</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">Crede Si Vis · Fiction</div>
+  <h1 class="hero-title-zh" data-lang="zh">记错了？</h1>
+  <h1 class="hero-title-en" data-lang="en">Misremembered?</h1>
+  <p class="hero-note hero-note-zh" data-lang="zh">历史虚构短篇小说集，灵感来自路加福音24章及哥林多前书15:6。<br>所有人物刻画与内心描写均为文学创作，不代表任何历史或神学主张。</p>
+  <p class="hero-note" data-lang="en">A collection of historical fiction, inspired by Luke 24 and 1 Corinthians 15:6.<br>All characterization and inner experience are literary invention and do not represent any historical or theological claim.</p>
+  <div class="hero-divider"></div>
+</header>
+
+<nav class="story-nav" style="margin-top:40px;">
+  <a href="#story-1"><span data-lang="zh">一 · 以马忤斯路上</span><span data-lang="en">I · Emmaus Road</span></a>
+  <a href="#story-2"><span data-lang="zh">二 · 空墓</span><span data-lang="en">II · The Empty Tomb</span></a>
+  <a href="#story-3"><span data-lang="zh">三 · 五百人</span><span data-lang="en">III · The Five Hundred</span></a>
+</nav>
+
+
+<!-- ═══════════════════ STORY I ═══════════════════ -->
+<section class="piece" id="story-1">
+  <div class="piece-header">
+    <div class="piece-num" data-lang="zh">一</div>
+    <div class="piece-num" data-lang="en">I</div>
+    <h2 class="piece-title-zh" data-lang="zh">以马忤斯路上</h2>
+    <h2 class="piece-title-en" data-lang="en">On the Road to Emmaus</h2>
+    <div class="piece-rule"></div>
+  </div>
+
+  <p data-lang="zh">我这一辈子只有一件事值得讲。但我从来没有讲过。</p>
+  <p data-lang="en">There is only one thing in my life worth telling. But I have never told it.</p>
+
+  <p data-lang="zh">不是不想讲，是不知道怎么讲。每次想开口，话到嘴边就觉得不对。不管用什么词，说出来都不是那个意思。就像你想告诉一个从没见过大海的人，海是什么样的。你说很大，很蓝，有浪。他听完点点头，以为自己懂了。但他不懂。</p>
+  <p data-lang="en">Not because I didn't want to. Because I didn't know how. Every time I tried to begin, the words felt wrong before they left my mouth. No matter what I said, it came out meaning something else. It's like trying to describe the sea to someone who has never seen it. You say it's big, it's blue, there are waves. They nod and think they understand. They don't.</p>
+
+  <p data-lang="zh">现在我老了。快死了大概。身体里的东西一样一样在关掉，像天黑之前一间屋子里的灯，一盏一盏灭。我想趁最后一盏灯还亮着的时候，把那件事说一次。说给谁听我不知道。也许说给自己听。</p>
+  <p data-lang="en">I am old now. Dying, probably. Things inside me are shutting down one by one, like lamps going out in a room before nightfall. I want to say this once while the last lamp is still lit. I don't know who I'm saying it to. Maybe to myself.</p>
+
+  <div class="sec-break"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">那一年的逾越节，我在耶路撒冷。</p>
+  <p data-lang="en">That year, during Passover, I was in Jerusalem.</p>
+
+  <p data-lang="zh">说"我在耶路撒冷"好像是一件很重要的事，其实不是。逾越节的时候很多人在耶路撒冷。城里到处都是从各地来的人，街上挤得走不动路，空气里全是烤羊肉的味道和牲口的粪味。我每年都去。去了也没什么特别的事做，就是去了。</p>
+  <p data-lang="en">Saying "I was in Jerusalem" makes it sound important. It wasn't. A lot of people were in Jerusalem during Passover. The city was packed with travelers from everywhere. You could barely move through the streets. The air smelled of roasting lamb and animal dung. I went every year. Nothing special ever happened. I just went.</p>
+
+  <p data-lang="zh">那个人的事我是听说的。不是一次听说的，是这里听一点那里听一点，前后大概有两三年。有人说他在加利利讲道，讲得很好。有人说他治好了瞎子。有人说他脾气不太好，在圣殿里掀了兑换银钱的人的桌子。有人说他是先知。有人说他疯了。</p>
+  <p data-lang="en">I had heard about the man. Not all at once—a bit here, a bit there, over two or three years. Someone said he was preaching in Galilee, and that he was good. Someone said he healed a blind man. Someone said he had a temper and overturned the money changers' tables in the Temple. Someone said he was a prophet. Someone said he was mad.</p>
+
+  <p data-lang="zh">我去听过他讲。有一次，就一次。在一个山坡上，人很多，我站得很远，听不太清。能听到的部分我觉得有道理，但我也说不上来到底哪里有道理。回去之后跟别人聊起来，别人问我他讲了什么，我发现自己复述不出来。不是忘了，是他说的那些话好像不是用来复述的。</p>
+  <p data-lang="en">I went to hear him speak once. Just once. On a hillside, with a large crowd. I stood far back and couldn't hear much. What I could hear seemed right, though I couldn't say why. Afterward, when someone asked me what he'd said, I found I couldn't repeat it. Not because I had forgotten. It was more that what he said wasn't the kind of thing you could repeat.</p>
+
+  <p data-lang="zh">后来我又见过他几次，远远地。跟着人群走过一段路。我不算他的门徒，那些常在他身边的人我一个都不认识。我就是……跟着走的那种人。每个先知身后都有一群这样的人，说不清为什么跟着，也不知道什么时候就不跟了。</p>
+  <p data-lang="en">I saw him a few more times after that, from a distance. Followed the crowd for a stretch of road. I wasn't one of his disciples. I didn't know any of the people close to him. I was just… the kind of person who follows along. Every prophet has a crowd like that behind him—people who can't quite say why they're there, and who drift away without knowing when they stopped.</p>
+
+  <div class="sec-break"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">逾越节之前几天，事情开始变了。</p>
+  <p data-lang="en">A few days before Passover, things changed.</p>
+
+  <p data-lang="zh">城里的气氛不一样了。不是节日的那种热闹，是另一种，紧绷的。罗马士兵比平时多。祭司长那边的人在到处打听什么。</p>
+  <p data-lang="en">The mood of the city shifted. Not the festive kind of noise—something else. Taut. There were more Roman soldiers than usual. People connected to the chief priests were asking questions everywhere.</p>
+
+  <p data-lang="zh">然后一天晚上消息传来，说他被抓了。</p>
+  <p data-lang="en">Then one night the news came: he had been arrested.</p>
+
+  <p data-lang="zh">消息是怎么传到我这里的，我已经不记得了。好像是一个认识的人跑来说的，上气不接下气，说他被抓了，夜里的事。我当时第一个反应不是悲伤，是害怕。很具体的害怕：他们会不会来抓跟他有关的人？我跟他有关吗？我算什么？我就远远地听过一次讲道，跟过几天的路，这算不算"有关"？</p>
+  <p data-lang="en">How the news reached me I no longer remember. Someone I knew came running, out of breath, saying he'd been taken—sometime in the night. My first reaction wasn't grief. It was fear. A very specific fear: would they come for people connected to him? Was I connected to him? What was I, exactly? I had heard him speak once from a distance, followed the road for a few days—did that count as "connected"?</p>
+
+  <p data-lang="zh">我没有去看他受审。没有去各各他。那天我躲在借住的地方，门关着，坐在角落里，听外面的声音。</p>
+  <p data-lang="en">I didn't go to watch the trial. I didn't go to Golgotha. I hid in the place where I was staying, door shut, sitting in a corner, listening to the sounds outside.</p>
+
+  <p data-lang="zh">能听到人群的喊声，很远，听不清在喊什么。偶尔有士兵走过的脚步声和盔甲的碰撞声。到了下午，天暗了一阵，有人说是要变天了，有人说不是。</p>
+  <p data-lang="en">I could hear the crowd shouting, from far away, couldn't make out what they were saying. Occasionally the footsteps of soldiers and the clatter of armor. In the afternoon the sky darkened for a while. Someone said a storm was coming. Someone else said no.</p>
+
+  <p data-lang="zh">后来安静了。</p>
+  <p data-lang="en">Then it went quiet.</p>
+
+  <p data-lang="zh">有人来说他死了。钉在十字架上，下午就断气了。说这话的人脸色很白，像是刚吐过。</p>
+  <p data-lang="en">Someone came and said he was dead. Crucified. He had stopped breathing in the afternoon. The person who said it was white-faced, as if they had just been sick.</p>
+
+  <p data-lang="zh">我坐在那里想了很久，想的是一件很小的事：我上次看到他是什么时候？想了半天，想不起来。好像是在路上走的时候，远远地看了一眼他的背影。什么时候的事？什么地方？想不起来了。</p>
+  <p data-lang="en">I sat there for a long time, thinking about something small: when had I last seen him? I tried to remember. I couldn't. It seemed like it had been on the road somewhere, a glimpse of his back from a distance. When? Where? I couldn't say.</p>
+
+  <p data-lang="zh">那天晚上我没睡着。不是因为悲伤。是一种很奇怪的感觉，像是有什么东西结束了，但我说不清那个东西到底是什么，所以也不知道它结束了意味着什么。</p>
+  <p data-lang="en">I didn't sleep that night. Not from grief. It was a strange feeling—as if something had ended, but I couldn't say what it was, so I didn't know what its ending meant.</p>
+
+  <div class="sec-break"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">接下来两天是安息日。什么也不能做。就等着。</p>
+  <p data-lang="en">The next two days were the Sabbath. Nothing could be done. Just waiting.</p>
+
+  <p data-lang="zh">到了第三天一早，消息开始乱了。</p>
+  <p data-lang="en">On the morning of the third day, the news started falling apart.</p>
+
+  <p data-lang="zh">最先传来的是几个女人的话。她们说去了墓穴，墓是空的。石头被滚开了，里面没有人。她们说看到了两个穿白衣服的人——或者是一个，不同的人说的数目不一样。那两个人说他不在这里，他已经复活了。</p>
+  <p data-lang="en">The first thing that came was what the women said. They had gone to the tomb, and the tomb was empty. The stone had been rolled away and there was no one inside. They said they had seen two figures dressed in white—or one; different people said different numbers. The figures said he was not there, that he had risen.</p>
+
+  <p data-lang="zh">这个消息一传开，反应各种各样。</p>
+  <p data-lang="en">When the news spread, the reactions were all over the place.</p>
+
+  <p data-lang="zh">有人哭了。有人说女人们是吓糊涂了，大清早天还黑着，看花了眼。有人说罗马人把尸体搬走了，怕追随者闹事。有人什么都不说，就坐在那里发呆。</p>
+  <p data-lang="en">Some wept. Some said the women were confused from fright, that it was still dark when they went and they had seen wrong. Some said the Romans had moved the body to prevent trouble. Some said nothing and sat staring.</p>
+
+  <p data-lang="zh">然后彼得去看了。他跑着去的。回来之后他说，确实是空的，裹布还在里面。但他的表情不是兴奋，是困惑。一个空的墓穴能说明什么？什么都能说明，什么也说明不了。</p>
+  <p data-lang="en">Then Peter went to see. He ran. When he came back he said it was indeed empty, the cloth still inside. But his expression wasn't excitement—it was bewilderment. What did an empty tomb prove? It could mean anything. It could mean nothing.</p>
+
+  <p data-lang="zh">又有人说他们看到了他。说这话的人声音发抖，眼睛不太对劲，别人听了将信将疑。也许是别人长得像。也许是你太想看到了所以就看到了。那个人说不清楚，只是反复说：是他，是他。</p>
+  <p data-lang="en">Then someone said they had seen him. Their voice was shaking, their eyes strange. Others listened with half-belief. Maybe it was someone who looked like him. Maybe you wanted so badly to see him that you did. The person couldn't explain it. They just kept saying: it was him, it was him.</p>
+
+  <p data-lang="zh">更多的消息传来，互相矛盾。每一条都有可能是真的，也有可能是假的。我拼不出一个完整的东西来。</p>
+  <p data-lang="en">More reports came, contradicting one another. Any one of them might be true. Any one might be false. I couldn't piece together anything whole.</p>
+
+  <p data-lang="zh">那些常跟着他的门徒大概知道得更多，但他们躲在一个地方不出来，门也关着。外面的人只能靠传话来了解里面的情况，传来传去就变了味道。</p>
+  <p data-lang="en">The disciples who had always followed him probably knew more, but they were shut in somewhere and not coming out. Those of us outside could only learn from relayed messages, and with every relay the meaning shifted.</p>
+
+  <p data-lang="zh">我开始想回家了。</p>
+  <p data-lang="en">I started thinking about going home.</p>
+
+  <p data-lang="zh">不是不关心。是觉得这些事离我太远了。不管发生了什么，那些人会去处理。那些从一开始就跟着他的人，那些跟他一起吃过饭的人。他们会弄清楚。我只是一个远远跟过几天路的人，这些事轮不到我来弄明白。</p>
+  <p data-lang="en">Not because I didn't care. Because all of this felt too far from me. Whatever had happened, those people would deal with it—the ones who had followed him from the beginning, the ones who had eaten with him. They would figure it out. I was just someone who had followed the road for a few days from a distance. It wasn't my place to understand this.</p>
+
+  <p data-lang="zh">我决定离开耶路撒冷。</p>
+  <p data-lang="en">I decided to leave Jerusalem.</p>
+
+  <div class="sec-break"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">革罗罢跟我一起走。</p>
+  <p data-lang="en">Cleopas walked with me.</p>
+
+  <p data-lang="zh">他的情况跟我差不多，也不是常在身边的人，也是远远地跟过一段路。我们不算很熟，但在耶路撒冷那几天说过几次话，知道彼此住在差不多的方向。一起走个伴。</p>
+  <p data-lang="en">His situation was much like mine—not a regular companion, just someone who had followed from a distance for a while. We weren't close, but we'd talked a few times over those days in Jerusalem and knew we were headed roughly the same way. Company for the road.</p>
+
+  <p data-lang="zh">以马忤斯离耶路撒冷大概六十斯塔迪亚，走路要大半天。那天天气还行，不太热也不太冷，路上有风。</p>
+  <p data-lang="en">Emmaus was about sixty stadia from Jerusalem—most of a day's walk. The weather was decent, not too hot, not too cold, with a wind on the road.</p>
+
+  <p data-lang="zh">一路上我们都在聊那些事。其实也不算聊，就是翻来覆去地说同样的话。他说他听到的，我说我听到的，两个人听到的还不太一样。说来说去说不出什么结论，但又停不下来，好像不说的话那些事情就堵在喉咙里出不去。</p>
+  <p data-lang="en">All along the way we talked about it. Not really talked—just went over the same things again and again. He said what he had heard, I said what I had heard, and the two didn't quite match. We couldn't reach any conclusion, but we couldn't stop either. As if not speaking would leave it stuck in the throat.</p>
+
+  <p data-lang="zh">革罗罢说了一句话我记到现在。他说：我们以为他会是那个人。</p>
+  <p data-lang="en">Cleopas said something I've remembered ever since. He said: we thought he was going to be the one.</p>
+
+  <p data-lang="zh">就这么一句。没有说"那个人"是什么意思。但我知道他的意思。我们都知道。</p>
+  <p data-lang="en">Just that. He didn't say what he meant by "the one." But I knew. We both knew.</p>
+
+  <p data-lang="zh">走了大概一个多时辰，有个人从后面走上来，跟我们并排了。</p>
+  <p data-lang="en">After perhaps an hour, a man came up behind us and fell into step alongside us.</p>
+
+  <p data-lang="zh">在那个年代这很正常。路上经常有人搭伴走，一个人走不安全，尤其是快到傍晚的时候。这个人看起来也是要往那个方向去的。</p>
+  <p data-lang="en">This was normal then. People often joined one another on the road—traveling alone wasn't safe, especially toward evening. The man seemed to be heading the same way.</p>
+
+  <p data-lang="zh">他问我们在聊什么。</p>
+  <p data-lang="en">He asked what we had been talking about.</p>
+
+  <p data-lang="zh">革罗罢停下来看了他一眼，然后说了。从头说的。说那个人被抓了，被钉了，死了。说有人说墓穴空了。说有人说看到他了。说我们不知道该信什么。</p>
+  <p data-lang="en">Cleopas stopped and looked at him for a moment, then told him. From the beginning. About the arrest, the crucifixion, the death. About the empty tomb. About the people who said they had seen him. About not knowing what to believe.</p>
+
+  <p data-lang="zh">我在旁边听着。革罗罢说着说着声音变了，他在哭。我以前没见过他哭。我们不是很熟的人，不是那种在对方面前哭的关系。但他就那样一边走一边说一边哭，好像忘了旁边还有人。</p>
+  <p data-lang="en">I listened beside him. As Cleopas talked, his voice changed. He was crying. I had never seen him cry. We weren't close enough for that—not the kind of relationship where you cry in front of each other. But he walked and talked and wept as though he had forgotten I was there.</p>
+
+  <p data-lang="zh">那个陌生人听完，开始说话。</p>
+  <p data-lang="en">The stranger listened, then began to speak.</p>
+
+  <p data-lang="zh">他说了很多。从很早以前的事说起，说先知们说过的话，说经上写的那些。我听着，有些能听懂，有些听不懂。他说话的方式跟别人不一样——不是在辩论，不是在说服谁，更像是在……铺开什么东西。像有人把一块很大的布展开在你面前，让你看上面的花纹，你一直以为那是一些零散的线头，但现在你看到它们是连在一起的。</p>
+  <p data-lang="en">He said a great deal. Starting from long ago—what the prophets had said, what was written. I listened. Some of it I understood, some I didn't. The way he spoke was unlike anyone else—not arguing, not trying to persuade, more like… unfolding something. As if someone spread a great cloth in front of you so you could see the pattern, and what you had always taken for stray threads turned out to be connected.</p>
+
+  <p data-lang="zh">我说不清他具体说了什么。这么多年过去了，那些话的内容我大部分都忘了。但我记得一种感觉。就是心里有一块很硬的东西——那几天积下来的，恐惧也好困惑也好绝望也好，混在一起变成了一块很硬的东西——在慢慢地松动。</p>
+  <p data-lang="en">I can't say clearly what he talked about. After so many years, I have forgotten most of the content. But I remember a feeling. There was something hard inside me—what had accumulated over those days, fear and confusion and despair all mixed together into something dense and hard—and it was slowly beginning to soften.</p>
+
+  <p data-lang="zh">不是被说服了。不是听到了一个特别有道理的论点然后豁然开朗。不是那样的。是更底下的什么东西在动。像冬天结束的时候，地底下的冰在化，你看不到但你感觉得到。</p>
+  <p data-lang="en">Not persuasion. Not a particularly convincing argument that suddenly made everything clear. Not that. Something lower down was shifting. Like the ice beneath the ground beginning to thaw at the end of winter—you can't see it, but you feel it.</p>
+
+  <p data-lang="zh">路很长。太阳在往下掉。我们走了很久。后来我发现我已经忘了自己要回家这件事。好像这条路本身就是目的地。</p>
+  <p data-lang="en">The road was long. The sun was falling. We walked for a long time. At some point I realized I had forgotten I was going home. As though the road itself had become the destination.</p>
+
+  <div class="sec-break"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">到了以马忤斯。天快黑了。</p>
+  <p data-lang="en">We arrived at Emmaus. Nearly dark.</p>
+
+  <p data-lang="zh">那个人看起来还要继续往前走。革罗罢留他，说天晚了，路不好走，住一晚吧。那个人没有推辞，就留下了。</p>
+  <p data-lang="en">The stranger seemed about to continue on. Cleopas pressed him to stay—the road would be bad in the dark, he said, spend the night. The man didn't refuse. He stayed.</p>
+
+  <p data-lang="zh">找了一个歇脚的地方。坐下来，弄了点简单的吃的。饼，还有一点别的什么，我不记得了。</p>
+  <p data-lang="en">We found a place to rest. Sat down. Put together something simple to eat. Bread, and something else—I don't remember what.</p>
+
+  <p data-lang="zh">那个人拿起饼。</p>
+  <p data-lang="en">The man picked up the bread.</p>
+
+  <p data-lang="zh">掰开。</p>
+  <p data-lang="en">Broke it.</p>
+
+  <p data-lang="zh">我不知道怎么描述接下来的事。这么多年我一直在想怎么描述它，到现在还是不知道。</p>
+  <p data-lang="en">I don't know how to describe what happened next. I have been trying to find words for it all these years, and I still don't have them.</p>
+
+  <p data-lang="zh">他掰饼的那个动作。手拿着饼，从中间分开。就是那个动作。没有任何特别的。每个人都那么掰饼。但他掰的方式——手的位置，用力的方式，或者什么别的，我说不出是什么——让我一下子知道了。</p>
+  <p data-lang="en">The way he broke the bread. His hands on it, dividing it down the middle. Just that gesture. Nothing unusual about it. Everyone breaks bread that way. But the way he did it—the position of his hands, the way he bore down, or something else, something I can't name—I knew instantly.</p>
+
+  <p data-lang="zh">不是"认出来"了。认出来是你看到一张脸然后想起来这张脸是谁。不是那样。是从一个比脸更深的地方知道的。像是身体里的什么东西先于脑子做出了反应。</p>
+  <p data-lang="en">Not "recognized." Recognizing is when you see a face and remember whose face it is. This wasn't that. This came from somewhere deeper than a face. As if something in the body reacted before the mind did.</p>
+
+  <p data-lang="zh">我看向革罗罢。革罗罢也在看我。</p>
+  <p data-lang="en">I looked at Cleopas. Cleopas was looking at me.</p>
+
+  <p data-lang="zh">他的眼睛说了跟我一样的话。</p>
+  <p data-lang="en">His eyes said what mine said.</p>
+
+  <p data-lang="zh">我转回头。</p>
+  <p data-lang="en">I turned back.</p>
+
+  <p data-lang="zh">对面的位置空了。饼还在桌上，掰开的。</p>
+  <p data-lang="en">The seat across from us was empty. The bread was still on the table, broken open.</p>
+
+  <div class="sec-break"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">我不记得接下来过了多久。可能很短也可能很长。我们坐在那里，对着那块掰开的饼，谁也没有说话。</p>
+  <p data-lang="en">I don't remember how long we sat there afterward. Could have been a short time, could have been long. Just the two of us, looking at the broken bread, not speaking.</p>
+
+  <p data-lang="zh">后来革罗罢说了一句：在路上的时候，他说话的时候，你有没有觉得……</p>
+  <p data-lang="en">Then Cleopas said: on the road, when he was speaking, did you feel…</p>
+
+  <p data-lang="zh">他没有说完。他不需要说完。我知道他在说什么。</p>
+  <p data-lang="en">He didn't finish. He didn't need to. I knew what he meant.</p>
+
+  <p data-lang="zh">心里那块硬东西已经不在了。不是碎掉了，是化了。从什么时候开始化的？是在路上的时候。我们走了那么长的路，那个人在旁边说着话，太阳在往下落，那块东西就一点一点地在化。我当时没有注意到。现在想起来才发现。</p>
+  <p data-lang="en">The hard thing inside me was gone. Not shattered—dissolved. When had it started? On the road. All that walking, the man speaking beside us, the sun going down, and it had been dissolving bit by bit. I hadn't noticed while it was happening. I only understood now, looking back.</p>
+
+  <p data-lang="zh">我们连夜往回走。来的时候走了大半天的路，回去的时候不知道用了多久。好像很快。</p>
+  <p data-lang="en">We walked back that night. Coming had taken most of a day. Going back—I don't know how long it took. It felt fast.</p>
+
+  <p data-lang="zh">找到了那些人，把我们遇到的事说了。有人听完沉默了。有人说他们也看到了，今天下午。有人说彼得也看到了。</p>
+  <p data-lang="en">We found the others and told them what had happened. Some listened and went silent. Some said they had seen him too, that very afternoon. Some said Peter had as well.</p>
+
+  <p data-lang="zh">又是各种各样的消息。跟之前一样，每个人说的都不完全一样。有人信我们，有人不太信。我能理解不信的人。如果我没有坐在那张桌前，我大概也不会信。</p>
+  <p data-lang="en">Again the same confusion—everyone's account slightly different. Some believed us, some didn't quite. I understood the ones who didn't. If I hadn't been sitting at that table, I probably wouldn't have believed it either.</p>
+
+  <div class="sec-break"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">后来的事，别人的记载比我清楚。那些门徒后来做了什么，去了哪里，传了什么道，我是后来才慢慢听说的。消息传到我这里的时候已经经过了很多人的嘴，跟当年那些关于空墓的消息一样——每一次转述都会变一点形状。</p>
+  <p data-lang="en">What happened after—others have recorded it more clearly than I can. What the disciples did, where they went, what they preached: I only learned gradually, later. By the time the news reached me it had passed through many mouths, like the reports about the empty tomb—every retelling shifted the shape a little.</p>
+
+  <p data-lang="zh">我没有加入他们。</p>
+  <p data-lang="en">I didn't join them.</p>
+
+  <p data-lang="zh">有人问过我为什么不去。我说不出来。不是不信。怎么可能不信。我是亲眼看到的——不，"亲眼看到"也不对，我看到了什么？一个人掰饼然后不见了。这算什么？我说给别人听的时候自己都觉得荒唐。但我知道那一刻发生了什么。问题是那个"知道"没法分享。它不是一个消息，不是一句话，不是一个可以从我这里搬到你那里的东西。</p>
+  <p data-lang="en">Someone asked me why not. I couldn't say. Not because I didn't believe. How could I not believe? I had seen it with my own eyes—no, even that's not right. What did I see? A man breaking bread and then being gone. What kind of thing is that to tell? Even telling it I can hear how absurd it sounds. But I knew what had happened in that moment. The trouble is that knowing isn't transferable. It's not a piece of news. It's not a sentence. It's not something that can be moved from me to you.</p>
+
+  <p data-lang="zh">所以我回去了。回到自己的日子里。该做什么做什么。日子跟以前一样过，什么也没有改变。</p>
+  <p data-lang="en">So I went back. Back to my own life, doing what had to be done. The days went on as before. Nothing changed.</p>
+
+  <p data-lang="zh">但也不是完全没有改变。</p>
+  <p data-lang="en">But not entirely unchanged.</p>
+
+  <div class="sec-break"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">我活了很久。比我以为的久得多。</p>
+  <p data-lang="en">I lived a long time. Much longer than I expected.</p>
+
+  <p data-lang="zh">那些年里断断续续听到一些消息。彼得在什么地方被抓了。保罗写了信。有人在某个城市建了一个小的聚会的地方。有人被杀了。有人在继续传。</p>
+  <p data-lang="en">Over those years, news came in fragments. Peter arrested somewhere. Paul writing letters. Someone building a small meeting place in some city. Someone killed. Someone still going.</p>
+
+  <p data-lang="zh">这些消息到我这里都已经很淡了，像隔着很厚的墙听到的声音。我的日子在这面墙的这一边，那些大事在墙的那一边。</p>
+  <p data-lang="en">It all reached me faintly, like sounds heard through a very thick wall. My days were on this side. The great events were on the other.</p>
+
+  <p data-lang="zh">有时候会有人路过，说起那些事。我听着，不说话。偶尔有人知道我曾经在耶路撒冷待过，问我有没有见过他。我说见过，远远地见过。他们追问：他是什么样的人？我说不知道怎么形容。他们以为我是谦虚或者记不清了，也就不再问了。</p>
+  <p data-lang="en">Sometimes travelers passed through and mentioned those things. I listened and said nothing. Occasionally someone learned I had been in Jerusalem and asked if I had seen him. I said yes, from a distance. They pressed: what was he like? I said I didn't know how to describe it. They assumed I was being modest, or that my memory had faded, and asked no more.</p>
+
+  <p data-lang="zh">有一年冬天，一个陌生人路过我住的地方，天快黑了，他问能不能借住一晚。我让他进来，给他弄了点吃的。也没什么特别的原因。只是觉得天黑了，路不好走，应该留人住一晚。</p>
+  <p data-lang="en">One winter a stranger passed by my home toward evening and asked if he could spend the night. I let him in and put together something to eat. For no particular reason. Just that it was dark, the road was poor, and one ought to let someone stay the night.</p>
+
+  <p data-lang="zh">从那以后，我没有再告诉任何人以马忤斯的事。</p>
+  <p data-lang="en">After that I never told anyone about Emmaus again.</p>
+
+  <p data-lang="zh">不是不想说。是每次想说的时候都会先在脑子里过一遍，过完就觉得不能说。因为说出来就变成了一个故事。一个可以相信也可以不相信的故事。跟那些关于空墓的传言一样，跟那些说"我看到了"的人的话一样，变成传来传去的消息里又多一个说法。</p>
+  <p data-lang="en">Not because I didn't want to. Every time I was about to say it, I would run through it first in my mind, and then feel I couldn't. Because saying it would turn it into a story. A story that could be believed or not. Like the reports about the empty tomb, like the people who said "I saw him"—just one more account in the chain of relayed messages.</p>
+
+  <p data-lang="zh">但那不是一个故事。那是我的命。</p>
+  <p data-lang="en">But it isn't a story. It is my life.</p>
+
+  <div class="sec-break"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">年头多了以后，我发现一件事。</p>
+  <p data-lang="en">After many years, I noticed something.</p>
+
+  <p data-lang="zh">我最常想起的不是掰饼的那个瞬间。那个瞬间太快了——他拿起饼，掰开，我知道了，他不在了。全部加起来可能不到几个呼吸的时间。太短了。短到我有时候会怀疑是不是记错了。也许饼是我自己掰的。也许对面根本就没有坐过人。也许那一整天都是我自己编出来的，因为那几天太害怕了太混乱了，脑子出了什么问题。</p>
+  <p data-lang="en">What I think about most often is not the moment of the broken bread. That moment was too fast—he picked it up, broke it, I knew, he was gone. All of it, maybe just a few breaths. Too short. Short enough that sometimes I wonder if I've remembered it wrong. Maybe I broke the bread myself. Maybe no one had been sitting across from us. Maybe I invented the whole day, because those days had been so frightening and chaotic that something in my mind had gone wrong.</p>
+
+  <p data-lang="zh">但我没法解释革罗罢。要说是我记错了，革罗罢那一眼又算什么。</p>
+  <p data-lang="en">But I can't explain Cleopas. If I got it wrong, what was that look between us?</p>
+
+  <p data-lang="zh">不过我最常想起的不是那个瞬间。</p>
+  <p data-lang="en">But that isn't what I think about most.</p>
+
+  <p data-lang="zh">我最常想起的是之前的那段路。从耶路撒冷到以马忤斯，六十斯塔迪亚，走了大半天。那个人在旁边，说着话。太阳在慢慢地落。风从什么地方吹过来，带着干草的味道。革罗罢走在我另一边，偶尔插一句话。路是土路，鞋底能感觉到石子。</p>
+  <p data-lang="en">What I think about most is the walk beforehand. Jerusalem to Emmaus, sixty stadia, most of a day. The man walking beside us, speaking. The sun slowly going down. A wind from somewhere carrying the smell of dry grass. Cleopas on my other side, adding a word now and then. A dirt road—you could feel the stones through the soles of your sandals.</p>
+
+  <p data-lang="zh">那段路没有任何特别的事发生。没有神迹，没有异象，没有任何不可思议的东西。就是三个人在路上走，其中一个在说话，另外两个在听。太阳在落。</p>
+  <p data-lang="en">Nothing remarkable happened on that road. No miracles, no visions, nothing impossible. Just three people walking, one of them talking, the other two listening. The sun going down.</p>
+
+  <p data-lang="zh">但那是我这一辈子最完整的一段时间。</p>
+  <p data-lang="en">But it was the most complete stretch of time in my whole life.</p>
+
+  <p data-lang="zh">我后来过了很多年，做了很多事，但没有哪一段时间像那段路一样完整。好像在那之前和在那之后的日子都是碎的，只有那段路上的几个时辰是整的。每一步都在它该在的地方。</p>
+  <p data-lang="en">I lived many more years and did many more things, but no other stretch of time felt as whole as that road. As if the days before and after were all broken, and only those few hours on the road were entire. Every step in its right place.</p>
+
+  <p data-lang="zh">我不知道这是不是就是别人说的那个词。那些后来传道的人有一个词，专门说这种事。我不用那个词。那个词被太多人用过了，意思已经变了好几遍。我就说：那段路上，心里那块硬东西化了。这是我自己的说法。不准确，但是我的。</p>
+  <p data-lang="en">I don't know if this is what others mean by the word they use. The people who went out to preach had a word for this kind of thing. I don't use it. Too many people have used it. The meaning has shifted too many times. I just say: on that road, the hard thing inside me dissolved. That's my way of saying it. Not accurate, but mine.</p>
+
+  <div class="sec-break"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">我这一辈子只有一件事值得讲。现在我讲完了。</p>
+  <p data-lang="en">There is only one thing in my life worth telling. Now I have told it.</p>
+
+  <p data-lang="zh">没有讲清楚。我知道。那件事大概本来就不是用来讲清楚的。</p>
+  <p data-lang="en">Not clearly. I know. Perhaps it was never the kind of thing that could be told clearly.</p>
+
+  <p data-lang="zh">有一件事我没有说。</p>
+  <p data-lang="en">There is one thing I have not said.</p>
+
+  <p data-lang="zh">每次掰饼的时候，我的手会停一下。</p>
+  <p data-lang="en">Every time I break bread, my hands pause.</p>
+
+  <p data-lang="zh">不是故意的。不是在纪念什么。就是手会停一下。停了几十年了。每次都停。每次停的时候我都知道为什么。</p>
+  <p data-lang="en">Not deliberately. Not as any kind of memorial. My hands just pause. They have been pausing for decades. Every time. Every time I know why.</p>
+
+  <p data-lang="zh">然后我把饼掰开，继续吃。</p>
+  <p data-lang="en">Then I break the bread, and go on eating.</p>
+
+  <p data-lang="zh">日子继续过。</p>
+  <p data-lang="en">The days go on.</p>
+</section>
+
+
+<!-- STORY II -->
+<div class="sec-break"><span></span><span></span><span></span></div>
+
+<section class="piece" id="story-2">
+  <div class="piece-header">
+    <div class="piece-num" data-lang="zh">二</div>
+    <div class="piece-num" data-lang="en">II</div>
+    <div class="piece-title" data-lang="zh">空墓</div>
+    <div class="piece-title" data-lang="en">The Empty Tomb</div>
+  </div>
+
+  <p data-lang="zh">我这一辈子只有一件事不确定自己记得对不对。但我每天都在想。</p>
+  <p data-lang="en">There is only one thing in my life I am not sure I remember correctly. But I think about it every day.</p>
+
+  <p data-lang="zh">不是每天专门去想。是它自己会来。早上天还没亮要出门的时候，脚踩到门外的土地上，凉的，它就来了。不是一个完整的画面，是一种感觉。脚底下的凉，空气里的味道，身边有人在走但没人说话。然后它就过去了，我该干什么干什么。</p>
+  <p data-lang="en">Not deliberately. It comes on its own. In the morning, when it is still dark and I step outside, my foot touches the ground—cool—and it comes. Not a complete picture, just a feeling. The coolness underfoot, the smell of the air, people walking beside me but no one speaking. Then it passes, and I get on with whatever needs doing.</p>
+
+  <p data-lang="zh">我不确定我记得的是不是那天真正发生的事。过了这么多年，有些东西我分不清是我自己看到的，还是后来听别人说的，还是我自己想出来的。记忆这个东西不可靠。它会自己长，像墙角的草，你不知道什么时候多出来一截，也分不清哪部分是原来就有的。</p>
+  <p data-lang="en">I am not sure what I remember is what actually happened that day. After so many years, I can't always tell what I saw myself from what I heard others say later, or what I filled in on my own. Memory is not reliable. It grows by itself, like weeds at the base of a wall—you don't notice when a new piece appears, and you can't tell which parts were there from the start.</p>
+
+  <p data-lang="zh">但那个凉是真的。几十年了，每次都一样。</p>
+  <p data-lang="en">But the coolness is real. It has been the same for decades.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">我跟那几个女人认识，不是因为什么大事，就是女人之间的那种认识。谁的亲戚在哪里，谁家做饭缺盐了去借，谁的孩子病了帮着看一看。我认识她们中间的两三个，帮过忙，一起做过事。</p>
+  <p data-lang="en">I knew those women the way women know each other. Whose relative lives where. Whose household is short of salt. Whose child is sick and needs looking after. I knew two or three of them. I had helped out, worked alongside them.</p>
+
+  <p data-lang="zh">她们跟着那个人走了很久。我没有跟着走，但因为她们，我知道一些。她们偶尔回来说起路上的事，说他讲了什么，做了什么。我听着，有时候觉得有意思，有时候觉得离我太远。我有自己的事要忙。</p>
+  <p data-lang="en">They had followed the man for a long time. I hadn't followed him myself, but because of them I knew things. They would come back now and then and talk about what had happened on the road—what he'd said, what he'd done. I listened. Sometimes it was interesting. Sometimes it felt too far from my own life. I had my own things to do.</p>
+
+  <p data-lang="zh">我见过他。不止一次，不算很远。有一回他在一个人家门口跟人说话，我从旁边经过，看了他一眼。就是一个普通人的样子。没有什么特别的。别人跟我说他能治病，我觉得也许是真的也许不是，反正跟我没关系。</p>
+  <p data-lang="en">I had seen him. More than once, and not from very far. Once he was at someone's doorway talking, and I walked past and looked at him. Just an ordinary-looking person. Nothing remarkable. Others told me he could heal the sick. Maybe he could, maybe he couldn't. It had nothing to do with me.</p>
+
+  <p data-lang="zh">后来逾越节到了。大家都去了耶路撒冷。城里那几天的事，别人讲得比我清楚。我只说我看到的。</p>
+  <p data-lang="en">Then Passover came. Everyone went to Jerusalem. What happened in the city during those days, others can describe better than I can. I will only say what I saw.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">他被抓那天晚上，男人们跑了。</p>
+  <p data-lang="en">The night he was arrested, the men ran.</p>
+
+  <p data-lang="zh">这话说出来不好听，但确实是这样。消息一来，那些跟过他的男人，大部分都不见了。有的真跑了，有的躲了起来，有的假装不认识他。我不怪他们，换了我大概也一样。罗马人抓人的时候不讲道理，跟谁沾上边就是沾上边。</p>
+  <p data-lang="en">That doesn't sound kind, but it's what happened. When the news came, most of the men who had followed him disappeared. Some ran. Some hid. Some pretended not to know him. I don't blame them. I probably would have done the same. When the Romans came for someone, they didn't make fine distinctions about who was connected and who wasn't.</p>
+
+  <p data-lang="zh">女人们没跑。不是因为勇敢，是因为没人注意女人。罗马士兵不在乎几个女人站在远处看。我们不算威胁。</p>
+  <p data-lang="en">The women didn't run. Not because we were braver. Because no one paid attention to women. The Roman soldiers didn't care about a few women standing at a distance. We weren't a threat.</p>
+
+  <p data-lang="zh">我在远处看到了各各他。远远地，看不清细节。能看到十字架，能看到上面有人。具体是什么样子我不说了。回来之后我的手一直在抖。抖了好几天。做饭的时候拿不住东西，别人以为我病了。</p>
+  <p data-lang="en">I saw Golgotha from far away. I couldn't make out the details. I could see the cross. I could see someone on it. I won't describe what it looked like. When I came back, my hands wouldn't stop shaking. They shook for days. I couldn't hold things properly when I cooked. People thought I was ill.</p>
+
+  <p data-lang="zh">他死了之后，有人去把尸体要回来了。用布裹好，放进一个墓穴里，石头滚上去堵住。这些事是那几个认识的女人告诉我的。她们去看了。</p>
+  <p data-lang="en">After he died, someone went and asked for the body. They wrapped it in cloth and placed it in a tomb, and a stone was rolled across the entrance. I heard this from the women I knew. They had been there to see it.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">安息日不能做事。等了两天。</p>
+  <p data-lang="en">The Sabbath meant nothing could be done. Two days of waiting.</p>
+
+  <p data-lang="zh">安息日一过，她们就说要去墓穴。要带香料去膏抹尸体。这是女人做的事。在我们那里一直是这样，男人负责葬，女人负责之后的事。</p>
+  <p data-lang="en">As soon as the Sabbath was over, the women said they would go to the tomb. They had prepared spices to anoint the body. This was women's work. It had always been that way where we came from—men handled the burial, women handled what came after.</p>
+
+  <p data-lang="zh">她们问我去不去。我说去。也不是因为什么特别的原因。就是觉得应该去。人死了，总要有人去料理。</p>
+  <p data-lang="en">They asked if I would come. I said yes. No particular reason. Just that it seemed like the right thing to do. Someone had died, and someone had to go and tend to it.</p>
+
+  <p data-lang="zh">我们天不亮就出发了。</p>
+  <p data-lang="en">We set out before dawn.</p>
+
+  <p data-lang="zh">那段路我记得很清楚，也许是记得最清楚的一段。天还是黑的，刚有一点点发灰。空气很凉，带着露水的味道。几个女人走在一起，没怎么说话。手里拿着香料和布。脚踩在地上有声音，因为很安静，所以脚步声特别清楚。</p>
+  <p data-lang="en">That walk I remember clearly—perhaps more clearly than anything else. The sky was still dark, just beginning to turn gray. The air was cool, with the smell of dew. A few women walking together, hardly speaking. Spices and cloth in our hands. Our footsteps were loud in the silence.</p>
+
+  <p data-lang="zh">路上有人说了一句：石头怎么办？墓穴的石头很重，我们几个人搬不动。没人回答。继续走。</p>
+  <p data-lang="en">Someone said on the way: what about the stone? The stone at the tomb was heavy. A few women couldn't move it. No one answered. We kept walking.</p>
+
+  <p data-lang="zh">我记得我当时在想的不是什么大事，是很具体的事：尸体放了两天多了，天气又不冷，会是什么味道。香料够不够。布要怎么裹。我在脑子里过这些程序，好像只要把程序想好了，到了就能做好。</p>
+  <p data-lang="en">I remember what I was thinking about, and it wasn't anything large. It was very specific: the body had been there for more than two days, and the weather wasn't cold, so what would it smell like. Whether we had brought enough spices. How to wrap the cloth. I was going through the procedure in my head, as if getting the steps right would mean everything would be fine once we arrived.</p>
+
+  <p data-lang="zh">然后到了。</p>
+  <p data-lang="en">Then we arrived.</p>
+
+  <p data-lang="zh">石头已经不在了。就是滚开了，在旁边。</p>
+  <p data-lang="en">The stone was already gone. Rolled aside, sitting to one side of the entrance.</p>
+
+  <p data-lang="zh">我们站在墓穴门口，互相看了一眼。没人说话。然后走了进去。</p>
+  <p data-lang="en">We stood at the mouth of the tomb and looked at each other. No one spoke. Then we went in.</p>
+
+  <p data-lang="zh">里面很暗。等眼睛适应了，看到石床上什么都没有。布在那里，叠着还是散着我不记得了，但人不在了。</p>
+  <p data-lang="en">It was dark inside. When our eyes adjusted, we saw the stone shelf was bare. The cloth was there—folded or scattered, I can't remember—but the body was gone.</p>
+
+  <p data-lang="zh">我当时的感觉不是害怕，不是兴奋，是困惑。一种非常具体的困惑。我们来做一件事——来膏抹一个死人的身体——但那个身体不在了。我手里还拿着香料。我站在一个空的石床前面，不知道手里的东西该放下还是该带走。</p>
+  <p data-lang="en">What I felt was not fear, not excitement. It was confusion. A very specific confusion. We had come to do something—to anoint a dead man's body—but the body wasn't there. I was still holding the spices. I stood in front of an empty stone shelf and didn't know whether to put down what I was carrying or take it back with me.</p>
+
+  <p data-lang="zh">就像你走了很远的路去找一个人，到了发现他走了。你站在空的屋子里，不知道接下来要做什么。</p>
+  <p data-lang="en">It was like walking a long way to see someone, and arriving to find they've left. You stand in the empty room and don't know what to do next.</p>
+
+  <p data-lang="zh">然后有人出现了。</p>
+  <p data-lang="en">Then someone appeared.</p>
+
+  <p data-lang="zh">我说不清楚那是什么人。穿白衣服的，一个还是两个我真的不记得了。后来别人说的数目跟我记的对不上。也许是两个，也许我只注意到了一个。说话了，说了什么，我只记得一句——</p>
+  <p data-lang="en">I can't say clearly what they were. Dressed in white. One or two—I honestly don't remember. Others later said a different number than what I recalled. Maybe there were two and I only noticed one. They spoke. What they said—I remember only one line:</p>
+
+  <p data-lang="zh">他不在这里。</p>
+  <p data-lang="en">He is not here.</p>
+
+  <p data-lang="zh">后面可能还说了别的。复活了什么的。但那些话当时没有进到我脑子里。我脑子里只有这一句："不在这里"。一个人应该在这里但他不在这里。我们来找他但他不在这里。</p>
+  <p data-lang="en">They may have said more after that. Something about rising. But those words didn't enter my mind at the time. The only thing in my head was: "not here." A person who should be here is not here. We came looking and he is not here.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">我们跑回去了。</p>
+  <p data-lang="en">We ran back.</p>
+
+  <p data-lang="zh">几个女人一起跑的，跑到一半有人跑不动了就走。到了之后我们找到那些门徒，开始说。</p>
+  <p data-lang="en">Several women running together. Halfway there some couldn't run anymore and walked. When we arrived we found the disciples and started talking.</p>
+
+  <p data-lang="zh">场面很乱。几个人同时在说，每个人记住的不一样。有人说两个穿白衣服的，有人说一个。有人说他们说了"他复活了"，有人说他们只说了"他不在这里"。有人记得石头是整个滚到一边的，有人说只滚开了一半。</p>
+  <p data-lang="en">It was chaos. Several of us talking at once, each remembering different things. One said two figures in white, another said one. One said they'd said "he has risen," another that they'd only said "he is not here." One remembered the stone rolled completely to one side, another said only halfway.</p>
+
+  <p data-lang="zh">我们越说越乱，说着说着开始吵起来——不是真的吵，是互相纠正。你记错了，不是那样的。不对，明明是这样的。</p>
+  <p data-lang="en">The more we talked the more confused it got. We started correcting each other—not arguing really, just insisting. You're remembering it wrong, it wasn't like that. No, it was exactly like that.</p>
+
+  <p data-lang="zh">门徒们听完，说了一个词。</p>
+  <p data-lang="en">The disciples listened, and then they used a word.</p>
+
+  <p data-lang="zh">胡言。</p>
+  <p data-lang="en">Nonsense.</p>
+
+  <p data-lang="zh">有的人没说出口但脸上写着。有的人直接说了。我记得那个词。不是"我不信"——"我不信"至少还当回事。"胡言"是根本不把你说的当一个值得认真对待的东西。就像大人听小孩胡说，笑一笑就过去了。</p>
+  <p data-lang="en">Some didn't say it out loud but their faces said it. Others said it directly. I remember that word. It was not "I don't believe you"—that at least takes you seriously. "Nonsense" means what you have said is not even worth considering. The way an adult listens to a child's babbling. A smile, and then you move on.</p>
+
+  <p data-lang="zh">我能理解他们。几个女人，天不亮跑去墓穴，跑回来上气不接下气，说的话互相还对不上。换了我也不信。</p>
+  <p data-lang="en">I could understand them. A few women, running to a tomb before dawn, running back out of breath, their accounts contradicting each other. I wouldn't have believed it either.</p>
+
+  <p data-lang="zh">但"能理解"和"不痛"是两件事。</p>
+  <p data-lang="en">But understanding and not hurting are two different things.</p>
+
+  <p data-lang="zh">后来彼得去看了。看完回来说确实空了。再后来有人说看到了他。更多人说看到了他。</p>
+  <p data-lang="en">Later Peter went to look. He came back and confirmed it was empty. Then others began saying they had seen him. More and more people said they had seen him.</p>
+
+  <p data-lang="zh">我注意到一件事：当男人们说"我看到了他"的时候，别人的反应跟我们说的时候不一样。不是马上相信，但至少认真听了。没有人说胡言。</p>
+  <p data-lang="en">I noticed something: when the men said "I saw him," the others reacted differently than they had when we said it. Not instant belief, but at least they listened seriously. No one said nonsense.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">后来的事，很多人记载过。比我记得更清楚，也比我说的更好听。</p>
+  <p data-lang="en">What happened after that, many have recorded. More clearly than I remember it, and more neatly than I could tell it.</p>
+
+  <p data-lang="zh">有些记载里提到了那天早上。提到几个女人去了墓穴，发现是空的。有些记载写了抹大拉的马利亚的名字，写了约亚拿的名字。我的名字从来没有在任何地方出现过。我只是"跟她们在一起的"那几个人中的一个。</p>
+  <p data-lang="en">Some of those records mention that morning. They mention a few women going to the tomb and finding it empty. Some records name Mary Magdalene. Some name Joanna. My name has never appeared anywhere. I was just one of "the women who were with them."</p>
+
+  <p data-lang="zh">这不要紧。我没有名字也不影响什么。</p>
+  <p data-lang="en">That's all right. Having no name doesn't change anything.</p>
+
+  <p data-lang="zh">但我注意到另一件事。那些故事在被讲来讲去的过程中，女人的部分越来越短。最早的时候人们还会说"几个女人先去了，发现墓是空的"。后来这一段变得越来越简略。有些讲法里好像空墓是彼得发现的。有些讲法里女人根本不出现。</p>
+  <p data-lang="en">But I noticed something else. As those stories were told and retold, the women's part grew shorter. Early on, people would still say "some women went first and found the tomb empty." Later that part became briefer and briefer. In some versions it was as though Peter had discovered the empty tomb. In some versions the women didn't appear at all.</p>
+
+  <p data-lang="zh">好像那天清晨的第一批脚印不是我们的。</p>
+  <p data-lang="en">As though the first footprints that morning weren't ours.</p>
+
+  <p data-lang="zh">我不生气。有什么好生气的。那些男人后来有了自己的经历，看到了自己的东西，他们的故事比我们的大。大的故事会盖住小的。这也正常。</p>
+  <p data-lang="en">I wasn't angry. What was there to be angry about? The men later had their own experiences, saw their own things. Their stories were bigger than ours. Big stories cover small ones. That's how it works.</p>
+
+  <p data-lang="zh">我回到了自己的日子里。</p>
+  <p data-lang="en">I went back to my life.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">我活了很久。比那些女人中的大多数都久。</p>
+  <p data-lang="en">I lived a long time. Longer than most of those women.</p>
+
+  <p data-lang="zh">那些年的事跟我没什么关系。使徒们去了什么地方，建了什么教会，写了什么信，受了什么苦。这些消息传到我这里已经很淡了。偶尔有人经过说起来，我听一听。有人说保罗写的信里提到了我们——不是提到我，是提到"那些女人"。就那么一两句。</p>
+  <p data-lang="en">The events of those years had little to do with me. The apostles traveling, building churches, writing letters, suffering. The news reached me faintly. Sometimes a traveler passing through would mention things. I listened. Someone said Paul mentioned us in one of his letters—not me, but "the women." A line or two.</p>
+
+  <p data-lang="zh">我没有加入他们。没有去传道，没有去任何地方。不是不信。我是亲脚走到那个墓穴门口的。我看到了空的石床。香料还在我手里。</p>
+  <p data-lang="en">I didn't join them. Didn't go out to preach, didn't go anywhere. Not because I didn't believe. I walked to that tomb with my own feet. I saw the empty shelf. The spices were still in my hands.</p>
+
+  <p data-lang="zh">但我能说什么？我说了一次，得到的回答是"胡言"。我不需要再听一次。</p>
+  <p data-lang="en">But what could I say? I said it once, and the answer I got was "nonsense." I didn't need to hear it again.</p>
+
+  <p data-lang="zh">有时候我想，也许那天早上真的是我记错了。天那么黑，人那么紧张，也许我们走错了墓穴。也许那个墓穴本来就是空的，我们搞混了。也许那个穿白衣服的人只是一个路过的人，不是什么别的。也许一切都有简单的解释。</p>
+  <p data-lang="en">Sometimes I thought perhaps that morning really was a mistake. It was so dark, we were so tense—maybe we went to the wrong tomb. Maybe that tomb had always been empty and we got confused. Maybe the person in white was just a passerby, nothing more. Maybe everything had a simple explanation.</p>
+
+  <p data-lang="zh">但每次天不亮出门的时候，脚踩到门外的地上，那个凉的感觉一来，我就知道我没有记错那段路。从住的地方到墓穴，天还黑着，几个女人一起走，没说话，脚步声很清楚。那段路我没有记错。那个凉是真的。</p>
+  <p data-lang="en">But every time I stepped outside before dawn, my foot touching the ground, that coolness rising—I knew I hadn't misremembered the walk. From where we were staying to the tomb, in the dark, a few women walking together, not speaking, footsteps clear in the silence. I hadn't misremembered that. The coolness was real.</p>
+
+  <p data-lang="zh">至于到了之后看到的——石头滚开了，石床是空的，穿白衣服的人说了那句话——这些我确实不敢说我全记对了。也许有些是后来别人说的混进了我自己的记忆。也许有些是我自己填上去的。</p>
+  <p data-lang="en">As for what we found when we arrived—the stone rolled away, the empty shelf, the figure in white saying those words—I honestly can't say I got all of it right. Maybe some of it was what others told me later, mixed into my own memory. Maybe some of it I filled in myself.</p>
+
+  <p data-lang="zh">但石床是空的。这个我没有记错。我站在那里，手里拿着香料，面前是空的。该在那里的人不在那里。</p>
+  <p data-lang="en">But the shelf was empty. That I didn't get wrong. I stood there, spices in hand, and there was nothing in front of me. The person who should have been there was not there.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">我这一辈子只有一件事不确定自己记得对不对。现在我把它说了。</p>
+  <p data-lang="en">There is only one thing in my life I am not sure I remember correctly. Now I have said it.</p>
+
+  <p data-lang="zh">说出来之后我发现，说跟不说其实没什么区别。这件事不会因为我说了就变得更真，也不会因为我一直没说就变得不真。它就在那里，跟那个空的石床一样。</p>
+  <p data-lang="en">Having said it, I find it makes no difference. The thing won't become more true because I've spoken it, and it won't become less true because I kept silent all these years. It is just there, like that empty shelf.</p>
+
+  <p data-lang="zh">有一件事我没有说。</p>
+  <p data-lang="en">There is one thing I have not mentioned.</p>
+
+  <p data-lang="zh">每次天不亮出门，脚踩到地上的时候，我会停一下。</p>
+  <p data-lang="en">Every time I step outside before dawn, my foot touching the ground, I pause for a moment.</p>
+
+  <p data-lang="zh">不长。就一下。凉的感觉从脚底上来，我就停了。然后继续走。走了几十年了。每次都停。每次停的时候我都回到了那天早上。几个女人在走，天还是黑的。香料在手里。</p>
+  <p data-lang="en">Not long. Just a moment. The coolness rises from the earth into my foot, and I stop. Then I keep walking. I have been walking for decades. Every time I pause. Every time I pause, I am back on that morning. A few women walking. The sky still dark. Spices in hand.</p>
+
+  <p data-lang="zh">然后我继续走。去打水，去做事，去过我的日子。</p>
+  <p data-lang="en">Then I keep walking. To draw water, to work, to live my days.</p>
+
+  <p data-lang="zh">日子继续过。</p>
+  <p data-lang="en">The days go on.</p>
+</section>
+
+<!-- STORY III -->
+<div class="sec-break"><span></span><span></span><span></span></div>
+
+<section class="piece" id="story-3">
+  <div class="piece-header">
+    <div class="piece-num" data-lang="zh">三</div>
+    <div class="piece-num" data-lang="en">III</div>
+    <div class="piece-title" data-lang="zh">五百人</div>
+    <div class="piece-title" data-lang="en">The Five Hundred</div>
+  </div>
+
+  <p data-lang="zh">我这一辈子只有一件事说不清楚。不是不愿意说，是真的说不清楚。每次想说的时候，发现自己能说的只有那么几句话，而那几句话什么也没有说明白。</p>
+  <p data-lang="en">There is only one thing in my life I cannot explain clearly. Not because I won't—because I truly can't. Every time I try, I find I have only a few sentences to offer, and those sentences don't really explain anything.</p>
+
+  <p data-lang="zh">我在那里。那天。跟很多人在一起。我看到了一个人。</p>
+  <p data-lang="en">I was there. That day. With a lot of other people. I saw a man.</p>
+
+  <p data-lang="zh">就这些。</p>
+  <p data-lang="en">That's it.</p>
+
+  <p data-lang="zh">你会问：你看到了什么？我说不上来。你会问：那个人长什么样？我说不上来。你会问：他说了什么？我没听到。你会问：那你怎么知道是他？我不知道。也许不是他。也许是别人。也许是我自己想看到所以就看到了。</p>
+  <p data-lang="en">You would ask: what did you see? I couldn't say. You would ask: what did the man look like? I couldn't say. You would ask: what did he say? I didn't hear. You would ask: how do you know it was him? I don't. Maybe it wasn't him. Maybe it was someone else. Maybe I just wanted to see something, so I did.</p>
+
+  <p data-lang="zh">但是过了这么多年，那天下午的阳光我还记得。晒在脖子后面，热的。这个我没有记错。</p>
+  <p data-lang="en">But after all these years, I still remember the sunlight that afternoon. On the back of my neck, hot. That I haven't gotten wrong.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">我对那个人的了解比大多数人都少。</p>
+  <p data-lang="en">I knew less about the man than most people.</p>
+
+  <p data-lang="zh">我住得远。不在耶路撒冷，也不在加利利。消息传到我这里要很久。他在那边讲道的时候我只听过别人的转述，转述的人自己也是听别人说的。到我这里已经变了几手，跟原来的话大概差很远了。</p>
+  <p data-lang="en">I lived far away. Not in Jerusalem, not in Galilee. News took a long time to reach me. When he was preaching out there, all I had were secondhand accounts from people who had themselves only heard secondhand. By the time it got to me it had been through several hands and probably bore little resemblance to what was actually said.</p>
+
+  <p data-lang="zh">有人说他能治病。有人说他讲的道不一样。有人说他会成为那个人——你知道的，大家一直在等的那个人。也有人说他就是一个普通的拉比。消息就是这样，每个人说的都不完全一样，你拼不出一个确定的东西来。</p>
+  <p data-lang="en">Someone said he could heal. Someone said his teaching was different. Someone said he would be the one—you know, the one everyone had been waiting for. Someone else said he was just an ordinary rabbi. That's how news works. No two people tell it the same way, and you can't assemble anything certain from it.</p>
+
+  <p data-lang="zh">我没有去过加利利，没有去过耶路撒冷听他讲。我就是一个住得很远的人，偶尔听到一些消息。</p>
+  <p data-lang="en">I had never been to Galilee, never been to Jerusalem to hear him. I was just a person who lived far away and occasionally heard things.</p>
+
+  <p data-lang="zh">后来逾越节的事传来了。他被抓了，被钉了，死了。消息到我这里的时候已经是事后好多天了，说的人自己也是听来的。死了就是死了。又一个被罗马人杀掉的人。那些年被杀的人多了。</p>
+  <p data-lang="en">Then the news from Passover came. He'd been arrested, crucified, killed. By the time it reached me it was already many days after the fact, and the person telling me had only heard it from someone else. Dead was dead. Another man killed by the Romans. There were many that year.</p>
+
+  <p data-lang="zh">但接着又来了别的消息。说他的墓是空的。说有人看到他了。说他没有死，或者说他死了但又活了。</p>
+  <p data-lang="en">But then other news followed. That his tomb was empty. That people had seen him. That he hadn't died, or that he had died but was alive again.</p>
+
+  <p data-lang="zh">这些消息更乱。传到我这里的时候已经什么样的都有。有人说得很肯定，有人说得很含糊，有人说这是胡扯。我不知道该信哪一个。</p>
+  <p data-lang="en">This news was even more confused. By the time it reached me, there were all kinds of versions. Some people sounded certain, some vague, some called it nonsense. I didn't know which to believe.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">后来有一次，有人说他会在某个地方出现。</p>
+  <p data-lang="en">Then one time, word came that he would appear somewhere.</p>
+
+  <p data-lang="zh">具体是怎么传出来的，我不记得了。好像是门徒那边传出来的话，说他会在某个地方跟大家见面。去的人很多。我也去了。</p>
+  <p data-lang="en">How it started I can't recall. Something passed down from the disciples—that he would meet with people at a certain place. Many went. I went too.</p>
+
+  <p data-lang="zh">为什么去？我说不上来。不是因为信。那时候我什么都不信，也什么都不不信，就是那种悬着的状态。也许是好奇。也许是觉得反正也没什么事，去看看。也许是那些消息在心里堵了太久，想亲眼看一看到底是真的假的，好有个了结。</p>
+  <p data-lang="en">Why? I couldn't say. It wasn't belief. At that point I neither believed nor disbelieved—just hovered in between. Maybe curiosity. Maybe having nothing better to do. Maybe the news had been stuck inside me for so long that I wanted to see with my own eyes whether it was true or false, just to have it settled.</p>
+
+  <p data-lang="zh">到了那里人很多。后来有人说有五百多个。我不知道有没有那么多，但确实很多。站在一片空地上，人挤着人。有些人互相认识，在小声说话。有些人跟我一样，谁也不认识，就站在那里等。</p>
+  <p data-lang="en">When I got there, the crowd was large. Someone later said more than five hundred. I don't know if it was that many, but it was a lot. People standing in an open field, pressed together. Some knew each other and were talking quietly. Some, like me, knew no one and simply stood waiting.</p>
+
+  <p data-lang="zh">等了多久我不记得了。太阳很大。站久了腿酸，脖子后面被晒得热辣辣的。有人带了水，在旁边传着喝。有小孩在人群里钻来钻去。</p>
+  <p data-lang="en">How long we waited I don't remember. The sun was strong. My legs ached from standing. The back of my neck burned. Someone had brought water and it was being passed around. Children wove through the crowd.</p>
+
+  <p data-lang="zh">一切都很普通。就像在等一个什么集会开始。</p>
+  <p data-lang="en">Everything was ordinary. Like waiting for some kind of gathering to start.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">然后有人说：来了。</p>
+  <p data-lang="en">Then someone said: he's here.</p>
+
+  <p data-lang="zh">我不知道谁先说的。声音从前面传过来，一层一层地往后传。人群动了一下，大家都往一个方向看。</p>
+  <p data-lang="en">I don't know who said it first. The words came from the front, passing back layer by layer. The crowd shifted. Everyone looked in one direction.</p>
+
+  <p data-lang="zh">我站得很远。人太多了，前面全是人的后脑勺和肩膀。我踮了脚，看到前面的空地上有一个人。</p>
+  <p data-lang="en">I was standing far back. Too many people—all I could see were the backs of heads and shoulders. I stood on my toes and saw, in the clearing ahead, a person.</p>
+
+  <p data-lang="zh">就是一个人。站在那里。</p>
+  <p data-lang="en">Just a person. Standing there.</p>
+
+  <p data-lang="zh">离我太远了。看不清脸。看不清穿什么。就是一个人的轮廓。他在说话好像，但我什么都没听到，隔着那么多人那么远的距离，声音根本传不过来。</p>
+  <p data-lang="en">Too far away to see a face. Too far to see what he was wearing. Just the outline of a man. He seemed to be speaking, but I couldn't hear anything—too many people, too much distance. The sound didn't carry.</p>
+
+  <p data-lang="zh">周围的人的反应各种各样。有人跪下了。有人在哭。有人站着不动，跟我一样，就是看着。前面有人往前面挤，想看得更清楚。后面有人在问前面的人他说了什么。</p>
+  <p data-lang="en">The reactions around me were all different. Some knelt. Some wept. Some stood still, like me, just watching. In front, people pressed forward to get a closer look. Behind me, people asked those ahead what he was saying.</p>
+
+  <p data-lang="zh">我就站在那里。看着那个人。看了很久。</p>
+  <p data-lang="en">I just stood there. Looking at that person. For a long time.</p>
+
+  <p data-lang="zh">我看到的就是一个人站在空地上。不近不远。看不清。我不知道那个人是不是他们说的那个人。我没有看到脸。我没有听到声音。我没有任何可以用来确认的东西。</p>
+  <p data-lang="en">What I saw was a man standing in an open field. Neither near nor far. I couldn't make him out. I didn't know if he was the person they said he was. I hadn't seen a face. I hadn't heard a voice. I had nothing to confirm anything.</p>
+
+  <p data-lang="zh">前面有人转过头来跟旁边的人说：是他。那个人说的时候眼泪流了一脸。我看着他的脸想：你怎么知道？你站得比我远还是比我近？你看到了什么我没看到的东西？</p>
+  <p data-lang="en">Someone in front turned to the person beside him and said: it's him. Tears were streaming down his face as he said it. I looked at his face and thought: how do you know? Were you standing closer than me or farther? Did you see something I didn't?</p>
+
+  <p data-lang="zh">后来那个人好像走了。又是一层一层传的消息——走了，不在了。人群开始散。有人还跪在地上没起来。有人在互相说话，说刚才的事。有人已经在往回走了。</p>
+  <p data-lang="en">Later the man seemed to leave. Again the news passed back through layers—gone, not there anymore. The crowd began to scatter. Some were still on their knees. Some stood talking about what had just happened. Some were already walking home.</p>
+
+  <p data-lang="zh">我站在原地站了一会儿。太阳还是很大。脖子后面很热。脚底下的土被那么多人踩过，很硬。</p>
+  <p data-lang="en">I stood where I was for a while. The sun was still strong. The back of my neck was hot. The ground underfoot, trampled hard by so many people.</p>
+
+  <p data-lang="zh">然后我也走了。</p>
+  <p data-lang="en">Then I left too.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">回去的路上我一直在想：我到底看到了什么？</p>
+  <p data-lang="en">On the way back I kept thinking: what did I actually see?</p>
+
+  <p data-lang="zh">一个人站在空地上。离我很远。看不清。就这些。</p>
+  <p data-lang="en">A man standing in a field. Far away from me. I couldn't make him out. That's all.</p>
+
+  <p data-lang="zh">这能说明什么？什么也说明不了。任何一个人站在空地上都是那个样子。我连他的脸都没有看到。凭什么说那个人就是死了又活过来的那个人？凭前面那个哭得一脸泪的人说"是他"？他又凭什么？</p>
+  <p data-lang="en">What does that prove? Nothing. Any person standing in a field looks like that. I didn't even see his face. On what basis could I say that was the man who died and came back to life? Because the weeping man in front of me said "it's him"? And on what basis did he say it?</p>
+
+  <p data-lang="zh">我回到家，该做什么做什么。过了一段时间，那天的事在我脑子里越来越不确定。也许那个人就是一个普通人。也许那些门徒找了一个长得像的。也许什么事都没有发生，就是一群人站在太阳底下等了半天，看到了他们想看到的东西。</p>
+  <p data-lang="en">I went home. Did what I'd always done. Over time, the events of that day grew less and less certain in my mind. Maybe the man was just an ordinary person. Maybe the disciples had found someone who looked like him. Maybe nothing happened at all—just a crowd standing in the sun too long, seeing what they needed to see.</p>
+
+  <p data-lang="zh">人就是这样。你想看到什么，你就会看到什么。</p>
+  <p data-lang="en">That's how people are. You see what you want to see.</p>
+
+  <p data-lang="zh">但有一件事我解释不了。</p>
+  <p data-lang="en">But there was one thing I couldn't explain.</p>
+
+  <p data-lang="zh">那天下午，那么多人站在那里，大多数人跟我一样站得远看不清。但人群里有一种东西——不是声音，不是动作，是一种我说不出来的东西——在那些人之间传。前面的人传给后面的人，但不是用话传的。站在那里你能感觉到。像是一阵风经过，但不是风。</p>
+  <p data-lang="en">That afternoon, with all those people standing there, most of them as far back as I was and unable to see clearly—there was something in the crowd. Not a sound, not a movement, but something I can't name—passing between them. From the front to the back, but not carried in words. You could feel it standing there. Like a wind passing through, but not wind.</p>
+
+  <p data-lang="zh">也许那就是一群人的情绪。也许就是从众。也许几百个人在一起，集体的什么东西会产生一种效果，让你以为你感觉到了什么，其实你什么也没感觉到。我不知道。我说不清楚。</p>
+  <p data-lang="en">Maybe it was just the mood of a crowd. Maybe it was just conformity. Maybe when several hundred people gather, something collective happens that makes you think you've felt something when really you've felt nothing. I don't know. I can't explain it clearly.</p>
+
+  <p data-lang="zh">但那天我走回家的路上，天开始黑了，我一个人走在路上，周围没有人了。那种感觉还在。不是在人群里才有的。就我一个人的时候它也在。</p>
+  <p data-lang="en">But that day, walking home, as it grew dark and I was alone on the road with no one around—the feeling was still there. It wasn't something that existed only in the crowd. Alone, it was still there.</p>
+
+  <p data-lang="zh">这个我解释不了。</p>
+  <p data-lang="en">That I cannot explain.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">后来的事跟我没什么关系。那些门徒建了教会，传了道。保罗写了很多信，据说在一封信里提到过我们。不是提到我，是提到"五百多人"。就那么一句。</p>
+  <p data-lang="en">What happened after that had little to do with me. The disciples built churches, preached, traveled. Paul wrote many letters. In one of them, I'm told, he mentioned us. Not me—"the five hundred." Just one sentence.</p>
+
+  <p data-lang="zh">五百多人里面的每一个人，都跟我一样，有自己的生活要过。我们不是门徒，不是使徒，不是任何运动的一部分。我们只是在那天下午去了那里，站了一会儿，然后回家了。</p>
+  <p data-lang="en">Every one of those five hundred had a life to live, just like me. We weren't disciples, weren't apostles, weren't part of any movement. We just went there one afternoon, stood for a while, and went home.</p>
+
+  <p data-lang="zh">有人后来加入了教会。有人没有。我没有。</p>
+  <p data-lang="en">Some later joined the church. Some didn't. I didn't.</p>
+
+  <p data-lang="zh">偶尔碰到也去过那天的人。我们不怎么谈那件事。有一次我问一个人：那天你看到了什么？他说看到了。我说你看清了吗？他沉默了一会儿说：没有。</p>
+  <p data-lang="en">Occasionally I ran into someone who had been there that day. We didn't talk about it much. Once I asked someone: what did you see? He said he saw him. I said: could you see clearly? He was quiet for a moment, then said: no.</p>
+
+  <p data-lang="zh">然后我们都没有再说了。</p>
+  <p data-lang="en">Neither of us said anything after that.</p>
+
+  <p data-lang="zh">我回到自己的日子里。种地，做工，活着。那些大事在很远的地方发生着，跟我隔着很远的距离。</p>
+  <p data-lang="en">I went back to my life. Tending the land, doing work, living. The great events happened far away, at a great distance from me.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">年头多了以后我开始怀疑那天到底发生了什么。也许什么都没发生。也许就是一大群人站在太阳底下，因为消息，因为期待，因为走了那么远的路不想白来，所以看到了他们需要看到的东西。</p>
+  <p data-lang="en">After many years I began to doubt what actually happened that day. Maybe nothing happened. Maybe it was just a large crowd standing in the sun, and because of the news, because of expectation, because they had walked so far and didn't want it to be for nothing, they saw what they needed to see.</p>
+
+  <p data-lang="zh">这个解释完全讲得通。我没有理由不接受这个解释。</p>
+  <p data-lang="en">That explanation makes perfect sense. I have no reason not to accept it.</p>
+
+  <p data-lang="zh">但是。</p>
+  <p data-lang="en">And yet.</p>
+
+  <p data-lang="zh">那天下午晒在脖子后面的太阳是真的。脚底下被踩硬的土是真的。前面那个人转过头来泪流满面说"是他"的表情是真的。一个人走在回家路上天黑了周围没人了那种感觉还在也是真的。</p>
+  <p data-lang="en">The sun on the back of my neck that afternoon was real. The hard-packed earth underfoot was real. The face of the man in front of me, turning around in tears to say "it's him"—that was real. Walking home alone as it grew dark, the feeling still there—that was real.</p>
+
+  <p data-lang="zh">这些东西没有一样能证明什么。一样都不能。太阳每天都晒，土路哪里都有，有人哭不代表哭的原因是真的，感觉更不能当证据。</p>
+  <p data-lang="en">None of these things proves anything. Not a single one. The sun shines every day. Dirt roads are everywhere. Tears don't prove their cause is true. Feelings are not evidence.</p>
+
+  <p data-lang="zh">但它们加在一起，在我身体里变成了一个东西。一个比记忆更深也比记忆更模糊的东西。它不像那些门徒的确信，不像保罗那种被光打倒在地的经历。它什么都不像。它几乎不存在。</p>
+  <p data-lang="en">But taken together, they became something inside me. Something deeper than memory and more blurred than memory. Not like the certainty of the disciples. Not like Paul's experience of being struck down by light. Not like anything. It barely exists.</p>
+
+  <p data-lang="zh">但它在。</p>
+  <p data-lang="en">But it is there.</p>
+
+  <div class="sec-break sec-break--inner"><span></span><span></span><span></span></div>
+
+  <p data-lang="zh">我这一辈子只有一件事说不清楚。现在我说了。</p>
+  <p data-lang="en">There is only one thing in my life I cannot explain clearly. Now I have said it.</p>
+
+  <p data-lang="zh">没有说清楚。因为本来就没有什么可以说清楚的。我只是在那里站了一会儿。</p>
+  <p data-lang="en">I have not said it clearly. Because there was never really anything to say clearly. I was just standing there for a while.</p>
+
+  <p data-lang="zh">有一件事我没有说。</p>
+  <p data-lang="en">There is one thing I have not mentioned.</p>
+
+  <p data-lang="zh">每次太阳晒在脖子后面的时候，我会停一下。就一下。好像身体在等什么东西到来。什么也没来。但我还是停了。</p>
+  <p data-lang="en">Every time the sun hits the back of my neck, I pause for a moment. Just a moment. As though my body is waiting for something to arrive. Nothing comes. But I still pause.</p>
+
+  <p data-lang="zh">停了几十年了。每次都停。</p>
+  <p data-lang="en">I have paused for decades. Every time.</p>
+
+  <p data-lang="zh">然后我继续做我在做的事。</p>
+  <p data-lang="en">Then I go back to whatever I was doing.</p>
+
+  <p data-lang="zh">日子继续过。</p>
+  <p data-lang="en">The days go on.</p>
+</section>
+
+</main>
+
+<footer style="text-align:center; padding:60px 24px 40px; color:var(--text-muted); font-size:0.78rem; letter-spacing:0.06em;">
+  <div style="margin-bottom:20px;">
+    <a href="index.html" style="color:var(--text-muted); text-decoration:none; margin:0 16px; opacity:0.7; transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" data-lang="zh">首页</a>
+    <a href="index.html" style="color:var(--text-muted); text-decoration:none; margin:0 16px; opacity:0.7; transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" data-lang="en">Home</a>
+    <span style="opacity:0.3;">·</span>
+    <a href="scifi.html" style="color:var(--text-muted); text-decoration:none; margin:0 16px; opacity:0.7; transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" data-lang="zh">科幻小说</a>
+    <a href="scifi.html" style="color:var(--text-muted); text-decoration:none; margin:0 16px; opacity:0.7; transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" data-lang="en">Sci-Fi Novel</a>
+  </div>
+  <div style="opacity:0.4;">credesivis.org</div>
+</footer>
+
+<canvas id="stars" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.55;"></canvas>
+
+<script>
+// Language toggle
+const btns = document.querySelectorAll('.lang-btn');
+btns.forEach(b => b.addEventListener('click', () => {
+  const lang = b.dataset.lang;
+  document.body.classList.remove('zh', 'en');
+  document.body.classList.add(lang);
+  btns.forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  localStorage.setItem('lang', lang);
+}));
+const saved = localStorage.getItem('lang') || 'zh';
+document.body.classList.add(saved);
+document.querySelector(`.lang-btn[data-lang="${saved}"]`)?.classList.add('active');
+
+// Starfield
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+function initStars() {
+  stars = [];
+  for (let i = 0; i < 180; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.1 + 0.2,
+      a: Math.random(),
+      da: (Math.random() * 0.003 + 0.001) * (Math.random() < 0.5 ? 1 : -1)
+    });
+  }
+}
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  stars.forEach(s => {
+    s.a += s.da;
+    if (s.a > 1 || s.a < 0) s.da *= -1;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${s.a})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+resize(); initStars(); drawStars();
+window.addEventListener('resize', () => { resize(); initStars(); });
+</script>
+</body>
+</html>
