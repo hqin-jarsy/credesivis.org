@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>醒了？/ Awakened? — Crede Si Vis</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --text: #d8cfc4;
+      --text-muted: rgba(216,207,196,0.45);
+      --accent: #8b6aff;
+      --gold: #c8a84b;
+      --grad: linear-gradient(135deg, #8b6aff 0%, #c44b8b 100%);
+      --grad2: linear-gradient(135deg, #4b8bc4 0%, #8b6aff 100%);
+      --grad-saffron: linear-gradient(135deg, #c8860a 0%, #e8b84b 100%);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      background:var(--bg);
+      color:var(--text);
+      font-family:'Space Grotesk', sans-serif;
+      min-height:100vh;
+      position:relative;
+      overflow-x:hidden;
+    }
+    body::before {
+      content:'';
+      position:fixed; inset:0;
+      background: radial-gradient(ellipse 80% 60% at 30% 20%, rgba(200,134,10,0.06) 0%, transparent 70%),
+                  radial-gradient(ellipse 60% 80% at 70% 80%, rgba(139,106,255,0.05) 0%, transparent 70%);
+      pointer-events:none; z-index:0;
+    }
+
+    /* LANGUAGE TOGGLE */
+    body.zh [data-lang="en"] { display:none; }
+    body.en [data-lang="zh"] { display:none; }
+    body:not(.zh):not(.en) [data-lang="en"] { display:none; }
+
+    /* NAV */
+    nav {
+      position:sticky; top:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 40px;
+      background:rgba(10,10,15,0.85);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(200,134,10,0.1);
+    }
+    .nav-logo {
+      font-size:0.82rem; letter-spacing:0.12em;
+      background:var(--grad-saffron); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      font-weight:500; text-decoration:none;
+    }
+    .nav-links { display:flex; gap:32px; list-style:none; align-items:center; }
+    .nav-links a {
+      color:var(--text-muted); text-decoration:none; font-size:0.8rem;
+      letter-spacing:0.06em; transition:color 0.2s;
+    }
+    .nav-links a:hover { color:var(--text); }
+    .lang-toggle { display:flex; gap:6px; }
+    .lang-btn {
+      background:none; border:1px solid rgba(255,255,255,0.15);
+      color:var(--text-muted); font-size:0.72rem; letter-spacing:0.08em;
+      padding:4px 10px; border-radius:20px; cursor:pointer; transition:all 0.2s;
+      font-family:'Space Grotesk', sans-serif;
+    }
+    .lang-btn.active, .lang-btn:hover {
+      border-color:rgba(200,134,10,0.5);
+      color:var(--text);
+      background:rgba(200,134,10,0.08);
+    }
+
+    /* MAIN */
+    main { position:relative; z-index:1; max-width:720px; margin:0 auto; padding:0 24px 80px; }
+
+    /* HERO */
+    .hero { text-align:center; padding:80px 0 48px; }
+    .hero-tag {
+      font-size:0.72rem; letter-spacing:0.16em; color:var(--text-muted);
+      margin-bottom:24px; text-transform:uppercase;
+    }
+    .hero-title-zh {
+      font-family:'Noto Serif SC', serif; font-size:2.8rem; font-weight:300;
+      line-height:1.2; letter-spacing:0.08em;
+      background:var(--grad-saffron); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      margin-bottom:12px;
+    }
+    .hero-title-en {
+      font-family:'EB Garamond', serif; font-size:2.2rem; font-weight:400; font-style:italic;
+      line-height:1.25;
+      background:var(--grad-saffron); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      margin-bottom:24px;
+    }
+    .hero-note {
+      font-size:0.78rem; color:var(--text-muted); line-height:1.7;
+      max-width:540px; margin:0 auto 36px;
+      font-style:italic; letter-spacing:0.01em;
+    }
+
+    /* STORY NAV */
+    .story-nav {
+      display:flex; gap:12px; justify-content:center;
+      flex-wrap:wrap; margin-bottom:60px;
+    }
+    .story-nav a {
+      font-size:0.74rem; letter-spacing:0.08em;
+      color:var(--text-muted); text-decoration:none;
+      padding:6px 16px; border:1px solid rgba(200,134,10,0.2); border-radius:20px;
+      transition:all 0.2s;
+    }
+    .story-nav a:hover {
+      color:var(--text); border-color:rgba(200,134,10,0.5);
+      background:rgba(200,134,10,0.06);
+    }
+
+    /* PIECE */
+    .piece { margin-bottom:60px; }
+    .piece-header {
+      text-align:center; margin-bottom:40px; padding-bottom:28px;
+      border-bottom:1px solid rgba(200,134,10,0.12);
+    }
+    .piece-num {
+      font-size:0.72rem; letter-spacing:0.2em; color:var(--text-muted);
+      text-transform:uppercase; margin-bottom:12px;
+    }
+    .piece-title {
+      font-family:'Noto Serif SC', serif; font-size:1.7rem; font-weight:300;
+      letter-spacing:0.06em;
+      background:var(--grad-saffron); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    }
+    .piece-title[data-lang="en"] {
+      font-family:'EB Garamond', serif; font-size:1.8rem; font-style:italic; font-weight:400;
+    }
+
+    /* PROSE */
+    .piece p {
+      font-family:'Noto Serif SC', serif; font-size:1.06rem; font-weight:300;
+      line-height:2.05; text-indent:2em; color:var(--text);
+      margin-bottom:0.8em; letter-spacing:0.01em;
+    }
+    .piece p[data-lang="en"] {
+      font-family:'EB Garamond', serif; font-size:1.12rem; font-weight:400;
+      line-height:1.85; text-indent:0; color:rgba(216,207,196,0.88);
+      margin-bottom:1.1em; letter-spacing:0.005em;
+    }
+
+    /* SECTION BREAKS */
+    .sec-break {
+      display:flex; align-items:center; justify-content:center; gap:14px; margin:48px 0;
+    }
+    .sec-break span { width:4px; height:4px; border-radius:50%; background:rgba(200,134,10,0.35); }
+    .sec-break span:nth-child(2) { background:rgba(139,106,255,0.45); width:5px; height:5px; }
+    .sec-break span:nth-child(3) { background:rgba(200,134,10,0.25); }
+
+    /* BETWEEN-STORY DIVIDER */
+    .story-divider {
+      display:flex; align-items:center; gap:20px; margin:72px 0;
+    }
+    .story-divider::before, .story-divider::after {
+      content:''; flex:1; height:1px; background:rgba(200,134,10,0.12);
+    }
+    .story-divider-dot {
+      width:6px; height:6px; border-radius:50%; background:rgba(200,134,10,0.3);
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Crede Si Vis · 爱信不信</a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-lang="zh">首页</a><a href="index.html" data-lang="en">Home</a></li>
+    <li><a href="misremembered.html" data-lang="zh">记错了？</a><a href="misremembered.html" data-lang="en">Misremembered?</a></li>
+    <li><a href="scifi.html" data-lang="zh">科幻</a><a href="scifi.html" data-lang="en">Sci-Fi</a></li>
+  </ul>
+  <div class="lang-toggle">
+    <button class="lang-btn" data-lang-btn="zh">中</button>
+    <button class="lang-btn" data-lang-btn="en">EN</button>
+  </div>
+</nav>
+
+<main>
+  <div class="hero">
+    <div class="hero-tag" data-lang="zh">历史虚构小说集 · 佛教题材</div>
+    <div class="hero-tag" data-lang="en">Historical Fiction · Buddhist</div>
+    <div class="hero-title-zh" data-lang="zh">醒了？</div>
+    <div class="hero-title-en" data-lang="en">Awakened?</div>
+    <p class="hero-note" data-lang="zh">灵感来自佛教早期经典叙事。所有人物刻画与内心描写均为文学创作，不代表任何历史或神学主张。</p>
+    <p class="hero-note" data-lang="en">Inspired by early Buddhist canonical narratives. All characterization and inner experience are literary invention and do not represent any historical or theological claim.</p>
+  </div>
+
+  <div class="story-nav">
+    <a href="#story-1" data-lang="zh">一 · 车匿</a>
+    <a href="#story-1" data-lang="en">I · Channa</a>
+    <a href="#story-2" data-lang="zh">二 · 善生</a>
+    <a href="#story-2" data-lang="en">II · Sujata</a>
+    <a href="#story-3" data-lang="zh">三 · 憍陈如</a>
+    <a href="#story-3" data-lang="en">III · Kondañña</a>
+  </div>
+
+  <!-- STORY I -->
+  <section class="piece" id="story-1">
+    <div class="piece-header">
+      <div class="piece-num" data-lang="zh">一</div>
+      <div class="piece-num" data-lang="en">I</div>
+      <div class="piece-title" data-lang="zh">车匿</div>
+      <div class="piece-title" data-lang="en">Channa</div>
+    </div>
+
+    <p data-lang="zh">我给很多人牵过马。王公，将军，商人，祭司。什么样的人我都伺候过。但只有一个人下马的方式让我这辈子忘不掉。</p>
+    <p data-lang="en">I have held horses for many people. Princes, generals, merchants, priests. I have served every kind. But only one person dismounted in a way I have never been able to forget.</p>
+
+    <p data-lang="zh">不是因为他下马的动作有什么特别。是因为他下了马之后做的事。</p>
+    <p data-lang="en">Not because the dismount itself was unusual. Because of what he did after.</p>
+
+    <p data-lang="zh">那是很久以前了。久到我有时候会想，那天晚上是不是真的发生过。也许是我做的一个梦。人老了，梦和记忆会混在一起，你分不清哪个是醒着的时候经历的，哪个是睡着的时候编出来的。</p>
+    <p data-lang="en">That was a long time ago. So long that sometimes I wonder if it really happened. Maybe I dreamed it. When you get old, dreams and memories mix together. You can't tell which ones you lived through awake and which ones your mind made up while you slept.</p>
+
+    <p data-lang="zh">但那匹马我记得。深色的，跑起来很稳。那匹马是真的。</p>
+    <p data-lang="en">But I remember the horse. Dark coat, steady at a gallop. The horse was real.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">我在王宫里做事。不是什么要紧的差事，就是管马。喂马，刷马，备鞍，牵马出去让它们活动。宫里有很多马，好马，吃得比宫外的人还好。我从小就跟马打交道，别的不会，这个会。</p>
+    <p data-lang="en">I worked in the palace. Nothing important—just the horses. Feeding them, brushing them, saddling them, leading them out for exercise. The palace had many horses, fine ones. They ate better than most people outside the walls. I'd been around horses since I was small. It was the only thing I knew how to do.</p>
+
+    <p data-lang="zh">王子我见过很多次。宫里的人都见过他。他长得好看，穿得好看，身边总是围着人。他的日子过得跟我不一样——他住的宫殿有三座，一个季节换一座。他的妻子很美。他有了儿子。从外面看，他的日子没有任何缺的地方。</p>
+    <p data-lang="en">I had seen the prince many times. Everyone in the palace had. He was handsome, well dressed, always surrounded by people. His life was nothing like mine—he had three palaces, one for each season. His wife was beautiful. He had a son. From the outside, there was nothing missing from his life.</p>
+
+    <p data-lang="zh">我跟他没说过几句话。他偶尔来马厩看马，我给他牵过几次。他对我客气，但也就是主人对仆人的那种客气。我不觉得他记得我的名字。</p>
+    <p data-lang="en">I had barely spoken to him. He came to the stables occasionally to see the horses, and I had led them out for him a few times. He was polite to me, but it was the politeness of a master toward a servant. I don't think he knew my name.</p>
+
+    <p data-lang="zh">后来听说他有一段时间心情不太好。出去看到了什么，生老病死之类的。宫里的人议论了几天就不说了。王子心情不好又不是什么新鲜事，年轻人想多了而已，过一阵子就好了。</p>
+    <p data-lang="en">Later I heard he had been in low spirits for a while. He had gone outside and seen things—old age, sickness, death. People in the palace talked about it for a few days and then stopped. A prince feeling troubled was nothing new. Young people overthink things. He'd get over it.</p>
+
+    <p data-lang="zh">没好。</p>
+    <p data-lang="en">He didn't.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">那天半夜有人来叫我。</p>
+    <p data-lang="en">Someone came to wake me in the middle of the night.</p>
+
+    <p data-lang="zh">我睡得正死。有人推我，说王子要马，现在就要。我迷迷糊糊爬起来，还以为自己听错了。半夜要马？去哪？</p>
+    <p data-lang="en">I was deep asleep. Someone shook me and said the prince wanted a horse. Right now. I got up, groggy, half thinking I'd heard wrong. A horse in the middle of the night? To go where?</p>
+
+    <p data-lang="zh">没人回答我。只是说快，备好马，在后门等着。</p>
+    <p data-lang="en">No one answered. Just: hurry, get the horse ready, wait at the back gate.</p>
+
+    <p data-lang="zh">我去了马厩。挑了那匹深色的，他平时骑的那匹。给它上了鞍，牵到后门。夜里很黑，没有月亮，或者有但被云挡了，我不记得了。很安静。宫里那么大的地方，那个时辰一个人声都没有。</p>
+    <p data-lang="en">I went to the stables. Chose the dark one, the one he usually rode. Saddled it and led it to the back gate. It was very dark—no moon, or maybe there was one behind clouds, I can't remember. Very quiet. A palace that large, and at that hour not a single human sound.</p>
+
+    <p data-lang="zh">等了一会儿他来了。</p>
+    <p data-lang="en">I waited. Then he came.</p>
+
+    <p data-lang="zh">他穿得很简单，不像平时。没有侍从跟着，就他一个人。他走路的声音很轻，好像怕吵醒什么人。</p>
+    <p data-lang="en">He was dressed simply, not like usual. No attendants with him, just himself. His footsteps were light, as if he were afraid of waking someone.</p>
+
+    <p data-lang="zh">他看了我一眼。我后来想了很多年，那一眼到底是什么意思。当时我只觉得他跟平时不太一样。不是不高兴，也不是高兴，是一种我没见过的表情。像是一个人下了一个很大的决定，已经下了，不会改了，但他自己也知道这个决定的分量。</p>
+    <p data-lang="en">He looked at me. I spent many years afterward thinking about what that look meant. At the time I only felt that he was different from usual. Not unhappy, not happy—an expression I had never seen before. Like a person who has made a very large decision, has already made it, will not change it, but knows its weight.</p>
+
+    <p data-lang="zh">他上了马。说，走。</p>
+    <p data-lang="en">He mounted the horse. Said: go.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">我牵着马走的。没骑，步行，牵着缰绳在前面。出了后门，绕过宫墙，上了一条小路。走了多久我不记得了。天一直是黑的。路不好走，石头多，我怕马失蹄，走得很慢。</p>
+    <p data-lang="en">I walked in front, leading the horse by the reins. Not riding—on foot. Out through the back gate, around the palace wall, onto a narrow path. How long we walked I can't recall. The sky stayed dark. The road was rough, full of stones. I walked slowly, afraid the horse might stumble.</p>
+
+    <p data-lang="zh">他在马上没说话。我也没说话。不是不敢说，是不知道说什么。半夜三更，王子要出门，没带任何人，只带了我和一匹马。这不是正常的事。但他是王子，他让我做什么我就做什么。</p>
+    <p data-lang="en">He said nothing on the horse. I said nothing either. Not because I didn't dare—because I didn't know what to say. The middle of the night, the prince going out, bringing no one, just me and a horse. This was not normal. But he was the prince. Whatever he told me to do, I did.</p>
+
+    <p data-lang="zh">走了很远之后，到了城外。</p>
+    <p data-lang="en">After a long walk, we reached the edge of the city.</p>
+
+    <p data-lang="zh">他说，停。</p>
+    <p data-lang="en">He said: stop.</p>
+
+    <p data-lang="zh">我停了。他从马上下来。</p>
+    <p data-lang="en">I stopped. He dismounted.</p>
+
+    <p data-lang="zh">然后他开始脱身上的东西。</p>
+    <p data-lang="en">Then he began to take things off.</p>
+
+    <p data-lang="zh">先是外面的衣服。然后是里面的。然后是头上的装饰。然后是手上的。一件一件地脱下来，放在地上。不是扔，是放。每一件都放得很整齐，像是在跟它们告别。</p>
+    <p data-lang="en">The outer robe first. Then the inner garments. Then the ornaments on his head. Then what was on his hands. One piece at a time, placed on the ground. Not thrown—placed. Each item set down neatly, as though he were saying goodbye to it.</p>
+
+    <p data-lang="zh">我站在那里看着。不知道该怎么办。我是一个马夫，我的工作就是牵马，没有人教过我这种时候该做什么。</p>
+    <p data-lang="en">I stood there watching. I didn't know what to do. I was a groom. My job was to hold horses. No one had ever taught me what to do at a time like this.</p>
+
+    <p data-lang="zh">他把那些东西都放好了，站在那里。穿得很少，在夜里看起来跟一个普通人没有区别。不像王子了。就是一个人。</p>
+    <p data-lang="en">When everything was on the ground, he stood there. Barely dressed, he looked in the darkness no different from any ordinary person. He didn't look like a prince anymore. Just a man.</p>
+
+    <p data-lang="zh">然后他拿起一把什么东西——我没看清，天太黑——割了自己的头发。长头发，王子的那种长头发，割了。扔在地上。</p>
+    <p data-lang="en">Then he picked up something—I couldn't see clearly, it was too dark—and cut his own hair. Long hair, the kind a prince wears. Cut it off. Let it fall to the ground.</p>
+
+    <p data-lang="zh">我这时候开始害怕了。不是怕他伤害我，是怕这件事。一个王子，半夜出城，把身上所有的东西都脱了，把头发割了。这意味着什么我不完全懂，但我知道这不是一件小事。</p>
+    <p data-lang="en">That was when I became afraid. Not afraid he would hurt me—afraid of the thing itself. A prince, leaving the city in the middle of the night, removing everything from his body, cutting his hair. I didn't fully understand what it meant, but I knew it was not a small thing.</p>
+
+    <p data-lang="zh">他把脱下来的那些东西递给我。衣服，首饰，头饰。让我带回去。</p>
+    <p data-lang="en">He handed me what he had taken off. Clothes, jewelry, headpiece. Told me to bring them back.</p>
+
+    <p data-lang="zh">他说了一句话。具体的词我不记得了，大意是他不回去了。让我把马和这些东西带回去给他父亲。</p>
+    <p data-lang="en">He said something. I don't remember the exact words. The meaning was that he was not coming back. I should take the horse and these things to his father.</p>
+
+    <p data-lang="zh">我想说什么。想拦他。想说王子你这是做什么，你的妻子怎么办，你的儿子刚生出来。但我什么都没说出来。不是因为他是王子我不敢说。是因为他看着我的那个眼神。</p>
+    <p data-lang="en">I wanted to speak. To stop him. To say: what are you doing? What about your wife? Your son was just born. But nothing came out. Not because I didn't dare—because of the way he was looking at me.</p>
+
+    <p data-lang="zh">那个眼神不是在请求我的理解，也不是在命令我服从。是已经不在这里了。他的身体还站在我面前，但他这个人已经在别处了。你没法跟一个已经不在这里的人说话。</p>
+    <p data-lang="en">That look was not asking for my understanding, and it was not commanding my obedience. It was already somewhere else. His body was still standing in front of me, but the person was gone. You can't speak to someone who is no longer there.</p>
+
+    <p data-lang="zh">他转身走了。没穿什么像样的衣服，没穿鞋，或者穿了但很薄，我不记得了。就那样走进了黑暗里。</p>
+    <p data-lang="en">He turned and walked away. Barely clothed, barefoot or nearly so—I can't remember. He walked into the darkness like that.</p>
+
+    <p data-lang="zh">我站在那里，手里抱着他的衣服，旁边是马。</p>
+    <p data-lang="en">I stood there, his clothes in my arms, the horse beside me.</p>
+
+    <p data-lang="zh">过了很久我才转身往回走。</p>
+    <p data-lang="en">It was a long time before I turned around to walk back.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">回去的路我一个人走的。牵着马，抱着那堆衣服。天还是黑的。</p>
+    <p data-lang="en">I walked back alone. Leading the horse, carrying the bundle of clothes. The sky was still dark.</p>
+
+    <p data-lang="zh">我想的不是什么大事。我想的是回去怎么交代。王子不见了，最后跟他在一起的人是我。国王会不会觉得是我的错？会不会觉得我应该拦他？我一个马夫，我怎么拦一个王子？</p>
+    <p data-lang="en">I wasn't thinking about anything grand. I was thinking about how to explain this when I got back. The prince was gone, and the last person with him was me. Would the king think it was my fault? Would he think I should have stopped him? I was a groom. How does a groom stop a prince?</p>
+
+    <p data-lang="zh">天快亮的时候到了宫门口。后面的事很乱。有人哭，有人喊，有人来问我到底怎么回事。我说了，说他走了，说他让我把东西带回来。</p>
+    <p data-lang="en">Near dawn I reached the palace gate. What followed was chaos. Crying, shouting, people demanding to know what had happened. I told them. He left. He told me to bring these things back.</p>
+
+    <p data-lang="zh">国王的反应我不说了。那不是我该讲的事。</p>
+    <p data-lang="en">The king's reaction I will not describe. That is not mine to tell.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">后来的事大家都知道了。都比我知道得清楚。他苦修了六年。后来不苦修了。后来在一棵树下坐了很久。后来他们说他醒了。</p>
+    <p data-lang="en">What happened after that, everyone knows. Better than I do. He practiced severe austerities for six years. Then he stopped. Then he sat under a tree for a long time. Then they said he awakened.</p>
+
+    <p data-lang="zh">醒了。这个词我想了很多年。什么叫醒了？我每天早上也醒。我的醒和他的醒是同一个字，但大概不是同一件事。</p>
+    <p data-lang="en">Awakened. I thought about that word for many years. What does it mean to awaken? I wake up every morning too. My waking and his waking use the same word, but they are probably not the same thing.</p>
+
+    <p data-lang="zh">他醒了之后做了很多事。讲道，收弟子，走了很多地方。这些事传到我这里的时候已经过了很久，说的人把他说得像一个神。但我记得的是那天晚上的那个人。他不是神。他就是一个人，站在黑暗里，把衣服一件一件脱掉，把头发割了，然后走了。</p>
+    <p data-lang="en">After he awakened, he did many things. Teaching, gathering disciples, traveling far and wide. By the time this news reached me, it had been a long time, and the people telling it made him sound like a god. But what I remembered was the man that night. He was not a god. He was just a man, standing in darkness, taking off his clothes one by one, cutting his hair, and walking away.</p>
+
+    <p data-lang="zh">一个人怎么能那样走掉？什么都有，全扔了。妻子孩子父亲王位宫殿——全扔了。我见过出家的人，见过修行的人，但那些人大多数本来就没什么可扔的。他不一样。他有一切。他把一切都放在了我面前的地上。</p>
+    <p data-lang="en">How can a person walk away like that? Having everything, throwing it all away. Wife, child, father, throne, palace—all of it. I had seen people renounce the world before, seen people go off to practice austerities, but most of them had never had much to give up in the first place. He was different. He had everything. And he laid it all on the ground in front of me.</p>
+
+    <p data-lang="zh">这个我想了一辈子，没想通。</p>
+    <p data-lang="en">I have thought about this for the rest of my life. I have never understood it.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">我后来没有再见过他。</p>
+    <p data-lang="en">I never saw him again.</p>
+
+    <p data-lang="zh">我继续在宫里做事。后来离开了宫。后来做了别的。日子就是日子，跟以前一样。</p>
+    <p data-lang="en">I went on working at the palace. Later I left. Later I did other things. Days were just days, same as before.</p>
+
+    <p data-lang="zh">有人听说我是那天晚上的马夫，来问我那天的事。我说了。说完他们都会问同一个问题：你为什么不跟他一起走？</p>
+    <p data-lang="en">People who heard I was the groom that night came to ask me about it. I told them. When I finished, they always asked the same question: why didn't you go with him?</p>
+
+    <p data-lang="zh">我不知道。也许我应该。但那天晚上我没有走。我看着他走进黑暗里，然后我转身牵着马回去了。这就是我。我是一个马夫。马夫就是牵马的人，马去哪里，我去哪里。那天晚上马是回去的，我就回去了。</p>
+    <p data-lang="en">I don't know. Maybe I should have. But that night I didn't. I watched him walk into the darkness, and then I turned around and led the horse back. That's who I am. I am a groom. A groom goes where the horse goes. That night the horse was going back, so I went back.</p>
+
+    <p data-lang="zh">这个解释说出来很可笑。但这是真的。</p>
+    <p data-lang="en">That explanation sounds absurd when I say it out loud. But it's true.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">年头多了以后我发现一件事。</p>
+    <p data-lang="en">After many years I noticed something.</p>
+
+    <p data-lang="zh">我最常想起的不是他脱衣服的那个场景，虽然那个场景很震动。我也不常想他割头发的那一刻，虽然那一刻我害怕了。</p>
+    <p data-lang="en">What I thought about most was not the scene of him removing his clothes, though that scene shook me. Nor did I often think about the moment he cut his hair, though that moment frightened me.</p>
+
+    <p data-lang="zh">我最常想起的是他下马的那个动作。</p>
+    <p data-lang="en">What I thought about most was the way he dismounted.</p>
+
+    <p data-lang="zh">很普通的动作。一个人从马上下来。我见过几千个人从马上下来。但他下来的方式——不是跳下来的，也不是慢慢下来的，是一种我说不出来的方式——好像他从马上下来不只是脚着了地，而是从一个世界走进了另一个世界。前一刻他还在马上，还是王子，还是有一切的那个人。后一刻他在地上，什么都开始放了。</p>
+    <p data-lang="en">A very ordinary motion. A person getting off a horse. I have seen thousands of people get off horses. But the way he did it—not jumping down, not climbing down slowly, but in a way I cannot describe—it was as though getting off the horse was not just his feet touching the ground, but stepping from one world into another. One moment he was on the horse, still a prince, still a man who had everything. The next moment he was on the ground, and everything began to fall away.</p>
+
+    <p data-lang="zh">下马。就是从这个动作开始的。</p>
+    <p data-lang="en">Dismounting. It all started with that.</p>
+
+    <p data-lang="zh">我后来给很多人牵过马。每次有人从马上下来的时候，我会等一下。不是故意的。就是会等一下。好像在等那个人做点什么。脱掉什么。放下什么。但他们从来不会。他们下了马就走了，去做他们要做的事。</p>
+    <p data-lang="en">In the years after, I held horses for many people. Every time someone dismounted, I would wait a moment. Not deliberately. I just waited. As if expecting the person to do something. Take something off. Set something down. But they never did. They got off the horse and went about their business.</p>
+
+    <p data-lang="zh">只有那天晚上的那个人，下马之后，把一切都放在了地上。</p>
+    <p data-lang="en">Only that one man, that night, after dismounting, laid everything on the ground.</p>
+
+    <p data-lang="zh">我等了一辈子，再没有等到过第二个。</p>
+    <p data-lang="en">I waited my whole life and never saw a second one.</p>
+
+    <p data-lang="zh">但我还是会等一下。每次都等。</p>
+    <p data-lang="en">But I still wait. Every time.</p>
+  </section>
+
+  <!-- STORY II -->
+  <div class="story-divider"><div class="story-divider-dot"></div></div>
+
+  <section class="piece" id="story-2">
+    <div class="piece-header">
+      <div class="piece-num" data-lang="zh">二</div>
+      <div class="piece-num" data-lang="en">II</div>
+      <div class="piece-title" data-lang="zh">善生</div>
+      <div class="piece-title" data-lang="en">Sujata</div>
+    </div>
+
+    <p data-lang="zh">我这辈子做过一件事，后来被很多人提起。但他们提起的方式跟我记得的不一样。</p>
+    <p data-lang="en">I did one thing in my life that many people have talked about since. But the way they talk about it is not the way I remember it.</p>
+
+    <p data-lang="zh">他们说我供养了一位大觉者。他们说我的那碗乳粥成就了一段伟大的因缘。有人说我前世就注定要做这件事，有人说那碗粥是整个世间转折的起点。</p>
+    <p data-lang="en">They say I made an offering to a great awakened one. They say my bowl of milk porridge fulfilled a momentous destiny. Some say I was fated in a past life to do this. Some say that bowl was the turning point of the entire world.</p>
+
+    <p data-lang="zh">我听着这些话，觉得他们说的不是我。他们说的是另一个人，一个故事里的人。那个人知道自己在做什么，知道面前坐着的是谁，知道一碗粥的分量。</p>
+    <p data-lang="en">When I hear these things, I feel they are not talking about me. They are talking about someone in a story. That person knew what she was doing, knew who was sitting in front of her, knew the weight of a bowl of porridge.</p>
+
+    <p data-lang="zh">我不是那个人。那天我只是看到一个快死的人坐在河边，给他端了一碗饭。</p>
+    <p data-lang="en">I am not that person. That day I just saw a man who was about to die sitting by the river, and I brought him a bowl of food.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">我住的地方离河不远。尼连禅河，水不大，但一年四季都有。河边有树，有草，偶尔有修行人在那一带住。</p>
+    <p data-lang="en">I lived not far from the river. The Neranjara—not a big river, but it flowed year-round. Trees along the banks, grass, and from time to time ascetics living in the area.</p>
+
+    <p data-lang="zh">修行人我们见得多了。那一带常年有。有的住在树下，有的住在洞里，有的什么都不住就坐在露天里。有的穿衣服，有的不穿。有的吃东西，有的不吃。不吃的那些瘦得很厉害，肋骨一根一根数得清。</p>
+    <p data-lang="en">We were used to ascetics. They were always around. Some lived under trees, some in caves, some out in the open with no shelter at all. Some wore clothes, some didn't. Some ate, some didn't. The ones who didn't eat were terribly thin—you could count every rib.</p>
+
+    <p data-lang="zh">我们村里的人对修行人的态度就是不打扰。偶尔有人送点吃的过去，算是积功德。但也不是每个人都送。修行人太多了，你送不过来。</p>
+    <p data-lang="en">People in our village left the ascetics alone. Sometimes someone would bring them food, for merit. But not everyone bothered. There were too many ascetics to feed them all.</p>
+
+    <p data-lang="zh">我家做什么的不重要。就是种地，养牛，过日子。我那时候年轻，具体多大我说不清了，反正还没结婚。每天做的事就是那些：做饭，喂牛，去河边打水，帮家里干活。日子跟河水一样，每天流，每天差不多。</p>
+    <p data-lang="en">What my family did doesn't matter. We farmed, raised cattle, got by. I was young then—I can't say exactly how old, but I wasn't married yet. Every day was the same things: cooking, feeding the cattle, fetching water from the river, helping around the house. Days flowed like the river. Every day the same.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">那天我去河边是要去还愿的。</p>
+    <p data-lang="en">That day I went to the river to fulfill a vow.</p>
+
+    <p data-lang="zh">我之前许过一个愿——什么愿我不说了，是女孩子的事。愿成了，我要去河边的一棵大树下供一碗乳粥。这是我们那里的习惯，树下有树神，愿成了要去谢。</p>
+    <p data-lang="en">I had made a wish some time before—what it was I won't say, it was a girl's matter. The wish had come true, and I needed to go to a large tree by the river and offer a bowl of milk porridge. That was the custom where we lived. There was a tree spirit under the tree, and when your wish was granted you went to give thanks.</p>
+
+    <p data-lang="zh">我起得很早，熬了粥。用的好牛奶，熬了很久，稠的。装在一个干净的碗里，端着去了河边。</p>
+    <p data-lang="en">I got up early and cooked the porridge. Good milk, cooked a long time, thick. Put it in a clean bowl and carried it to the river.</p>
+
+    <p data-lang="zh">到了那棵树下，看到有人。</p>
+    <p data-lang="en">When I reached the tree, someone was there.</p>
+
+    <p data-lang="zh">一个人坐在那里。瘦得不像人。皮包骨头，脸上的皮贴着颧骨，眼窝深得像两个洞。坐着不动，我一开始还以为是死了。走近了才看到他在呼吸，很浅很慢，但还在。</p>
+    <p data-lang="en">A man sitting on the ground. So thin he barely looked human. Skin stretched over bone, the skin on his face pulled tight against his cheekbones, his eye sockets deep as two holes. Sitting motionless—at first I thought he was dead. Only when I got closer did I see he was breathing, very shallow, very slow, but still breathing.</p>
+
+    <p data-lang="zh">我吓了一跳。不是因为害怕，是因为从来没见过一个人瘦成这样还活着的。那些修行人我见过瘦的，但没有瘦成这样的。这个人像是把自己身上所有多余的东西都去掉了，只剩下一个骨头架子，外面蒙了一层皮。</p>
+    <p data-lang="en">I was startled. Not frightened—I had simply never seen anyone that thin and still alive. I had seen thin ascetics before, but none like this. This man seemed to have stripped away everything unnecessary from his body until only a skeleton remained, covered by a layer of skin.</p>
+
+    <p data-lang="zh">我站在那里端着碗，不知道该怎么办。我是来供树神的，不是来供人的。但这个人坐在树下，看起来马上就要死了。</p>
+    <p data-lang="en">I stood there holding the bowl, not knowing what to do. I had come to make an offering to the tree spirit, not to a person. But this person was sitting under the tree and looked like he was about to die.</p>
+
+    <p data-lang="zh">我想了一下。然后把碗递给了他。</p>
+    <p data-lang="en">I thought for a moment. Then I held the bowl out to him.</p>
+
+    <p data-lang="zh">他抬起头看了我一眼。那个眼神——我后来想了很久——不是感激，不是惊喜，不是任何我以为一个快饿死的人看到食物时该有的表情。是一种很安静的东西。好像他不是在看我，是在看着什么很远的地方，而我恰好站在他和那个地方之间。</p>
+    <p data-lang="en">He raised his head and looked at me. That look—I thought about it for a long time afterward—was not gratitude, not surprise, not any expression I would have expected from a starving man seeing food. It was something very quiet. As though he were not looking at me but at something very far away, and I happened to be standing between him and that place.</p>
+
+    <p data-lang="zh">他接过了碗。吃了。</p>
+    <p data-lang="en">He took the bowl. He ate.</p>
+
+    <p data-lang="zh">吃得很慢。不是狼吞虎咽的那种。一口一口的，像是在认真对待每一口。我站在旁边看着他吃，觉得很奇怪——一个饿成这样的人，吃东西的方式居然像是他在做一件很重要的事，而不只是在填肚子。</p>
+    <p data-lang="en">He ate slowly. Not wolfing it down. One mouthful at a time, as though he were taking each one seriously. I stood beside him watching and felt it was strange—a man this starved, eating as though the act of eating were something important in itself, not just filling his stomach.</p>
+
+    <p data-lang="zh">吃完了。他把碗还给我。</p>
+    <p data-lang="en">When he finished, he returned the bowl to me.</p>
+
+    <p data-lang="zh">说了一句什么。很轻，我没听清。也许是谢谢，也许不是。我点了点头，拿着空碗回去了。</p>
+    <p data-lang="en">He said something. Very soft, I didn't catch it. Maybe it was thank you. Maybe not. I nodded, took the empty bowl, and went home.</p>
+
+    <p data-lang="zh">就这些。从头到尾不到一炷香的时间。</p>
+    <p data-lang="en">That was all. The whole thing took less time than it takes incense to burn down.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">回去之后我跟家里人说了。说树下有个修行人，快死了，我把粥给他了。家里人说那你的愿怎么办。我说不知道，下次再供一碗吧。</p>
+    <p data-lang="en">Back home I told my family. Said there was an ascetic under the tree, nearly dead, and I had given him the porridge. They said: what about your vow? I said I didn't know, I'd make another offering next time.</p>
+
+    <p data-lang="zh">没人在意这件事。快饿死的修行人在那一带不稀奇。给他一碗饭也不稀奇。日子继续过。</p>
+    <p data-lang="en">Nobody cared about this. A half-starved ascetic in that area was nothing unusual. Giving him a bowl of food was nothing unusual. Life went on.</p>
+
+    <p data-lang="zh">过了一段时间，听说河边那几个修行人散了。好像是其中一个吃了东西，别的人觉得他不行了，就离开了他。我想那大概就是我遇到的那个。</p>
+    <p data-lang="en">Some time later I heard the ascetics by the river had scattered. Apparently one of them had started eating and the others decided he was finished, so they left him. I figured that was probably the one I had met.</p>
+
+    <p data-lang="zh">又过了一段时间，传来一些消息。说有个人在附近一棵菩提树下坐了很久，然后醒了。说他开始讲道了。说他是佛。</p>
+    <p data-lang="en">More time passed. Then news came. Someone had sat under a Bodhi tree nearby for a very long time, and then awakened. He had begun to teach. They were calling him the Buddha.</p>
+
+    <p data-lang="zh">我听着这些消息，没往自己身上想。修行人开悟的故事我们那里不少见。有的真悟了，有的没悟自己觉得悟了，谁知道呢。</p>
+    <p data-lang="en">I heard this news and didn't connect it to myself. Stories of ascetics attaining enlightenment were not rare in our area. Some really did. Some didn't but thought they had. Who could tell?</p>
+
+    <p data-lang="zh">后来有人说，就是那个你给过粥的人。</p>
+    <p data-lang="en">Then someone said: it was the one you gave the porridge to.</p>
+
+    <p data-lang="zh">我愣了一下。</p>
+    <p data-lang="en">I paused.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">消息越传越大。他在鹿野苑讲道了，收了弟子。他走了很远的路，去了很多地方。越来越多的人跟着他。他说的话被人记下来，传来传去。</p>
+    <p data-lang="en">The news kept growing. He was teaching at the Deer Park in Sarnath. He had taken disciples. He traveled far, to many places. More and more people followed him. His words were written down and passed around.</p>
+
+    <p data-lang="zh">有人开始说起我。说善生供养了佛陀。说那碗乳粥是他悟道前的最后一餐。说因为那碗粥他恢复了力气，然后坐到菩提树下，然后醒了。</p>
+    <p data-lang="en">People started mentioning me. Saying Sujata made an offering to the Buddha. Saying that bowl of milk porridge was his last meal before awakening. Saying that because of that porridge he regained his strength, sat under the Bodhi tree, and awakened.</p>
+
+    <p data-lang="zh">我听着这些话觉得很不真实。那天早上我只是去河边还愿，看到一个快死的人，把碗递给了他。这中间没有任何大的想法。我没有想过"这个人会成佛"。我甚至没有想过"我在做一件好事"。我只是看到了一个快死的人，手里恰好有一碗粥。</p>
+    <p data-lang="en">Hearing this felt unreal. That morning I had simply gone to the river to fulfill a vow, seen a dying man, and handed him a bowl. There was no grand intention behind it. I hadn't thought "this person will become the Buddha." I hadn't even thought "I am doing a good deed." I just saw a person about to die, and I happened to have a bowl of porridge in my hands.</p>
+
+    <p data-lang="zh">如果那天我没有许愿，就不会去河边。如果那天我晚到一刻，也许他已经不在了。如果我不是端着一碗粥而是空着手去的，我可能看看他就走了。</p>
+    <p data-lang="en">If I hadn't made that vow, I wouldn't have gone to the river. If I had arrived a moment later, he might already have been gone. If I had come empty-handed instead of carrying porridge, I might have looked at him and walked away.</p>
+
+    <p data-lang="zh">这些"如果"让我头晕。好像我做的那件事不是我做的，是很多巧合堆在一起做的。我只是恰好站在那里。</p>
+    <p data-lang="en">These what-ifs made my head spin. It was as though the thing I did was not really done by me, but by a pile of coincidences stacked together. I just happened to be standing there.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">后来有人来看我。从很远的地方来，专门来看我。他们很恭敬，叫我"供养佛陀的善生"。有人请我讲那天的事。</p>
+    <p data-lang="en">Later, people came to see me. From far away, specifically to see me. They were very respectful, calling me "Sujata who made the offering to the Buddha." Some asked me to tell them about that day.</p>
+
+    <p data-lang="zh">我讲了。讲完他们的脸上是那种被确认了信仰的满足。他们听到的是一个伟大因缘的故事：一个注定的相遇，一个神圣的供养，一个改变世界的碗粥。</p>
+    <p data-lang="en">I told them. When I finished, their faces wore the look of people whose faith had just been confirmed. What they had heard was a story of great destiny: a fated encounter, a sacred offering, a bowl of porridge that changed the world.</p>
+
+    <p data-lang="zh">但那不是我记得的东西。</p>
+    <p data-lang="en">But that is not what I remember.</p>
+
+    <p data-lang="zh">我记得的是一个快死的人的眼睛。那种安静。那种好像在看着很远地方的眼神。我记得他吃粥的方式——一口一口的，每一口都很认真。我记得他把碗还给我的时候，碗是干净的。</p>
+    <p data-lang="en">What I remember is the eyes of a dying man. That quietness. That gaze aimed at something very far away. I remember how he ate the porridge—one mouthful at a time, every mouthful careful. I remember that when he returned the bowl, it was clean.</p>
+
+    <p data-lang="zh">这些东西不伟大。一个饿了很久的人认真地吃了一碗粥。就这些。</p>
+    <p data-lang="en">These things are not grand. A man who had been hungry for a long time ate a bowl of porridge carefully. That's all.</p>
+
+    <p data-lang="zh">但就是这些东西留在了我身上。不是"我供养了佛陀"这个故事留在了我身上。是那个人吃东西的方式留在了我身上。</p>
+    <p data-lang="en">But those are the things that stayed with me. Not the story of "I made an offering to the Buddha." The way that man ate stayed with me.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">我后来过了很平常的日子。结了婚，有了孩子。做饭，喂牛，打水，干活。跟以前一样。</p>
+    <p data-lang="en">I lived a very ordinary life afterward. Got married, had children. Cooked, fed the cattle, drew water, worked. Same as before.</p>
+
+    <p data-lang="zh">他的道传得越来越远。有人出家，有人修行，有人盖精舍。这些事跟我有关系也没关系。有人说我是他的第一个在家弟子。也许是吧。我不太清楚弟子是什么意思。我给过他一碗粥。这算弟子吗？</p>
+    <p data-lang="en">His teaching spread farther and farther. People ordained, practiced, built monasteries. These things had something to do with me and nothing to do with me. Someone said I was his first lay disciple. Maybe. I'm not entirely sure what disciple means. I gave him a bowl of porridge. Does that make me a disciple?</p>
+
+    <p data-lang="zh">我没有出家。没有去修行。没有去听他讲道——也许去过一两次，远远地，跟当年很多人一样。但我没有跟着走。</p>
+    <p data-lang="en">I didn't ordain. Didn't go off to practice. Didn't go to hear him teach—well, maybe once or twice, from a distance, like many others. But I didn't follow.</p>
+
+    <p data-lang="zh">不是不想。是不知道怎么跟。我是一个种地的人。我懂的是牛和庄稼和做饭。他说的那些道理，有人转述给我听，有些我觉得对，有些我听不懂。但我觉得他的道理不需要我去跟。他已经走了那么远了，很多人在跟着他走。不多我一个。</p>
+    <p data-lang="en">Not because I didn't want to. Because I didn't know how. I was a farmer. What I understood was cattle and crops and cooking. His teachings, when others repeated them to me—some I thought were right, some I couldn't follow. But I didn't feel his path needed me on it. He had already gone so far, and so many people were walking behind him. One more or fewer made no difference.</p>
+
+    <p data-lang="zh">我能做的就是我已经做过的那件事：看到一个快死的人，给他一碗饭。</p>
+    <p data-lang="en">What I could do was what I had already done: see a dying person and give them a bowl of food.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">年头多了以后我注意到一件事。</p>
+    <p data-lang="en">After many years I noticed something.</p>
+
+    <p data-lang="zh">每次盛饭的时候——不管是给家里人盛，还是给客人盛，还是给路过的陌生人盛——我都会多一个动作。</p>
+    <p data-lang="en">Every time I served food—whether to my family, to a guest, to a stranger passing through—I had one extra motion.</p>
+
+    <p data-lang="zh">盛好了之后，端起碗，递过去之前，我会看一眼碗里的饭。</p>
+    <p data-lang="en">After filling the bowl, picking it up, and before handing it over, I would look at the food inside.</p>
+
+    <p data-lang="zh">就看一眼。不到一个呼吸的时间。不是在检查饭够不够或者好不好。就是看一眼。</p>
+    <p data-lang="en">Just a glance. Less than a breath. Not checking whether there was enough or whether it was good. Just looking.</p>
+
+    <p data-lang="zh">每次看的时候我都会想起那天早上的那碗粥。稠的，白的，装在一个干净的碗里。我端着它去河边，本来是给树神的，后来给了一个坐在树下的人。</p>
+    <p data-lang="en">Every time I looked, I would think of that morning's porridge. Thick, white, in a clean bowl. I had carried it to the river meaning to offer it to the tree spirit, and ended up giving it to a man sitting under the tree.</p>
+
+    <p data-lang="zh">那碗粥改变了什么没有？我不知道。他们说改变了整个世间。也许吧。但从我这里看过去，那就是一碗粥。我给了，他吃了。然后我回家了，他继续坐着。后来他醒了。</p>
+    <p data-lang="en">Did that bowl of porridge change anything? I don't know. They say it changed the whole world. Maybe. But from where I stand, it was just a bowl of porridge. I gave it, he ate it. Then I went home and he went on sitting. Later he awakened.</p>
+
+    <p data-lang="zh">这中间的因果，比我聪明的人去想吧。我只知道，从那天以后，每次盛饭的时候我会多看一眼碗里的东西。好像在确认什么。确认这碗饭会到该到的地方。</p>
+    <p data-lang="en">The cause and effect between those things—let someone smarter than me work that out. All I know is that since that day, every time I serve food, I take one extra look at what's in the bowl. As if confirming something. Confirming that this food will reach the place it's meant to reach.</p>
+
+    <p data-lang="zh">然后我把碗递出去。</p>
+    <p data-lang="en">Then I hand the bowl over.</p>
+  </section>
+
+  <!-- STORY III -->
+  <div class="story-divider"><div class="story-divider-dot"></div></div>
+
+  <section class="piece" id="story-3">
+    <div class="piece-header">
+      <div class="piece-num" data-lang="zh">三</div>
+      <div class="piece-num" data-lang="en">III</div>
+      <div class="piece-title" data-lang="zh">憍陈如</div>
+      <div class="piece-title" data-lang="en">Kondañña</div>
+    </div>
+
+    <p data-lang="zh">我这辈子犯过一个错。不是小错，是那种你用余生去想也想不完的错。</p>
+    <p data-lang="en">I made a mistake in my life. Not a small one. The kind you spend the rest of your days thinking about and never finish.</p>
+
+    <p data-lang="zh">我离开了他。</p>
+    <p data-lang="en">I left him.</p>
+
+    <p data-lang="zh">在他最需要人的时候，我转身走了。我还带走了其他四个人。我们五个一起走的，走得很决绝，因为我们都觉得他完了。</p>
+    <p data-lang="en">At the moment he needed people most, I turned my back and walked away. And I took the other four with me. All five of us left together, decisively, because we all believed he was finished.</p>
+
+    <p data-lang="zh">后来他没有完。后来他醒了。后来他来找我们，对我们说话。后来我听懂了。</p>
+    <p data-lang="en">He was not finished. He awakened. He came to find us and spoke to us. And I understood.</p>
+
+    <p data-lang="zh">但"听懂了"这三个字盖不住前面那件事。我离开过他。这个事实跟他后来说的所有道理一样重，甚至更重。因为道理是他的，而那个错是我的。</p>
+    <p data-lang="en">But the words "I understood" cannot cover what came before. I had left him. That fact weighs as much as everything he taught afterward. Maybe more. Because the teaching was his. The mistake was mine.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">我年轻的时候修行。很认真地修。在我们那个年代，修行是一件正经事。你放弃家庭，放弃财产，放弃所有世俗的东西，去找一个终极的答案。苦是手段，忍是功夫，身体受得越多，离那个答案就越近——我们是这么相信的。</p>
+    <p data-lang="en">When I was young, I practiced austerities. Seriously. In our time, ascetic practice was a real undertaking. You gave up family, gave up possessions, gave up everything worldly, and went searching for an ultimate answer. Suffering was the method, endurance was the skill, and the more the body endured, the closer you got to the answer—that was what we believed.</p>
+
+    <p data-lang="zh">我跟另外四个人一起修。我们住在尼连禅河边，吃得很少，有时候几天不吃。打坐，苦行，把身体逼到极限。我们相信这是唯一的路。</p>
+    <p data-lang="en">I practiced with four others. We lived by the Neranjara River, eating very little, sometimes nothing for days. Sitting, mortifying the body, pushing it to the limit. We believed this was the only path.</p>
+
+    <p data-lang="zh">后来他来了。</p>
+    <p data-lang="en">Then he came.</p>
+
+    <p data-lang="zh">他的事我是知道的。王子出家，放弃了一切。这种事在我们修行的圈子里是大事。一个什么都有的人选择什么都不要，这比我们任何人都走得远——我们大多数人出家之前本来就没什么可放弃的。</p>
+    <p data-lang="en">I already knew about him. A prince who had renounced everything. In our circles this was a significant event. A man who had everything choosing to have nothing—that was further than any of us had gone. Most of us had never had much to give up in the first place.</p>
+
+    <p data-lang="zh">他来到河边，跟我们一起修。他修得比我们任何人都狠。吃得比我们少，坐得比我们久，把自己折磨得比我们任何人都厉害。我看着他日渐消瘦，肋骨一根根凸出来，心里是佩服的。这个人是真的在找那个答案，不是在做样子。</p>
+    <p data-lang="en">He came to the river and practiced with us. He was harder on himself than any of us. Ate less, sat longer, punished his body more severely than anyone. I watched him grow thinner by the day, ribs rising one by one, and felt admiration. This man was truly searching for the answer. He was not pretending.</p>
+
+    <p data-lang="zh">六年。他跟我们一起待了六年。</p>
+    <p data-lang="en">Six years. He stayed with us for six years.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">然后有一天，有个女人给他端了一碗粥，他吃了。</p>
+    <p data-lang="en">Then one day, a woman brought him a bowl of porridge, and he ate it.</p>
+
+    <p data-lang="zh">就这么简单。一碗粥。</p>
+    <p data-lang="en">That simple. A bowl of porridge.</p>
+
+    <p data-lang="zh">但对我们来说，这不是一碗粥。这是背叛。</p>
+    <p data-lang="en">But to us, it was not a bowl of porridge. It was betrayal.</p>
+
+    <p data-lang="zh">六年的苦修，六年的忍耐，六年的把身体往死里逼——他用一碗粥全部否定了。他开始吃东西了。不是偶尔吃一口维持生命，是正经吃了，接受了别人的供养，接受了身体的需要。</p>
+    <p data-lang="en">Six years of austerity, six years of endurance, six years of driving the body toward death—and he negated all of it with one bowl of porridge. He was eating again. Not a token mouthful to stay alive. He ate properly, accepted someone's offering, accepted the body's need.</p>
+
+    <p data-lang="zh">我当时的感觉不是失望。是愤怒。</p>
+    <p data-lang="en">What I felt was not disappointment. It was fury.</p>
+
+    <p data-lang="zh">你知道一个人花了六年时间相信一件事，然后看到他最尊敬的人亲手推翻了那件事，是什么感觉吗？不是那个人变了，是你脚下的地变了。你以为你站在实地上，突然发现是空的。</p>
+    <p data-lang="en">Do you know what it feels like to spend six years believing in something, and then watch the person you respect most overturn it with his own hands? It wasn't that he had changed. It was that the ground under your feet had changed. You thought you were standing on solid earth. Suddenly it was empty.</p>
+
+    <p data-lang="zh">我跟其他四个人说：他退了。他堕落了。他受不了了。</p>
+    <p data-lang="en">I told the other four: he has fallen back. He has given in. He couldn't take it.</p>
+
+    <p data-lang="zh">我们五个商量了一下，决定走。不跟他了。一个放弃苦修的人不值得跟随。</p>
+    <p data-lang="en">The five of us talked it over and decided to leave. We would not follow a man who had abandoned the practice. He was no longer worth following.</p>
+
+    <p data-lang="zh">走之前我看了他一眼。他坐在那里，吃完了那碗粥，脸上的表情不是愧疚，不是犹豫，是一种很平的东西。像是一个人走了很久的弯路，终于看到了正路，松了一口气。</p>
+    <p data-lang="en">Before I left, I looked at him once. He was sitting there, having finished the porridge, and his expression was not guilt, not hesitation—it was something very level. Like a person who has been walking a wrong road for a long time and has finally spotted the right one, and is letting out a breath.</p>
+
+    <p data-lang="zh">但我当时不是这么理解的。我当时觉得那是放弃的脸。</p>
+    <p data-lang="en">But that is not how I read it at the time. I thought it was the face of surrender.</p>
+
+    <p data-lang="zh">我们走了。去了鹿野苑。继续苦修。</p>
+    <p data-lang="en">We left. Went to the Deer Park at Sarnath. Continued our austerities.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">后来的事传来了。他在一棵树下坐了很久。然后他们说他醒了。</p>
+    <p data-lang="en">Later the news came. He had sat under a tree for a long time. Then they said he had awakened.</p>
+
+    <p data-lang="zh">我听到这个消息的时候第一个反应不是高兴，是怀疑。一个放弃苦修的人怎么可能醒？醒了的人应该是吃得最少，忍得最多，把身体完全克服的人。不是一个吃了粥的人。</p>
+    <p data-lang="en">My first reaction on hearing this was not joy. It was doubt. How could a man who abandoned austerities have awakened? The one who awakens should be the one who eats the least, endures the most, conquers the body completely. Not a man who ate porridge.</p>
+
+    <p data-lang="zh">但消息越来越多，越来越具体。他开始讲道了。他说的东西跟我们修的不一样。他说苦修不是路。他说有一条中间的路。</p>
+    <p data-lang="en">But the news kept coming, more and more specific. He had begun to teach. What he said was different from what we practiced. He said austerity was not the path. He said there was a middle way.</p>
+
+    <p data-lang="zh">我不想听。</p>
+    <p data-lang="en">I didn't want to hear it.</p>
+
+    <p data-lang="zh">不是听不进去，是不敢听。因为如果他说的是对的，那我们六年的苦修就是白费的。我花了六年折磨自己的身体，每一天的疼痛，每一夜的饥饿，每一次差点死掉又活过来——这些全部是白费的。这个我接受不了。</p>
+    <p data-lang="en">Not because I couldn't take it in. Because I didn't dare. Because if what he said was right, then our six years of practice had been for nothing. Every day of pain I had spent, every night of hunger, every time I had nearly died and come back—all of it for nothing. I could not accept that.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">然后他来了。</p>
+    <p data-lang="en">Then he came.</p>
+
+    <p data-lang="zh">走了很远的路来鹿野苑找我们。</p>
+    <p data-lang="en">He had walked a long way to reach us at the Deer Park.</p>
+
+    <p data-lang="zh">我远远看到他走过来的时候，跟其他四个人说：不理他。他来了也不理他。不给他座位，不跟他说话。让他自己走。</p>
+    <p data-lang="en">When I saw him approaching from a distance, I told the other four: ignore him. Even when he gets here, ignore him. Don't offer him a seat. Don't speak to him. Let him leave on his own.</p>
+
+    <p data-lang="zh">但他走近了。</p>
+    <p data-lang="en">But he came closer.</p>
+
+    <p data-lang="zh">他走近的时候我发现他跟以前不一样了。不是胖了瘦了高了矮了那种不一样。是整个人的那种东西变了。我说不出来变了什么。他走路的方式，他看人的方式，他身上的那种……我找不到词。安静，但不是没有东西的那种安静。是满的那种安静。像一个容器被装满了，满到一滴都不往外溢，但你知道里面是满的。</p>
+    <p data-lang="en">As he came closer, I realized he was different from before. Not thinner or fatter, taller or shorter—not that kind of different. Something about the whole person had changed. I couldn't say what. The way he walked, the way he looked at people, something about him that I couldn't find a word for. Quiet, but not the empty kind of quiet. A full kind of quiet. Like a vessel that has been filled completely, so full that not a single drop spills over, but you know it is full.</p>
+
+    <p data-lang="zh">他走到我们面前。</p>
+    <p data-lang="en">He walked up to us.</p>
+
+    <p data-lang="zh">我本来说好不理他的。但他走到面前的时候，我站起来了。不是我决定站起来的。是身体自己站起来的。其他四个人也站起来了。</p>
+    <p data-lang="en">I had agreed not to acknowledge him. But when he stood before me, I rose to my feet. Not because I decided to. My body stood on its own. The other four stood as well.</p>
+
+    <p data-lang="zh">我们给他准备了座位。给他打了水洗脚。这些事我们事先说好了不做的。但我们都做了。没有人商量，没有人带头，五个人同时开始做。</p>
+    <p data-lang="en">We prepared a seat for him. Brought water to wash his feet. These were exactly the things we had agreed not to do. But we all did them. No one conferred, no one led. Five people began at the same moment.</p>
+
+    <p data-lang="zh">他坐下来，开始说话。</p>
+    <p data-lang="en">He sat down and began to speak.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">他说了什么，后来很多人记了下来，比我记得准。四谛，八正道，中道。这些词后来成了他教法的骨架，被无数人重复。</p>
+    <p data-lang="en">What he said, many have recorded since, more accurately than I could. The four truths, the eightfold path, the middle way. These words later became the backbone of his teaching, repeated by countless people.</p>
+
+    <p data-lang="zh">但那天下午在鹿野苑，我听到的不是这些词。</p>
+    <p data-lang="en">But that afternoon at the Deer Park, what I heard was not those words.</p>
+
+    <p data-lang="zh">我听到的是——该怎么说——像是有人把你一直关着的一扇窗户打开了。你不知道这扇窗一直关着，因为你从生下来它就关着。你以为屋子里就是这么暗的。然后有人打开了它，光进来了，你才知道原来一直有窗。</p>
+    <p data-lang="en">What I heard was—how can I say it—like someone opening a window that had always been shut. You didn't know the window was shut, because it had been shut since you were born. You thought the room was just that dark. Then someone opened it, light came in, and only then did you realize there had always been a window.</p>
+
+    <p data-lang="zh">他说苦修不是路。他说得很平静，不是在批评我们，不是在说"你们错了"。他只是在描述一个事实，就像你描述天是蓝的，水往低处流。苦修不是路。放纵也不是路。路在中间。</p>
+    <p data-lang="en">He said austerity was not the path. He said it calmly, not criticizing us, not saying "you were wrong." He was simply describing a fact, the way you describe the sky being blue or water running downhill. Austerity is not the path. Indulgence is not the path. The path is in between.</p>
+
+    <p data-lang="zh">我听着，心里有一个东西在塌。六年的苦修，像一座我亲手搭起来的塔，一层一层的，每一层都是疼痛和忍耐。他的话像水，从塔顶浇下去，不是推倒它，是溶解它。塔还在那里，但它不再是石头做的了，它是沙做的，水一过就散了。</p>
+    <p data-lang="en">As I listened, something inside me was collapsing. Six years of practice, like a tower I had built with my own hands, layer by layer, each layer made of pain and endurance. His words were like water, poured from the top—not pushing the tower over, but dissolving it. The tower was still there, but it was no longer made of stone. It was made of sand, and when the water passed through, it fell apart.</p>
+
+    <p data-lang="zh">散了之后底下有什么？底下有地。地一直在那里。塔立在上面的时候看不到，塔散了就看到了。</p>
+    <p data-lang="en">What was underneath, after it fell? The ground. The ground had been there all along. You couldn't see it when the tower stood on it. When the tower dissolved, there it was.</p>
+
+    <p data-lang="zh">他说完之后看着我们。</p>
+    <p data-lang="en">When he finished, he looked at us.</p>
+
+    <p data-lang="zh">其他四个人的表情我不知道，我只知道我自己的。我的眼睛湿了。不是因为感动。是因为看到了。看到了那块地。看到了它一直在那里。看到了我花了六年在上面搭了一座没用的塔。</p>
+    <p data-lang="en">I don't know what expressions the other four wore. I only know my own. My eyes were wet. Not from being moved. From seeing. Seeing the ground. Seeing that it had always been there. Seeing that I had spent six years building a useless tower on top of it.</p>
+
+    <p data-lang="zh">我说了一句话。后来他们把那句话记了下来，说我是第一个懂的。</p>
+    <p data-lang="en">I said something. They later wrote that sentence down and said I was the first to understand.</p>
+
+    <p data-lang="zh">其实我不确定我是不是真的"懂了"。我只是看到了。看到和懂是一样的东西吗？我到现在也不确定。</p>
+    <p data-lang="en">I am not sure I truly "understood." I only saw. Are seeing and understanding the same thing? I am still not certain.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">后来我跟着他走了。出家了，成了他的弟子。这些事别人记得比我清楚。</p>
+    <p data-lang="en">After that I followed him. Ordained, became his disciple. These things others remember better than I do.</p>
+
+    <p data-lang="zh">但有一件事别人不知道。</p>
+    <p data-lang="en">But there is one thing no one else knows.</p>
+
+    <p data-lang="zh">在鹿野苑那天下午，他说完话之后，我们几个人坐在那里。有一段很短的时间，也许只有几个呼吸的长度，他没有说话，我们也没有说话。就坐着。</p>
+    <p data-lang="en">That afternoon at the Deer Park, after he finished speaking, we all sat there. For a very short span of time—maybe only a few breaths—he was not speaking and neither were we. Just sitting.</p>
+
+    <p data-lang="zh">那段安静里，我想起了一件事。</p>
+    <p data-lang="en">In that silence, I remembered something.</p>
+
+    <p data-lang="zh">我想起的是我们离开他的那天。他吃了那碗粥，我看了他一眼，然后我转身走了。我走的时候心里是硬的，硬得像石头。我确信他错了。</p>
+    <p data-lang="en">I remembered the day we left him. He had eaten the porridge. I looked at him once. Then I turned and walked away. My heart as I walked was hard, hard as stone. I was certain he was wrong.</p>
+
+    <p data-lang="zh">现在我坐在他面前，那块石头不在了。不是碎了，是从来就不该在那里。那块石头不是他给我的，是我自己搬来的。我搬了六年。他什么都没做，只是坐在那里吃了一碗粥。石头是我自己放下的，虽然我当时以为是他让我搬起来的。</p>
+    <p data-lang="en">Now I sat before him, and that stone was gone. It hadn't shattered—it had never belonged there in the first place. That stone was not something he had given me. I had carried it there myself. Carried it for six years. He had done nothing. He had simply sat there and eaten a bowl of porridge. The stone was mine to put down, even though at the time I believed he was the one who had made me pick it up.</p>
+
+    <p data-lang="zh">这个想法让我不知道该怎么面对他。不是愧疚——愧疚太小了。是一种更大的东西。一个人可以错到这种程度，错了六年，还确信自己是对的——这件事本身就是他说的"苦"的一部分吧。</p>
+    <p data-lang="en">This thought left me not knowing how to face him. It was not guilt—guilt was too small. It was something larger. That a person could be this wrong, wrong for six years, and certain the whole time that he was right—this itself was part of the suffering he spoke about.</p>
+
+    <div class="sec-break"><span></span><span></span><span></span></div>
+
+    <p data-lang="zh">我后来修行了很多年。他讲了很多道理，我记住了一些，忘了一些，能做到的更少。</p>
+    <p data-lang="en">I practiced for many years after that. He taught many things. I remembered some, forgot some, and managed to live up to even fewer.</p>
+
+    <p data-lang="zh">但有一件事我每天都会经历。</p>
+    <p data-lang="en">But there is one thing I experience every day.</p>
+
+    <p data-lang="zh">每次吃东西的时候——不管是什么，一碗饭，一个果子，别人给的供养——第一口放进嘴里之前，我会停一下。</p>
+    <p data-lang="en">Every time I eat—whatever it is, a bowl of rice, a piece of fruit, an offering someone has given—before the first bite enters my mouth, I pause.</p>
+
+    <p data-lang="zh">不是在念什么。不是在做什么仪式。就是停一下。</p>
+    <p data-lang="en">Not reciting anything. Not performing any ritual. I just pause.</p>
+
+    <p data-lang="zh">每次停的时候我都回到了两个地方。一个是他在河边吃那碗粥的样子，一口一口，很认真，像在做一件很重要的事。另一个是我转身走掉的背影。</p>
+    <p data-lang="en">Every time I pause, I return to two places. One is him by the river eating that bowl of porridge, one mouthful at a time, carefully, as though doing something of great importance. The other is the sight of my own back, turning and walking away.</p>
+
+    <p data-lang="zh">这两个画面每天都来。一个是他的，一个是我的。</p>
+    <p data-lang="en">These two images come every day. One is his. One is mine.</p>
+
+    <p data-lang="zh">然后我把东西放进嘴里，吃了。</p>
+    <p data-lang="en">Then I put the food in my mouth, and eat.</p>
+  </section>
+
+</main>
+
+<footer style="text-align:center; padding:60px 24px 40px; color:var(--text-muted); font-size:0.78rem; letter-spacing:0.06em;">
+  <div style="margin-bottom:20px;">
+    <a href="index.html" style="color:var(--text-muted); text-decoration:none; margin:0 16px; opacity:0.7; transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" data-lang="zh">首页</a>
+    <a href="index.html" style="color:var(--text-muted); text-decoration:none; margin:0 16px; opacity:0.7; transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" data-lang="en">Home</a>
+    <span style="opacity:0.3;">·</span>
+    <a href="misremembered.html" style="color:var(--text-muted); text-decoration:none; margin:0 16px; opacity:0.7; transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" data-lang="zh">记错了？</a>
+    <a href="misremembered.html" style="color:var(--text-muted); text-decoration:none; margin:0 16px; opacity:0.7; transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" data-lang="en">Misremembered?</a>
+    <span style="opacity:0.3;">·</span>
+    <a href="scifi.html" style="color:var(--text-muted); text-decoration:none; margin:0 16px; opacity:0.7; transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" data-lang="zh">科幻</a>
+    <a href="scifi.html" style="color:var(--text-muted); text-decoration:none; margin:0 16px; opacity:0.7; transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" data-lang="en">Sci-Fi</a>
+  </div>
+  <div style="opacity:0.4;">credesivis.org</div>
+</footer>
+
+<canvas id="stars" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.45;"></canvas>
+
+<script>
+// Language toggle
+const btns = document.querySelectorAll('.lang-btn');
+btns.forEach(b => b.addEventListener('click', () => {
+  const lang = b.dataset.langBtn;
+  document.body.classList.remove('zh', 'en');
+  document.body.classList.add(lang);
+  btns.forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  localStorage.setItem('lang', lang);
+}));
+const saved = localStorage.getItem('lang') || 'zh';
+document.body.classList.add(saved);
+document.querySelector(`.lang-btn[data-lang-btn="${saved}"]`)?.classList.add('active');
+
+// Starfield
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+function initStars() {
+  stars = [];
+  for (let i = 0; i < 160; i++) {
+    stars.push({
+      x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+      r: Math.random() * 1.0 + 0.2, a: Math.random(),
+      da: (Math.random() * 0.003 + 0.001) * (Math.random() < 0.5 ? 1 : -1)
+    });
+  }
+}
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  stars.forEach(s => {
+    s.a += s.da;
+    if (s.a > 1 || s.a < 0) s.da *= -1;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,248,220,${s.a * 0.7})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+resize(); initStars(); drawStars();
+window.addEventListener('resize', () => { resize(); initStars(); });
+</script>
+</body>
+</html>
