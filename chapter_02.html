@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第二章 它们知道吗 · Crede Si Vis</title>
+  <meta name="description" content="它们在转，可它们知道吗。——Alice在温热的液体里，两种温度最后碰了她一下。" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@300;400;600;700&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #04040a;
+      --bg2: #080810;
+      --surface: #0e0e18;
+      --border: rgba(255,255,255,0.07);
+      --text: #e0e0f5;
+      --text-muted: rgba(224,224,245,0.45);
+      --accent: #8b6aff;
+      --accent2: #ff6a8b;
+      --accent3: #6af0ff;
+      --gold: #f0d06a;
+      --grad: linear-gradient(135deg, #8b6aff 0%, #6af0ff 100%);
+      --grad2: linear-gradient(135deg, #ff6a8b 0%, #f0d06a 100%);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* ── NEBULA BACKGROUND ── */
+    #nebula {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(139,106,255,0.10) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 70%, rgba(106,240,255,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(255,106,139,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    #nebula canvas { display: block; width: 100%; height: 100%; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(4,4,10,0.80);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.3rem; font-style: italic;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-back {
+      color: var(--text-muted); text-decoration: none;
+      font-size: 0.82rem; letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 8px;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+    .nav-back svg { width: 14px; height: 14px; }
+
+    /* ── HERO ── */
+    .chapter-hero {
+      min-height: 52vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      text-align: center;
+      padding: 120px 24px 64px;
+      position: relative; z-index: 1;
+    }
+    .chapter-eyebrow {
+      font-size: 0.70rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--accent3);
+      margin-bottom: 20px; font-family: 'Space Grotesk', sans-serif;
+    }
+    .chapter-number {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      font-style: italic;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .chapter-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(2rem, 6vw, 3.6rem);
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 32px;
+      background: var(--grad2);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .chapter-divider {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139,106,255,0.5), transparent);
+    }
+
+    /* ── BODY TEXT ── */
+    .chapter-body {
+      position: relative; z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 60px 28px 120px;
+    }
+
+    .chapter-body p {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(1rem, 2.2vw, 1.08rem);
+      font-weight: 300;
+      line-height: 2.05;
+      color: rgba(224,224,245,0.88);
+      margin-bottom: 1.6em;
+      text-indent: 2em;
+    }
+
+    /* dialogue lines — no indent */
+    .chapter-body p.dialogue {
+      text-indent: 0;
+    }
+
+    /* section break */
+    .section-break {
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px;
+      margin: 52px 0;
+    }
+    .section-break span {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: rgba(139,106,255,0.45);
+    }
+    .section-break span:nth-child(2) {
+      background: rgba(106,240,255,0.45);
+      width: 5px; height: 5px;
+    }
+    .section-break span:nth-child(3) {
+      background: rgba(255,106,139,0.35);
+    }
+
+    /* final line */
+    .chapter-end {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.08rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 64px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── FOOTER NAV ── */
+    .chapter-nav {
+      position: relative; z-index: 1;
+      max-width: 680px; margin: 0 auto;
+      padding: 0 28px 80px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 40px;
+    }
+    .chapter-nav-link {
+      color: var(--text-muted); text-decoration: none;
+      font-size: 0.82rem; letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 8px;
+      transition: color 0.2s;
+    }
+    .chapter-nav-link:hover { color: var(--text); }
+    .chapter-nav-series {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; }
+      .chapter-body { padding: 40px 20px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="nebula"><canvas id="stars"></canvas></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Crede Si Vis</a>
+  <a href="scifi.html" class="nav-back">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M10 3L5 8l5 5"/>
+    </svg>
+    科幻系列
+  </a>
+</nav>
+
+<header class="chapter-hero">
+  <div class="chapter-eyebrow">Crede Si Vis · Sci-Fi Series</div>
+  <div class="chapter-number">Chapter Two &nbsp;·&nbsp; 第二章</div>
+  <h1 class="chapter-title">它们知道吗</h1>
+  <div class="chapter-divider"></div>
+</header>
+
+<article class="chapter-body">
+
+  <p>有颗星是橙色的。</p>
+
+  <p>不是太阳的那种橙色。太阳是不能直接看的，白色黄色缠在一起，刺得眼睛疼。这颗不一样。这颗是橙色，而且橙得很安静，像一块烧透了的炭搁在那里慢慢凉下来，暗红和橙黄交织在一起，边缘还微微地在颤抖，但并不刺眼。Alice盯着它看了好一会儿。眼睛也不疼，只是觉得暖的。不仅是身体暖，颜色也暖，就像冬天隔着玻璃看外面的落日，晒不到，但眼睛里觉得暖。</p>
+
+  <p class="dialogue">"它是快灭了吗？"Alice问。</p>
+
+  <p class="dialogue">"那倒不是。它就是这个颜色。"Rabbit说。"有些星星生下来就是这样。比太阳静一点，或者说比太阳老实一点，没那么闹。"</p>
+
+  <p class="dialogue">"哦？不闹的星也能有行星？"</p>
+
+  <p class="dialogue">"那是，而且不闹的星旁边的行星活得还更久呢。"</p>
+
+  <p>Alice想了想，似乎Rabbit这句话好像在说别的什么。但她也没追问，因为Rabbit经常这样，说一句话，表面在回答你，底下还垫了一层。你要是追问他，他就把那层收走了，脸上还一副什么也没说过的样子。</p>
+
+  <p>Alice和Rabbit慢慢靠近了那颗橙色星旁边的一颗行星。行星越来越大，从一个光点变成一颗球。Alice忽然想到了蜂蜜，不是罐子里那种规规矩矩的蜂蜜，而是刚从勺子上滴下来、还拉着丝的那种，深深浅浅的。有些地方偏琥珀，有些地方偏金黄，有些地方透出一点发绿的暗，像光照进去了但还没照匀。</p>
+
+  <p class="dialogue">"它是液态的还是固态的？"Alice问。</p>
+
+  <p class="dialogue">"你到了就知道了。"</p>
+
+  <div class="section-break">
+    <span></span><span></span><span></span>
+  </div>
+
+  <p>是液态的。</p>
+
+  <p>Alice的脚落下去的时候，她以为会踩到地面，但并没有。她踩进了一层温热的液体里，比水更稠，比蜂蜜薄，刚好没过脚踝。温度很舒服，不烫不凉，像洗澡水放了几分钟之后的那个温度。她的脚趾在液体里动了动，液体就跟着晃，很慢，好像妈妈好脾气时候的样子。</p>
+
+  <p>空气也是暖的。潮潮的，带着一股说不上来的气味，不过不难闻，甚至有一点甜，又有一点像下过雨之后泥土的味道。有风，但很轻，从她说不清的方向吹过来，把液面上的热气吹成一缕一缕的。</p>
+
+  <p>然后有什么东西落在她胳膊上。</p>
+
+  <p>凉的。一丝。又一丝。</p>
+
+  <p>Alice抬头看。看不到云，看不到天，只有那颗橙色的星挂在很高的地方，把所有东西都染成了暖红色。但确实有什么在往下落。极细的液滴，比毛毛雨还细，像这颗星球的空气里本来就藏着水，风一吹，就冻成了一丝丝的冰挂往下掉。</p>
+
+  <p>下雨了。不是地球的那种雨。是这里的雨丝。</p>
+
+  <p>Alice站在温热的液体里，淋着凉的细雨丝，觉得这个感觉很奇怪。脚是暖的，胳膊是凉的。两种温度同时贴着她，像两只手，一只从下面托着她，一只从上面轻轻摸她的头发。</p>
+
+  <p>她低头看过去，那液体是半透明的，还能看到自己的脚在里面，只是脚趾模模糊糊的，像隔着磨砂玻璃。颜色也不是一种，近处偏金，远一点偏琥珀，更远的地方沉下去一片暗绿色，像有什么东西在深处慢慢搅动。整片液面在动，但又不是流动，是涌动，从下往上，又从上往下，缓慢的，像在呼吸。</p>
+
+  <p>然后她看到了离她几步远的液面上，有一团东西。不是很大，只比她的手掌大一点。薄薄的一层膜，半透明的，静静的趴在液面上。但不是平的，有微微的鼓起来的，像一个正在做梦的气泡。</p>
+
+  <p>Alice忽然蹲下来，是膝盖自己软了，不是她自己要蹲，是那个东西把她的视线拽下去了，身体也跟着沉了下去。这是它动的方式吗？那层膜的表面在起伏，有点不规则，但又不是乱的。似乎有一种节奏，像一首她不认识的曲子，听不出调，但她感觉得到那个节奏不是随便的，是有意味的。</p>
+
+  <p>梵高画的那些旋涡，在星空里，在麦田里，就是这种感觉。不是圆的转动，是活的涌动。每一笔都在动，而且动得有道理。</p>
+
+  <p>Alice在学校的美术书上看过《星夜》的印刷版。印刷版是平的，那些旋涡被压在纸上不动。后来Dinah陪她去了一次美术馆，她在真迹的复制品前面站了很久，久到Dinah坐在旁边的长椅上把水壶里的水都喝完了。那一次她才知道，梵高画的不是星星的形状，是星星在动的样子。</p>
+
+  <p>这团膜在液面上的涌动，就是那种动。</p>
+
+  <p>她抬起头想找Rabbit说什么，然后看见了原来不只是一团。</p>
+
+  <p>因为到处都是。液面上铺满了膜，大的小的，远的近的，像雨后水洼上的泡沫，但每一个都在动。近处的膜偏金色，跟液体的表层差不多。远一点的偏绿，更远的带着一层淡淡的紫，好像它们的颜色跟液体的深度有关。有的在缓缓漂，有的原地不动只是涌着，有的几团挤在一起，边缘互相碰，碰了又弹开，像不小心撞到了路人。</p>
+
+  <p class="dialogue">"这里到处都是呢，"Alice说。</p>
+
+  <p class="dialogue">"嗯。"</p>
+
+  <p class="dialogue">"它们都是活的？"</p>
+
+  <p class="dialogue">"都是。"</p>
+
+  <p class="dialogue">"它们是同一种东西吗？那些绿的和那些金色的。"</p>
+
+  <p class="dialogue">"是。颜色不一样是因为吃的东西不一样。"</p>
+
+  <p>Alice又看了一会儿。她发现有一团特别大的，离她不远，比她两只手摊开还大。它的涌动比小的慢，但幅度更大，整片膜像在深呼吸。它的边缘有一团小的正在靠近，小的只有指甲盖那么大，漂得很快。</p>
+
+  <p class="dialogue">"那个大的会吃那个小的吗？"Alice问。</p>
+
+  <p class="dialogue">"有可能。"</p>
+
+  <p class="dialogue">"那不公平。"</p>
+
+  <p class="dialogue">"你的学校食堂公平吗？"</p>
+
+  <p>Alice愣了一下，然后差点笑出来。"那不一样。"</p>
+
+  <p class="dialogue">"哪里不一样。"</p>
+
+  <p class="dialogue">"食堂里大家排队。"</p>
+
+  <p class="dialogue">"排队也是年级高的吃的多吧？"</p>
+
+  <p>Alice想反驳，但发现好像确实是这样。每次在食堂，高年级的总能抢到排在前面，好吃的总被拿走。她和Dinah去得晚的时候只有剩下的，还凉掉了。</p>
+
+  <p>她继续看着那个大的和那个小的。小的漂到了大的边缘，碰了一下。大的那团膜的边缘微微凹进去，像是张开了什么。Alice的心提了一下。但没有。大的又把边缘合回去了。小的弹开了，继续漂。</p>
+
+  <p class="dialogue">"它没吃。"</p>
+
+  <p class="dialogue">"这次没有。"Rabbit说。</p>
+
+  <p>Alice盯着那团小的看了几秒，看着它漂远了，漂到了一片绿色的膜群旁边。小小的，独自在涌动着，不知道自己刚从什么边上擦过去了。</p>
+
+  <p>她想看得更近一点。那些膜的边缘到底是什么做的？那层薄薄的透明的东西，碰到液体和碰到别的膜的时候反应不一样——碰到液体会裹，碰到膜会弹开。为什么？</p>
+
+  <p>她往前探了探身。</p>
+
+  <p>再近一点。</p>
+
+  <p>脚底的液面很滑。不是冰的那种滑，是稠的那种滑，像踩在一层没擦干净的洗洁精上。Alice的重心不小心往前多倾了一点，脚底一溜——</p>
+
+  <p>她整个人栽进了液体里。</p>
+
+  <p>倒是不深，液体其实蛮浅的，她的膝盖碰到了什么软软的东西，可能是更深处的另一层。温热的液体一下子没到了她的腰，溅起来打在她的脸上，甜的，黏的。睡衣全湿了，贴在身上。</p>
+
+  <p>然后她感觉到了，似乎有什么东西在往她胳膊上贴。</p>
+
+  <p>那些膜。离她最近的几团膜朝她漂过来了，边缘伸展开，试探着碰她的皮肤。它们的边缘碰上来的时候有一种微微的吸力，像创可贴刚贴上去的那一下。不疼。但能感觉到它们在拽——在试图把她的皮肤裹进去。它们不知道她是什么。它们只是在做它们一直在做的事情：遇到东西就吞。</p>
+
+  <p>Alice的第一反应不是尖叫。她低头看着贴在自己胳膊上的那团膜，看它的边缘一点一点往上爬。从这个距离看，膜的纹路更清楚了——不是光滑的，上面有极其细密的褶皱，像指纹。每一团的褶皱都不一样。</p>
+
+  <p class="dialogue">"别动。"</p>
+
+  <p>Rabbit的声音很近。他站在液面上——不是站在液体里，是站在液面上，爪子刚好踩在液体的表面张力上面，一点都没沉。但Alice还来不及想这个科学不科学。</p>
+
+  <p>Rabbit低下头，耳朵贴近液面，发出了一个声音。Alice听不清那个声音——不是说不出来，是她的耳朵好像接收不到那个频率。但液面接收到了。液面从Rabbit的耳朵尖开始轻轻地颤，颤纹一圈一圈扩散出去，像扔了一颗小石子进池塘。</p>
+
+  <p>于是那些膜散了。不是逃走，就是松手了。贴在Alice胳膊上的那团膜缓缓脱开，边缘收回去，退回到液面上，恢复了自己的涌动。像什么都没发生过。</p>
+
+  <p>Alice蹲在液体里，湿淋淋的，看着那些膜漂远。她的心跳在慢慢回来。不是从恐惧回来——她其实没怎么怕。是从一种很近的、很密的注意力里回来。</p>
+
+  <p>Rabbit看着她。爪子还稳稳地踩在液面上。</p>
+
+  <p class="dialogue">"它们觉得你挺好吃的。"</p>
+
+  <p>Alice从液体里站起来，睡衣滴着水，头发贴在脸上。她把头发从眼前抹开，想瞪Rabbit，但发现自己在笑。</p>
+
+  <p class="dialogue">"你刚才是怎么做到的？"</p>
+
+  <p class="dialogue">"什么？"</p>
+
+  <p class="dialogue">"站在水面上。"</p>
+
+  <p class="dialogue">"不是水。是高粘度有机液体。表面张力够大。"</p>
+
+  <p class="dialogue">"那为什么我站不住？"</p>
+
+  <p class="dialogue">"你太重了。"</p>
+
+  <p class="dialogue">"我才三十八公斤！"</p>
+
+  <p class="dialogue">"对这种液面来说，太重了。"Rabbit的耳朵转了一下。"你没事吧。"</p>
+
+  <p>这三个字不是问句的语气。是确认的语气。像他已经知道她没事，但还是要说一遍。</p>
+
+  <p class="dialogue">"没事。"Alice把睡衣上的液体甩了甩。甩不干净，这东西太黏了。"你早就知道它们会贴上来吧。"</p>
+
+  <p class="dialogue">"嗯。"</p>
+
+  <p class="dialogue">"你没提前告诉我。"</p>
+
+  <p class="dialogue">"你没给我机会。你蹲太快了，比我说话都快。"</p>
+
+  <p>Alice又想瞪他，却又没真的瞪。她低头看了看自己的胳膊。贴过膜的地方有一点点发红，像被轻轻吸了一下。说不上疼，她摸了摸那块皮肤，想着那团膜上指纹一样的褶皱。每一团都不一样。</p>
+
+  <p>她看着它慢慢地吞。从边缘伸出一小片，比指甲盖还小，把周围液体里的什么东西裹进去了。然后它在长大，很慢。</p>
+
+  <p>然后那团大的开始变形。</p>
+
+  <p>中间凹进去了。像有人用手指轻轻按了一下。凹的地方越来越深，两边越来越鼓。中间那条线越来越细，越来越细，像拉丝的糖。Alice以前在庙会上看过拉糖的师傅，一团糖稀被两根竹签拉开，中间那根丝越拉越长越拉越细，到最后细得像蜘蛛丝，亮晶晶的，一碰就断。</p>
+
+  <p>这团膜中间那条线也是这样。越来越细。Alice甚至不敢眨眼。</p>
+
+  <p>断了。</p>
+
+  <p>两团。各自完整。各自有自己的边界，自己的节奏。一阵温风吹过来，液面晃了一下，两团膜各自跟着晃了晃，像被风打了个招呼。</p>
+
+  <p>Alice盯着看了很久。</p>
+
+  <p class="dialogue">"Rabbit。"</p>
+
+  <p class="dialogue">"嗯。"</p>
+
+  <p class="dialogue">"原来那个呢。"</p>
+
+  <p>Rabbit没有立刻回答。Alice扭头看他。他站在她旁边，爪子刚好没在液体里，耳朵没有动。他在看她。不是在看那团膜。</p>
+
+  <p class="dialogue">"哪个是原来那个？"他说。</p>
+
+  <p>Alice看回去。两团膜，一左一右，大小差不多，节奏差不多。她分不出来。盯着看，试图从形状或动法上找区别。找不到。</p>
+
+  <p class="dialogue">"两个都是，"她说。"或者两个都不是。"</p>
+
+  <p>Rabbit的耳朵动了一下。很小的一下。</p>
+
+  <p class="dialogue">"它们分裂出来之后，会认识对方吗？"Alice问。</p>
+
+  <p class="dialogue">"不会。"</p>
+
+  <p class="dialogue">"永远不会？"</p>
+
+  <p class="dialogue">"它们没有认识这个概念。"</p>
+
+  <p>Alice想了想。没有认识这个概念。就是说，原来是一个的两个东西，从分开的那一刻起，就跟液面上其他几千几万团膜一样了。没有区别。没有特殊。不会在茫茫膜海里找到对方，说一句"你是从我身上来的"。</p>
+
+  <p class="dialogue">"它们知道吗？"她问。</p>
+
+  <p class="dialogue">"知道什么？"</p>
+
+  <p class="dialogue">"知道原来那个不在了。"</p>
+
+  <p>Rabbit连耳朵都没动。他整个停住了。不是想事情的那种停。是被什么碰了一下的停。</p>
+
+  <p>Alice家楼下有一棵老槐树，去年秋天一场大风把最大的那根枝丫刮断了。第二天早上她路过的时候看到断口，白的，像骨头的截面。树不知道自己断了。但是断了。</p>
+
+  <p class="dialogue">"你问的是它们知不知道自己会死，"Rabbit说。</p>
+
+  <p>Alice没有点头也没有摇头。她看着那两团膜，各自在液面上涌着。</p>
+
+  <p class="dialogue">"它们不会死，"Rabbit说。"它们分裂。分裂不是死。"</p>
+
+  <p class="dialogue">"但是原来那个不在了。"</p>
+
+  <p class="dialogue">"原来那个变成了两个新的。"</p>
+
+  <p class="dialogue">"那就是不在了。"</p>
+
+  <p>Rabbit看了她一会儿，但这一会儿比之前的那些一会儿都长。</p>
+
+  <p>他没有回答她。Alice知道。但她也没追。不是不想知道了。是她知道Rabbit说不出来。也许谁都说不出来。</p>
+
+  <p>过了这一会儿，Rabbit轻轻动了一下耳朵。</p>
+
+  <p class="dialogue">"怎么样，"他说。"想继续往前走吗？"</p>
+
+  <p>声音比刚才软了一点。Alice听出来了。这次似乎不是催她，而是在问她。</p>
+
+  <p>她站起来。液体从脚踝上滑下去，温的，慢的，似乎还不想放手。细雨丝还在落，落在她头发上，落在她肩膀上，凉的，轻的。两种温度最后碰了她一下。</p>
+
+  <p>她回头看了一眼。两团膜已经各自游远了。各自依然在吞，各自依然在长，各自在准备下一次变成两个。液面上到处都是它们。到处都在涌，到处都在分裂，到处都在变成两个不认识彼此的新东西。</p>
+
+  <p>它们不知道。</p>
+
+  <p>但Alice知道。</p>
+
+  <div class="section-break">
+    <span></span><span></span><span></span>
+  </div>
+
+  <p>下一颗星球远远看过去是蓝灰色的，像一块被风磨了很久的石头。不过走近了才发现那个蓝灰不是死的。表面有纹路，有明暗，还有一些极细的线在蜿蜒，像干涸了的河床，又像冬天枯掉的树根。</p>
+
+  <p>Alice落地的那一刻就知道这里不一样了。</p>
+
+  <p>有够重。</p>
+
+  <p>脚落在地面上的时候，膝盖差点弯下去。倒不是踩空了，是比她预想的沉。好像有人在她肩膀上放了一个书包，也不算特别重，但就是一直在，拿不掉。她站直了，觉得自己的身体比平时压实了一层。连头发都沉了，贴着脖子，不像在细胞星球上被风吹得到处飘。</p>
+
+  <p>脚底是冰凉的岩石。硬的，实的，每一步都踩得到底。上一颗星球是温水泡着你，这一颗让你站得稳稳的，但得你自己能扛住自己。</p>
+
+  <p>这里的空气又干又冷，不过好在那种冷不是冬天的冷，是一种清冽的冷。Alice吸了一口，凉意从鼻腔一路滑到肺里，整个人一下子清醒了。像咬了一口深秋的苹果，那种脆的凉的，牙齿比脑子先知道。</p>
+
+  <p class="dialogue">"好冷。"Alice搓了搓胳膊。她还穿着睡衣呢。</p>
+
+  <p class="dialogue">"不是冷。是干。这里几乎没有水。"</p>
+
+  <p>Rabbit看了她一眼。Alice觉得他的目光里有一种很轻的什么东西，不过他什么也没说。也许是想说"你下次应该穿件外套"。也许不是。她决定不问了。</p>
+
+  <p class="dialogue">"几乎？那就是还有一点？"</p>
+
+  <p class="dialogue">"你仔细看。"</p>
+
+  <p>Alice看了看脚边，那些灰蓝色的岩石，是平坦的，偶尔有裂缝。裂缝里是有东西的。不是草，也不是苔藓，是一种半透明的结构，硬硬的，从裂缝里伸出来，像冰凌，但不化。</p>
+
+  <p>然后她发现了。裂缝最深的地方，有极细的液体在走。说不上流动，更像是在渗。慢慢地，从一条裂缝渗到另一条裂缝，亮晶晶的一线，比头发丝还细。整颗星球几乎没有水，但那一点点水在岩石缝里走着自己的路，安安静静的，虽然不急，但也不停。</p>
+
+  <p>像Dinah。Alice忽然想。Dinah走路就是这样。即不急，也没停。别人都在跑的时候她在走，但她到的时候跟别人差不多，有的时候还更早。</p>
+
+  <p class="dialogue">"那些冰凌是活的还是死的？"Alice指了指裂缝里的东西。</p>
+
+  <p class="dialogue">"活的。"</p>
+
+  <p class="dialogue">"可它们不动啊。"</p>
+
+  <p class="dialogue">"又不是所有活的东西都动，动的也不一定是活的。"</p>
+
+  <p>Alice走过去蹲下来。又蹲下去了？Rabbit心想。</p>
+
+  <p>那些半透明的结构确实没在动。但Alice看了几秒之后发现了一件事——它们的表面在变的。不是活动，是亮度在变。明一下，暗一下，像心跳，但又极其缓慢。跟细胞星球上的涌动不一样，那个是热的，快的，混沌的。这个是冷的，慢的，精确的。一种是热热闹闹地活，一种是安安静静地活，但都有活力。</p>
+
+  <p>她站起来往远处看，原来到处是灰蓝色的岩石和裂缝。裂缝里到处是冰凌，到处是那种微弱的明灭。不过她还看到了别的东西。</p>
+
+  <p>有几个稍大一点的形状散落在远处的岩面上。有的只有她的拳头大小，有的跟她的书包差不多大。它们也不动，但也在一明一灭的，跟裂缝里的冰凌是一样的节奏。</p>
+
+  <p class="dialogue">"那些也是活的？"</p>
+
+  <p class="dialogue">"嗯。长大了的。"</p>
+
+  <p>Alice看着那些大大小小的形状。有一个离她比较近，大概有她的脑袋那么大，表面纹理很清楚，一圈一圈的环纹，像年轮。旁边还有一个小的，只有拳头大小，纹路还模糊着，没长出清楚的形状来。</p>
+
+  <p>再远一点，她看到了两个真正大的。</p>
+
+  <p>比她还大，而且大很多。灰蓝色的，跟地面几乎同色。轮廓分明，关节清晰，棱角锐利。不像细胞星球上的膜那样模糊柔软。这两个东西倒像是被刀刻出来的。每一个面，每一条线，都是确定的。</p>
+
+  <p>但是很好看。Alice觉得它们很好看。跟细胞星球上那种好看完全不一样。那边是梵高，涌动的，热烈的，颜色搅在一起。这边是另一种。线条干净，比例精确。冷冷的美。像数学课本上画的几何体忽然站起来走了。</p>
+
+  <p class="dialogue">"Rabbit，这里走路好累啊。"Alice动了几步，每一步都觉得自己比平时重。</p>
+
+  <p class="dialogue">"重力大嘛。这里比地球重。"</p>
+
+  <p class="dialogue">"重多少？"</p>
+
+  <p class="dialogue">"你现在等于背着半个自己在走路。"</p>
+
+  <p>Alice低头看了看自己的脚。穿着睡衣光着脚踩在冰凉的岩石上，确实觉得每一步都像是要把脚从地面上拔出来。她想到体育课跑八百米，最后一百米腿就是这种感觉，像灌了铅。但是跑八百米至少跑完了能停。这里停不了，重力又不会累。</p>
+
+  <p>Rabbit走在她前面，两条腿倒腾得挺稳。看起来一点事都没有。</p>
+
+  <p class="dialogue">"你不累吗？"</p>
+
+  <p class="dialogue">"我本来就轻嘛，重力增加一半也还行。"</p>
+
+  <p class="dialogue">"那不公平。"</p>
+
+  <p class="dialogue">"你今天第二次说不公平了。"</p>
+
+  <p>Alice瞪了他一眼。Rabbit的耳朵没动，但Alice觉得他在笑。她不知道兔子的脸到底能不能笑，但她就是觉得他在笑。</p>
+
+  <p>那两个大的在朝着彼此走。一个稍大，一个稍小。</p>
+
+  <p>速度很慢。不急，也不是不急。是每一步都很实。它们的步子落在岩石上，Alice的脚底能感觉到震动。在这种重力下面，走路本身就是一件认真的事情。每一步落下去都要扛住自己，每一步抬起来都是把自己从地面上拔出来。</p>
+
+  <p>她看着它们走，觉得它们走路的样子有一种很安静的力气。不是快，是稳。每一步都放在该放的地方，不多也不少。</p>
+
+  <p>它们开始靠近了。</p>
+
+  <p>近到Alice能看到它们表面的纹路了。不是皮肤，是石头一样的外壳，上面有刀刻般细密的纹理。两个个体的纹理完全不同。大的那个是竖纹，密集的，像削了皮的树干。小的那个是环纹，一圈一圈的，像年轮的截面。</p>
+
+  <p>完全不同的两个东西。大概从一生下来就不一样。</p>
+
+  <p>然后它们碰在一起了。</p>
+
+  <p>不是撞的，也不是融合。是两个个体站到了一起，各自伸出了一部分。Alice看到伸出的部分碰在一起的那个瞬间，竖纹和环纹交叠了，搅在了一起，你的走进了我的里面。</p>
+
+  <p>忽然交叠的部分从它们身上脱落了。一个小小的团块落在地面上。落地的声音其实很轻，但在这颗安静的星球上Alice听到了。它也开始脉动。明一下，暗一下。跟裂缝里的冰凌是一样的。</p>
+
+  <p>它活了。</p>
+
+  <p>然后Alice看向那两个大的。</p>
+
+  <p>它们在分开。慢慢的，跟来的时候一样慢。但Alice注意到了——它们各自少了一块。伸出去的那部分，给了，就没长回来。大的少了一小片竖纹，小的少了一圈年轮。</p>
+
+  <p>它们在走开。一个往左，一个往右。不回头。步子比来的时候慢了一点点。缺口边缘的纹路暗了，像被什么东西磨掉了一层，连带着力气也被磨走了。</p>
+
+  <p>Alice看了很久。目光在两个远去的背影和地上那个明灭着的小东西之间来来回回。</p>
+
+  <p class="dialogue">"它们以后还能再做这个吗？"她问。</p>
+
+  <p class="dialogue">"还能。不过每次都少一点。"</p>
+
+  <p>每次都少一点。</p>
+
+  <p>Alice的胸口动了一下。很轻的一下。不是因为那两个个体，是因为她忽然想到了妈妈。</p>
+
+  <p>妈妈每天晚上给她倒那杯水。每天早上叫她起床。每天把头发拨到她耳朵后面。每天留那条门缝。给的时候，妈妈还是妈妈。还是那件灰蓝色睡衣，还是那个声音，还是那只手。</p>
+
+  <p>但是。</p>
+
+  <p>但是什么呢。她说不上来。</p>
+
+  <p class="dialogue">"它们以后还会遇到彼此吗？"Alice问。</p>
+
+  <p class="dialogue">"不知道。这里很大。"</p>
+
+  <p class="dialogue">"那个小的呢，"她看着地上那个明灭着的团块。"它以后也要找别人？"</p>
+
+  <p class="dialogue">"嗯。它长大了，也要找一个跟它不一样的。"</p>
+
+  <p class="dialogue">"如果找不到呢？"</p>
+
+  <p>Rabbit这次停了一下才回答。"那它就一直是自己，就不变大也不变小。不过一般都会找到的。"</p>
+
+  <p>Alice看着远处那些散落在岩面上的大大小小的形状。有的很大，纹路清晰。有的很小，还在慢慢长。有一个她之前没注意到的，那个特别小，缩在一条裂缝边上，纹路暗淡，几乎看不见明灭了。它应该是给过很多次了。它快要给完了。</p>
+
+  <p>Alice看着它。然后她发现Rabbit也在看它。</p>
+
+  <p>不是扫一眼。是看了很久。</p>
+
+  <p>Rabbit平时看什么都很快的。他的眼睛跟他的耳朵一样，扫一圈就够了，什么都看见了，什么都记住了，然后继续走。但这次他停住了。他站在那里，爪子抱在胸前一动不动，耳朵也不动，整个定在了那个缩在裂缝边上的、快要给完的小东西面前。</p>
+
+  <p>Alice没见过他这样。</p>
+
+  <p>她没问。她就站在他旁边，安安静静的。风吹过来，从她和Rabbit之间穿过去，冷的。Alice的胳膊上起了一层鸡皮疙瘩，但她没搓胳膊。她怕动静会打断什么。</p>
+
+  <p>过了很久。也许其实不久。在这颗安静的星球上分不清的。</p>
+
+  <p class="dialogue">"每次来都少一点，"Rabbit说。声音很轻。不是对Alice说的，更像是对着那个快要给完的小东西说的，又更像是对自己说的。</p>
+
+  <p>Alice听见了。她不知道Rabbit来过这里几次，也不知道他上次来的时候这个小东西是什么样子。她不知道Rabbit记不记得它以前的纹路，以前的大小，以前的明灭。</p>
+
+  <p>但她知道他看的不只是这一个。他在看所有给完了的。所有以前在这里、现在不在这里的。</p>
+
+  <p>她没有说话。只是往Rabbit那边靠了半步。也没近到碰到他，就是近了半步。</p>
+
+  <p>Rabbit的耳朵动了一下。很轻的一下。他知道她在旁边。</p>
+
+  <p>又过了一会儿，他把目光从那个小东西上面收回来了。耳朵转了一下，恢复了平时那个角度。他没有解释刚才那句话。Alice也没有问。</p>
+
+  <p class="dialogue">"少到最后呢？"她问。声音像被风吹散了。</p>
+
+  <p>Rabbit没有回答。</p>
+
+  <p>Alice把目光从远处移开。蓝灰色的石头，冷的。裂缝里那些不动的冰凌在微微明灭。那条极细的水线还在裂缝深处慢慢走着，亮晶晶的，安静的，不急，不停。</p>
+
+  <p class="dialogue">"为什么一定要有别人才能活下去？"</p>
+
+  <p>不完全是对Rabbit说的。也不完全是问这颗星球上的生物。她不知道自己在问谁。</p>
+
+  <p>Rabbit没有回答。</p>
+
+  <p>风吹过来。干的，冷的，没有味道。但不是死气沉沉的风。它从远处带了什么来，又带走了。Alice不知道是什么。</p>
+
+  <p class="dialogue">"走吧，"她说。</p>
+
+  <div class="section-break">
+    <span></span><span></span><span></span>
+  </div>
+
+  <p>离开的时候Alice回头看了一眼。蓝灰色的弹珠在身后缩小。细细的裂缝看不见了。那条水线看不见了。那两个走开的背影看不见了。那个明灭着的小东西也看不见了。那个缩在裂缝边上快要给完的，也看不见了。</p>
+
+  <p class="dialogue">"Rabbit。"</p>
+
+  <p class="dialogue">"嗯。"</p>
+
+  <p class="dialogue">"这两颗星球跟我们学校的生物课没差太多。"</p>
+
+  <p>Rabbit的耳朵转了一下。"你们的生物课会讲这些？讲东西会不会死，讲为什么得有别人？"</p>
+
+  <p class="dialogue">"讲细胞分裂和有性繁殖。"</p>
+
+  <p class="dialogue">"那是同一件事。"</p>
+
+  <p class="dialogue">"是吗？"</p>
+
+  <p class="dialogue">"你自己刚才自问自答的呀。"</p>
+
+  <p>Alice想了想。她确实问了，也是自己答的。问了"原来那个呢"，问了"为什么一定要有别人"。生物课没讲过这些。生物课讲的是怎么分裂，怎么繁殖。她问了，也答了，但是她更想知道的是为什么。</p>
+
+  <p>她往前走。脚步没有变。来的时候什么速度，走的时候还是什么速度。那两颗星球上的东西，美是美的。细胞星球上膜的涌动让她停不下来，两性星球上两个纹路完全不同的个体走到一起让她胸口动了一下。但它们不会往上看。不知道自己在干什么。不问问题。</p>
+
+  <p>她要的不是这个。虽然还说不清楚要什么，但确实不是这个。哪里似乎还不够。</p>
+
+  <p class="dialogue">"接下来呢？"</p>
+
+  <p class="dialogue">"接下来不一样了，"Rabbit说。</p>
+
+  <p class="dialogue">"哪里不一样？"</p>
+
+  <p class="dialogue">"接下来的东西会看你。"</p>
+
+  <p>Alice的脚步停了一下。很短的一下。然后她继续向前走。</p>
+
+
+  <div style="font-family:'Space Grotesk',sans-serif; font-size:0.82rem; color:var(--text-muted); line-height:2.2; letter-spacing:0.02em; border-left:2px solid rgba(139,106,255,0.25); padding-left:20px; margin:0 0 1.6em 0;">
+    Rabbit → Q：她觉得这些星球"跟学校的生物课差不多"。不过她问了两个好问题，先问它们知不知道自己会死，后来又问为什么一定要有别人。比预期的快。<br>
+    Q → Rabbit：记录在案。继续。
+  </div>
+
+</article>
+<footer class="chapter-nav">
+  <a href="chapter_01.html" class="chapter-nav-link">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M10 3L5 8l5 5"/>
+    </svg>
+    第一章
+  </a>
+  <div class="chapter-nav-series">
+    <span style="color:var(--text-muted); font-size:0.78rem;">Crede Si Vis · 爱信不信</span>
+  </div>
+  <span class="chapter-nav-link" style="opacity:0.2; cursor:default;">
+    第三章
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M6 3l5 5-5 5"/>
+    </svg>
+  </span>
+</footer>
+
+<script>
+  // Starfield
+  (function(){
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resize(){
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function initStars(){
+      stars = [];
+      const n = Math.floor((canvas.width * canvas.height) / 5000);
+      for(let i=0;i<n;i++){
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 0.9 + 0.1,
+          a: Math.random(),
+          speed: Math.random() * 0.3 + 0.05
+        });
+      }
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      stars.forEach(s=>{
+        s.a += s.speed * 0.008;
+        if(s.a > 1) s.a = 0;
+        const alpha = Math.sin(s.a * Math.PI) * 0.7 + 0.1;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(200,200,255,${alpha})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    initStars();
+    draw();
+    window.addEventListener('resize', ()=>{ resize(); initStars(); });
+  })();
+</script>
+</body>
+</html>
