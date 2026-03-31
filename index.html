@@ -101,6 +101,16 @@
     .nav-links .nav-scifi:hover {
       background: var(--accent); color: white;
     }
+    .nav-links .nav-sit {
+      color: var(--text-muted);
+      font-style: italic;
+      font-family: 'EB Garamond', serif;
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      opacity: 0.7;
+      transition: opacity 0.2s, color 0.2s;
+    }
+    .nav-links .nav-sit:hover { opacity: 1; color: var(--text); }
 
     /* ── LANG TOGGLE ── */
     .lang-toggle {
@@ -178,6 +188,18 @@
     .hero-cta {
       display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
     }
+    .hero-sit {
+      display: block;
+      margin-top: 24px;
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      opacity: 0.65;
+      transition: opacity 0.25s, color 0.25s;
+    }
+    .hero-sit:hover { opacity: 1; color: var(--text); }
     .btn {
       padding: 13px 32px;
       border-radius: 40px;
@@ -590,6 +612,7 @@
     <li><a href="awakened.html" data-lang="en">Awakened?</a><a href="awakened.html" data-lang="zh">醒了？</a></li>
     <li><a href="changed.html" data-lang="en">Changed?</a><a href="changed.html" data-lang="zh">变了？</a></li>
     <li><a href="gone.html" data-lang="en">Gone?</a><a href="gone.html" data-lang="zh">走了？</a></li>
+    <li><a href="sit.html" class="nav-sit" data-lang="en">Sit ·</a><a href="sit.html" class="nav-sit" data-lang="zh">静 ·</a></li>
   </ul>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -617,6 +640,8 @@
       <a href="scifi.html" class="btn btn-secondary" data-lang="en">Sci-Fi Series ↗</a>
       <a href="scifi.html" class="btn btn-secondary" data-lang="zh">科幻系列 ↗</a>
     </div>
+    <a href="sit.html" class="hero-sit" data-lang="en">Not feeling it today? Come sit for a moment. →</a>
+    <a href="sit.html" class="hero-sit" data-lang="zh">今天不太好？来坐一会儿。→</a>
 
     <div class="scroll-hint">
       <span data-lang="en">Scroll</span><span data-lang="zh">向下</span>
