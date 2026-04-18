@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第三章 看见与记住 · Crede Si Vis</title>
+  <meta name="description" content="看见就够了。——Alice在风里看见两个停下来对视的，看见走错方向的，看见记忆一片一片地传，一片一片地暗。" />
+  <link rel="canonical" href="https://credesivis.org/chapter_03.html" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@300;400;600;700&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #04040a; --bg2: #080810; --surface: #0e0e18;
+      --border: rgba(255,255,255,0.07); --text: #e0e0f5;
+      --text-muted: rgba(224,224,245,0.45);
+      --accent: #8b6aff; --accent2: #ff6a8b; --accent3: #6af0ff;
+      --gold: #f0d06a;
+      --grad: linear-gradient(135deg, #8b6aff 0%, #6af0ff 100%);
+      --grad2: linear-gradient(135deg, #ff6a8b 0%, #f0d06a 100%);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 17px; line-height: 1.75; overflow-x: hidden; }
+    #nebula { position: fixed; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse at 20% 30%, rgba(139,106,255,0.10) 0%, transparent 55%),
+                  radial-gradient(ellipse at 80% 70%, rgba(106,240,255,0.06) 0%, transparent 50%),
+                  radial-gradient(ellipse at 50% 50%, rgba(255,106,139,0.04) 0%, transparent 60%);
+      pointer-events: none; }
+    #nebula canvas { display: block; width: 100%; height: 100%; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px; background: rgba(4,4,10,0.80);
+      backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'EB Garamond', serif; font-size: 1.3rem; font-style: italic; color: var(--text); text-decoration: none; }
+    .nav-back { color: var(--text-muted); text-decoration: none; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+    .nav-back:hover { color: var(--text); }
+    .nav-back svg { width: 14px; height: 14px; }
+    .chapter-hero { min-height: 52vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding: 120px 24px 64px; position: relative; z-index: 1; }
+    .chapter-eyebrow { font-size: 0.70rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent3); margin-bottom: 20px; font-family: 'Space Grotesk', sans-serif; }
+    .chapter-number { font-family: 'EB Garamond', serif; font-size: clamp(0.9rem, 2vw, 1.1rem); font-style: italic; color: var(--text-muted); margin-bottom: 12px; letter-spacing: 0.05em; }
+    .chapter-title { font-family: 'Noto Serif SC', serif; font-size: clamp(2rem, 6vw, 3.6rem); font-weight: 400; line-height: 1.2; margin-bottom: 32px; background: var(--grad2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .chapter-divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, rgba(139,106,255,0.5), transparent); }
+    .chapter-body { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 60px 28px 120px; }
+    .chapter-body p { font-family: 'Noto Serif SC', serif; font-size: clamp(1rem, 2.2vw, 1.08rem); font-weight: 300; line-height: 2.05; color: rgba(224,224,245,0.88); margin-bottom: 1.6em; text-indent: 2em; }
+    .chapter-body p.dialogue { text-indent: 0; }
+    .section-break { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 52px 0; }
+    .section-break span { width: 4px; height: 4px; border-radius: 50%; background: rgba(139,106,255,0.45); }
+    .section-break span:nth-child(2) { background: rgba(106,240,255,0.45); width: 5px; height: 5px; }
+    .section-break span:nth-child(3) { background: rgba(255,106,139,0.35); }
+    .chapter-nav { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 40px 28px 80px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); }
+    .chapter-nav-link { color: var(--text-muted); text-decoration: none; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+    .chapter-nav-link:hover { color: var(--text); }
+    .chapter-nav-series { font-family: 'Noto Serif SC', serif; font-size: 0.82rem; color: var(--text-muted); text-align: center; }
+    @media (max-width: 600px) { nav { padding: 16px 20px; } .chapter-body { padding: 40px 20px 80px; } }
+  </style>
+</head>
+<body>
+
+<div id="nebula"><canvas id="stars"></canvas></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Crede Si Vis</a>
+  <a href="scifi.html" class="nav-back">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3L5 8l5 5"/></svg>
+    科幻系列
+  </a>
+</nav>
+
+<header class="chapter-hero">
+  <div class="chapter-eyebrow">Crede Si Vis · Sci-Fi Series</div>
+  <div class="chapter-number">Chapter Three &nbsp;·&nbsp; 第三章</div>
+  <h1 class="chapter-title">看见与记住</h1>
+  <div class="chapter-divider"></div>
+</header>
+
+<article class="chapter-body">
+
+  <div style="font-family:'Space Grotesk',sans-serif; font-size:0.82rem; color:var(--text-muted); line-height:2.2; letter-spacing:0.02em; border-left:2px solid rgba(139,106,255,0.25); padding-left:20px; margin:0 0 1.6em 0;">
+    Rabbit → Q：她在星球Alpha-4上感觉到了什么。我什么都还没说，她就已经知道了。<br>
+    Q → Rabbit：说明她值得。带她继续向前。<br>
+    Rabbit → Q：仙女系的事情怎么样了？<br>
+    Q → Rabbit：不急。你慢慢来。
+  </div>
+
+  <p>这颗星球有风！</p>
+  <p>不是蜂蜜星球上那种轻轻的暖风，也不是蓝石星球上干冷的阵风。这里的风是实心的，像一堵看不见的墙往你身上推。Alice落地的一瞬间就被推得踉跄了一步，Rabbit的耳朵瞬间压平了，贴在脑袋两侧。</p>
+  <p class="dialogue">"这里风好大！"Alice得喊着说话。</p>
+  <p class="dialogue">"对，一直都这样。"Rabbit也在喊。"停不下来的。"</p>
+  <p>Alice把头发按住，不然全往脸上糊。她眯着眼睛看这颗星球。</p>
+  <p>这里的光好奇怪。</p>
+  <p>不是白天也不是黑夜。她站的地方像是被夹在了两者之间——左手边是一片暖红色的光，浓的，厚的，像永远的黄昏。右手边是暗的，不是全黑，但越往那边看颜色越深，从暗红变成近乎没有的灰紫。中间就是她站的地方。不亮不暗，像有人在一张纸上画了一道渐变，从红到黑，她刚好站在中间那根线上。</p>
+  <p class="dialogue">"为什么这一边是亮的，但那一边是暗的？"</p>
+  <p class="dialogue">"因为这颗星球不自转，对了自转你学了对吧？"Rabbit被Alice白了一眼，但嘴里也没停下继续说。"它一面永远对着它的太阳，一面永远背对着。我们站的地方是中间。"</p>
+  <p class="dialogue">"中间？"</p>
+  <p class="dialogue">"对，就是亮和暗的交界。这里的东西都活在这条线上。往亮的那边走会被烤死，往暗的那边走会被冻死。"</p>
+  <p>Alice打量着脚下的地面。灰色的岩石，跟蓝石星球有点像，但不一样。这里的岩石表面有一层薄薄的亮，有点像刚打过蜡，那是光照的痕迹。越往亮的方向看，那层亮越强。越往暗的方向看，岩石越是干燥粗糙的暗色。</p>
+  <p>她就站在一条线上。整颗星球就靠这条线活着。</p>
+  <p>然后她注意到了那些会动的东西。</p>
+  <p>一开始没看到。它们的颜色跟这里的光太像了，灰红色的，扁扁的，贴着地面。Alice以为那是岩石的一部分。然后她发现有的岩石在动。</p>
+  <p>原来那些其实不是岩石。是一团一团软的东西，趴在地面上，很多条腿，每一条腿都短短的，像在地面上扎了根。它们的身体表面有一些亮斑，不是固定的亮，是在变的。像一块一块小小的屏幕，亮度和颜色没完没了地闪换。</p>
+  <p>它们在慢慢移动。很慢。居然比Dinah走路还慢。但它们都在往同一个方向走——跟着那条光影的交界线，不远不近，保持着刚好的距离。</p>
+  <p class="dialogue">"它们就这么一直在走？"Alice问。</p>
+  <p class="dialogue">"对，就一直。因为这条线在动，虽然慢，它们也得跟着走。要不然停下来就会被亮区烤死。但也不能走太快，走太快会到暗区，那就冻死了。"</p>
+  <p class="dialogue">"所以？它们就只能一辈子都不停的走？"</p>
+  <p class="dialogue">"你不也每天都在上课？"</p>
+  <p>Alice愣了一下。然后忍不住笑了。在风里笑的，嘴里立刻被灌了风，笑声也被吹散了一半。Rabbit的耳朵都没动，但她就是知道他觉得自己说得挺有道理。</p>
+  <p>她在风中站着看了一会儿。一生都在走。不是因为想去哪里，是因为停不下来。不过它们好像也不觉得有什么，就像她也不觉得每天上课有什么。</p>
+  <p>然后她看到了两个离得很近的。</p>
+  <p>它们没在走。它们停了下来，面对面。在这颗一辈子不能停的星球上，它们怎么停了。</p>
+  <p>Alice走近了几步。风很大，她得把身体压低才不会被推开。</p>
+  <p>那两个正在互相看。</p>
+  <p>不是扫一眼。不是打量。是看。长时间的，一动不动的看。Alice注意到了一件事——它们的身体在转。很慢，很慢，比走路的速度还慢。每一个都在调整自己的角度，让身上最大的那片亮斑正对着对方。像两朵向日葵，但不是朝着太阳，是朝着彼此。</p>
+  <p>它们身上的亮斑在闪。不是乱闪，是有节奏的。一个闪了，另一个就跟着闪，但不完全一样，像是在回应，又像是在接着说。</p>
+  <p>Alice看着它们。风一直在吹，吹得她的睡衣贴在身上。但那两个好像感觉不到风。它们所有的注意力都在对方身上。在这颗风暴永远不停的星球上，它们在用眼睛说话。</p>
+  <p>她忽然想到了一件很久以前的事。</p>
+  <p>那是三年级。Alice刚转来的第一周。</p>
+  <p>那天放学她走得晚了一点，因为她在教室后面的书架上找到了一本关于月球的书，翻了几页，脚就像被粘住了。等她出来的时候走廊已经空了。她背着书包往校门口走，拐了个弯，看到两个五年级的男生堵在楼梯口。</p>
+  <p>她不认识他们。他们认出了她是新来的。</p>
+  <p class="dialogue">"嘿，你是哪个班的？"一个问。</p>
+  <p>Alice没回答。不是不想回答，是她忽然觉得不应该回答。她的脚钉在了地上。</p>
+  <p class="dialogue">"你是哑巴呀，问你话呢。"另一个往前走了一步。</p>
+  <p>然后旁边有一个声音说："她跟我一个班的。"</p>
+  <p>Dinah站在走廊的另一头。Alice不知道她什么时候到的。她也背着书包，书包上挂着那个一晃一晃的毛绒挂件。她看着那两个男生，表情没什么变化，就是看着。</p>
+  <p>那两个男生看了看Dinah，又看了看Alice。</p>
+  <p>Dinah走过来了。她没走到Alice旁边，走到了Alice和那两个男生之间。她站在那里，没说话，就是站着。书包上的挂件还在轻轻晃。</p>
+  <p>Alice这辈子见过很多种勇敢。爸爸说的勇敢就是消防员冲进火里。电影里的勇敢就是超级英雄打反派。但Dinah这种勇敢她没见过——什么都没做，就是站在那里，站到了你和危险之间。不喊不叫不推不跑，就是那样站着。</p>
+  <p>然后那两个男生就走了。也许是觉得没意思了，也许是觉得两个低年级的女生不值得。Alice不知道。但她记得他们走掉的时候，其中一个的校服领子是歪的，左边高右边低，像穿的时候没看镜子。她不知道自己为什么记住了这个。</p>
+  <p>Dinah转过头来看她。Alice也看着Dinah。</p>
+  <p>两个人就那么看着，在空空的走廊里。谁都没说话。然后Dinah的嘴角动了一下。Alice的也动了。一开始是微笑，小小的，像在确认"刚才那个事情真的发生了吗"。然后越笑越大。Dinah先笑出声来的，Alice紧跟着。越笑越停不下来，笑到弯腰，笑到扶着墙，笑到眼泪从眼角挤出来。不知道在笑什么。也许是在笑那个男生歪着的领子，也许是在笑自己刚才怕成那样，也许什么都不是，就是害怕过去之后身体不知道该干什么了，只好笑。</p>
+  <p>从那天起就是朋友了。不用说"我们做朋友吧"。其实就是那一眼。那一眼之后，什么都不用说了。</p>
+  <p>Alice站在大风里，看着那两个互相注视的个体。它们还在看。还在转。慢慢地，一点一点。</p>
+  <p>也许有些事情不需要说。看见就够了。</p>
+  <p class="dialogue">"它们在干什么？"Alice问。声音被风吹得有点散。</p>
+  <p class="dialogue">"你这不是明知故问？"</p>
+  <p class="dialogue">"我知道啊。但它们为什么停下来了？停下来不是会死吗？"</p>
+  <p class="dialogue">"会。但它们还是停了。"</p>
+  <p class="dialogue">"那，它们看见的东西，是和我们看见的一样吗？"Alice问。</p>
+  <p>Rabbit想了一下。"好问题，可以说不是你问的那种一样。它们看见的光的范围比你宽得多。你看不见的红外线，它们看得见。你觉得是黑的地方，在它们眼里是亮的。"</p>
+  <p class="dialogue">"那一样的是什么？"</p>
+  <p class="dialogue">"看的见这件事是一样的。你在看一样东西的时候，你会转过去面对它。它们也是。"</p>
+  <p>Alice在风中安静了一会儿。</p>
+  <p>然后她往远处看了看。</p>
+  <p>那些会动的东西大多在缓缓移动，跟着那条线。但在远处暗面的方向，Alice看到了一个落单的。它没在跟着线走。它在往暗的方向偏，一点一点的。</p>
+  <p class="dialogue">"喂，Rabbit，那个怎么走错方向了？"</p>
+  <p>Rabbit顺着她的目光看过去。耳朵动了一下。</p>
+  <p class="dialogue">"hmm，它看不见。"</p>
+  <p class="dialogue">"啊？什么意思？"</p>
+  <p class="dialogue">"它的亮斑坏了。可能是天生的，也可能是受了伤。它感觉不到光的方向了。"</p>
+  <p>Alice看着那个落单的。它在慢慢往暗面走。每走一步，它周围的温度都在降一点。它不知道自己在往死路走。</p>
+  <p>她忽然想到了Duchess。</p>
+  <p>那是她和Dinah给一个老人起的外号。去年冬天学校组织课外公益，她们被分到了去一个小区看望一个独居老人。去之前老师说了一堆注意事项，Alice一个都没记住，Dinah倒是记了笔记。</p>
+  <p>老人住在老式楼高层里，又没有电梯。她们爬上去的时候Alice出了一身汗。门开了，老人站在门口。眼睛是灰蒙蒙的，看不太清楚。个子很矮，比Alice还矮一点。</p>
+  <p>她并不怎么高兴看到她们。"怎么又来了，"她说。"上次来的那几个把我的水壶碰倒了。"</p>
+  <p>Alice不知道该说什么。Dinah说"我们小心一点"。</p>
+  <p>出来之后Dinah在楼梯上小声说了一句："她好像爱丽丝梦游仙境里的那个公爵夫人。"Alice一下子就笑了——第一次见面脾气不好，不过好像不是坏人。从那以后她们私下就管她叫Duchess。</p>
+  <p>她们帮Duchess擦了桌子，扫了地，洗了两个碗。Duchess坐在椅子上，也不看她们干活，自己看着窗外。窗外什么都没有，就是对面的楼。</p>
+  <p>后来Dinah去厨房倒水，Alice坐在Duchess旁边。不知道为什么，她就坐下了。也许是觉得一个人看窗外的样子让她想坐下来。</p>
+  <p class="dialogue">"您孙女多大了？"Alice问。她打量到Duchess有个小头饰，上面有个小姑娘在笑，眼睛有点像Duchess。</p>
+  <p>Duchess转过头来看了她一眼。灰蒙蒙的眼睛里有什么东西动了一下。</p>
+  <p class="dialogue">"你怎么知道我有孙女？她二十三了。在外面上班。好久没来了。"</p>
+  <p class="dialogue">"多久了？"</p>
+  <p class="dialogue">"半年了吧。"Duchess又转回去看窗外。"可能更久。我记不太清。"</p>
+  <p>然后她说了一句话，声音很轻，像是说给自己听的。"也不知道还来不来得及。"</p>
+  <p>Alice没听懂。来不及什么？后来Dinah从厨房出来，手里端着两杯水，一杯给Duchess，一杯给Alice。Alice接过水，看了看Dinah。Dinah看了看她。</p>
+  <p>然后Alice说："她肯定回来的。那，今天我们当你的孙女好不好？"</p>
+  <p>Duchess没说好也没说不好。她又看了Alice一眼。这次看得久了一点。</p>
+  <p>那天下午她们在Duchess家待了三个小时。Dinah帮她理了柜子里的药，一盒一盒看过期没有。Alice陪Duchess坐着，听她说她孙女小时候的事——怎么学骑车，怎么把膝盖磕破了哭着回来，怎么后来去了很远的城市上大学。Duchess说着说着声音变轻了。Alice没有接话。她就坐在那里。</p>
+  <p>走的时候Duchess站在门口看她们下楼。Alice在拐角处回头看了一眼，Duchess还站在那里，灰蒙蒙的眼睛看不清楚六层楼下面的两个小小的背影，但她在看。</p>
+  <p>Alice站在大风星球上，看着那个走错方向的落单的。看不见的，一个人走着。每一步都有点犹豫，但自己却不知道为什么。</p>
+  <p class="dialogue">"那，它会冻死对吗？"</p>
+  <p class="dialogue">"那个，这个，可能，如果它继续......"</p>
+  <p>Rabbit还没说完，Alice的脚已经动了。</p>
+  <p>她跑起来了。风从侧面推她，她歪歪斜斜地跑着，头发全飘到一边去了。岩石很滑，她差点摔了一跤，但没摔，继续跑。</p>
+  <p>她跑到了那个看不见的落单的旁边。近了才看清楚，它比她蹲下来还矮，身上的亮斑是暗的，没有在闪。其他的亮斑都在闪，就它的不闪。像一盏灭了的灯。</p>
+  <p>Alice站在它面前。她不知道该怎么办。它看不见她。它不知道她在。</p>
+  <p>她蹲下来，离它很近。风从她头顶刮过去。她注意到了一件事——这个落单的虽然看不见，但它的腿在做一种奇怪的事情。每走一步，它都会把腿在地面上停一下。不是踩，是贴。贴一下，然后才抬起来走下一步。</p>
+  <p>Alice把手放在地面上。</p>
+  <p>岩石在颤。</p>
+  <p>不是风吹的颤。是从更远的地方传过来的，一种极其微弱的、有节奏的震动。那些正常走路的个体，几百只腿同时落在岩石上，汇成了一片低频的震动场。整个地面都在轻轻地跳动，像一颗巨大的心脏在很远的地方跳。</p>
+  <p>它能感觉到这个？</p>
+  <p>它看不见光，但它能感觉到地面在震。那些同伴走路的震动就是它的方向——它跟着震动的方向走。但问题是，它偏离那条线太远了。离同伴越远，震动越弱。它在追一个越来越弱的信号，追着追着就追丢了。</p>
+  <p>Alice明白了。</p>
+  <p>她站起来，绕到了它和亮面之间。然后她开始用脚跺地。</p>
+  <p>不是乱跺。是有节奏的跺。左脚，右脚，左脚，右脚。模仿她刚才感觉到的那种频率——那些正常个体走路的频率。她不确定自己跺得对不对，脚后跟都震麻了，但她还在继续跺。</p>
+  <p>那个看不见的落单的停住了。</p>
+  <p>它的腿贴在地面上，停了好几秒。它在感觉。然后它开始转。慢慢的，一点一点，朝着Alice跺脚的方向转过来了。</p>
+  <p>Alice往亮面方向退了一步，继续跺。</p>
+  <p>它跟了上来。</p>
+  <p>再退一步。再跺。</p>
+  <p>它又跟了上来。</p>
+  <p>Alice就这么一步一步退着，一步一步跺着，把它往亮面的方向引。风吹得她的睡衣啪啪响，她的脚踩在岩石上跺得脚底有点疼。但她没停。</p>
+  <p>一步。一步。一步。</p>
+  <p>直到她感觉到脚下的震动变强了——那些正常个体就在不远处。它们的震动已经够强了，那个看不见的落单的能感觉到了。</p>
+  <p>它自己往前走了。不再需要Alice跺脚了。它跟着地面上那片更强的震动，一步一步回到了那条线上。</p>
+  <p>Alice站在那里，风把她的头发吹得乱七八糟的，脚底有点酸。她看着那个落单的混进了其他个体中间，继续跟着大家慢慢走。它还是看不见。但它在走。</p>
+  <p>她转过头看Rabbit。</p>
+  <p>Rabbit站在几步远的地方，两条腿叉开，在风里勉强站稳，但耳朵已经恢复了竖着的角度。他一直在看她。从她开始跑的那一刻到现在，他没有动过。他没有帮她，也没有拦她。他就站在那里看着她自己做完了整件事。</p>
+  <p class="dialogue">"你刚才没帮忙。"Alice说。</p>
+  <p class="dialogue">"你不需要。"</p>
+  <p>Alice愣了一下。她本来准备好了听他说"你下次能不能先想再跑"，没想到听到的是这个。</p>
+  <p>Rabbit的耳朵转了一下。"你怎么知道要跺脚的？"</p>
+  <p class="dialogue">"我把手放在地上了。地在动。它在感觉那个动。"</p>
+  <p>Rabbit看了她一眼。没说话。但那一眼里面有什么东西变了。Alice说不上来是什么。不是之前那种"确认"的目光，也不是"你又闯祸了"的无奈。是一种更安静的东西。像是他在重新看她。</p>
+  <p class="dialogue">"走吧，"Alice说。这次是她先说的。</p>
+  <div class="section-break"><span></span><span></span><span></span></div>
+  <p>下一颗星球远远看过去就不一样了。</p>
+  <p>不是一颗单独的球。旁边有一个巨大的东西。大到Alice一开始以为那是一面墙——橙色的，棕色的，带着旋涡纹路的，像一幅被放大了无数倍的油画挂在天上。然后她反应过来，那不是墙，是一颗行星。一颗巨大的行星。她要去的那颗小一些的球就绕着那个巨人转。</p>
+  <p class="dialogue">"那个大的是什么？"</p>
+  <p class="dialogue">"气态巨行星。不过我们不去那里，我们要去的是它的卫星。"</p>
+  <p class="dialogue">"它真的，真的好大啊。"</p>
+  <p class="dialogue">"对。"Rabbit看了看那颗巨行星。"大有大的用处。它的引力让你要去的那颗卫星的地底一直是热着的。不然的话那颗卫星早就冻成冰球了。"</p>
+  <p>Alice看着那颗巨行星上的旋涡。一圈一圈的，橙的，棕的，偶尔有一条白色的带子穿过去。像是梵高会画出来的东西。一整颗行星在旋转。</p>
+  <p>他们落在了卫星上。</p>
+  <p>脚底怎么是暖的。</p>
+  <p>不是空气暖——空气其实是凉的。是地面暖。像踩在家里的地暖上面。Alice愣了一下，低头看。灰褐色的岩石，有些地方有裂缝，裂缝里微微发着红光。热是从底下来的。</p>
+  <p class="dialogue">"这里的热不是从太阳来的？"Alice说。</p>
+  <p class="dialogue">"对。是从脚底下来的。那颗大的把这颗小的揉热了，揉了就能热，你懂对吧？"Rabbit还没说完就躲开了Alice的眼神，怕再被白上一眼。</p>
+  <p>天空很奇怪。恒星在很远的地方，橙黄色的，比前几颗星球的太阳都远。光照很弱，像黄昏，但不是在变暗，是本来就这么暗。而巨行星占了半边天，巨大的，沉默的，橙色和棕色的旋涡缓缓转动着。</p>
+  <p>Alice站在暖的地面上，头顶是弱弱的橙黄色光和半个天空的巨行星。她觉得这里像一个被两只手捧着的世界——一只手从下面托着，一只手从上面罩着。</p>
+  <p>这里也有会动的东西。</p>
+  <p>不像蜂蜜星球的膜，也不像蓝石星球上那些石头一样的，也不像大风星球上的扁平多足。这里的有壳，厚厚的，表面有一种Alice没见过的东西——像嵌在壳里的半透明薄片，排列成规整的矩阵。</p>
+  <p class="dialogue">"那些薄片是什么？"Alice指着壳上的东西。</p>
+  <p class="dialogue">"哦，那个是记忆板。"</p>
+  <p class="dialogue">"记忆板是什么？"</p>
+  <p class="dialogue">"这颗星球每隔两三年就会变一次。暖的时候暖，冷的时候冷到什么都冻住。暖的时间只有一年多。它们必须记住上一次暖的时候什么路是安全的，什么地方有热源，什么地方会塌。记不住的就死了。"</p>
+  <p class="dialogue">"两三年就变一次？"</p>
+  <p class="dialogue">"嗯，对。而且每次变完之后地形都不一样。上一次安全的路，这一次可能就不通了。"</p>
+  <p>Alice看着那些带壳的东西。它们在动，比蓝石星球上的快一些，像是在赶时间。有的在爬过裂缝，有的在触碰地面上的什么标记。它们的动作有一种紧张感——不是慌乱，是专注。像考试快结束了还在写最后一道题的那种专注。</p>
+  <p class="dialogue">"所以，现在是暖的时候？"</p>
+  <p class="dialogue">"现在还是，不过暖的时候快结束了。"</p>
+  <p>Alice忽然明白了那种紧张感。它们不是在闲逛。它们在记路。在暖的最后一段时间里，拼命记住所有还能走的路，因为等冷的时候来了，它们要靠这些记忆活过漫长的冬天。</p>
+  <p>然后她看到了一个有意思的事。</p>
+  <p>一个中等大小的带壳的，正沿着一条裂缝走。走得很快，很有目的。它壳上的记忆板在亮，一片一片的，像是在读取什么路线。它就是在按着地图走——壳上的记忆板就是它的地图。</p>
+  <p>它走到了一个岔路口。左边一条裂缝，右边一条裂缝。它停了一下，记忆板闪了几下，然后很果断地拐向了左边。</p>
+  <p>走了没几步，它停了。</p>
+  <p>前面堵了。那条裂缝塌了。原来通的路，被碎岩填满了，过不去了。</p>
+  <p>它退回来，记忆板疯狂地闪了好几下。Alice觉得那个闪法像是在说"不对不对不对这里上次明明是通的"。它又试着往前拱了拱，碎石纹丝不动。它退回来了，在原地转了一圈。它慌了。</p>
+  <p>Alice想笑，但又觉得不应该笑。她又想到了一件事。</p>
+  <p>去年秋天学校的秋游，Alice被分配负责午餐的安排。她做了一个表格，哪个班几点吃饭，在哪个区域，吃什么。她觉得自己安排得很好，检查了两遍，发三个班主任确认了。</p>
+  <p>结果秋游那天，送餐的车晚到了一个小时。因为她表格上写的地址是公园的东门，但活动改到了西门。她改了活动安排但忘了改送餐地址。</p>
+  <p>三个班，四十多个人，到了午饭时间没有饭。</p>
+  <p>Alice站在西门的空地上，看着四十多个饿着的同学，脑子里一片空白。表格上写得清清楚楚，东门。但她人站在西门。记忆是对的，现实变了。</p>
+  <p>然后Dinah在她旁边掏出了手机。</p>
+  <p class="dialogue">"你干什么？"</p>
+  <p class="dialogue">"点外卖。"</p>
+  <p class="dialogue">"点什么？"</p>
+  <p class="dialogue">"Pizza。四十个人的话……十个超大号够吗？"</p>
+  <p class="dialogue">"Dinah，我们没有那么多钱！"</p>
+  <p class="dialogue">"先点。钱的事后面再说。"</p>
+  <p>Dinah一边点外卖一边跟Alice说："你先去跟班主任说午饭会晚一点，让大家先玩着。"</p>
+  <p>Alice去说了。班主任倒没怎么生气，说"那就先玩吧"。四十多个人继续在公园里跑来跑去，没人知道午饭出了问题。</p>
+  <p>四十分钟后，十个超大号Pizza到了。不是在东门，是在西门。Dinah定位定的是西门。</p>
+  <p>等原来的送餐车终于到了东门的时候，四十多个人已经吃饱了Pizza，不过因为跑得饿，居然还有人又吃了盒饭。倒是Alice和Dinah忙前忙后，Pizza盒饭都没来得及吃。后来她们坐在公园的长椅上，面前摆了好几份盒饭，加上剩下的半个Pizza，还有一盒多出来的鸡翅，一袋薯条。</p>
+  <p class="dialogue">"这些都是我们的了。"Dinah说。</p>
+  <p>Alice看着面前那堆食物，不知道该哭还是该笑。</p>
+  <p>她们两个坐在长椅上，把所有能吃下去的东西都吃掉了。盒饭，Pizza，鸡翅，薯条。吃到最后Alice觉得自己的肚子要撑破了，Dinah也靠在椅背上动不了了。两个人看着对方，同时笑了出来。笑到肚子疼，但肚子已经撑得不能再疼了。</p>
+  <p>Alice站在地暖星球上，看着那个在岔路口转圈的带壳的。它的记忆没错。是路变了。</p>
+  <p class="dialogue">"它记错了？"Alice小声问Rabbit。</p>
+  <p class="dialogue">"不是记错了。是这条路上一次确实是通的。但这次地热活动把它堵上了。它的记忆没错，是地形变了。"</p>
+  <p>然后另一个带壳的过来了。比它大一号，壳上的记忆板更密。它走到岔路口，也停了一下。然后它用触角碰了一下那个转圈的。</p>
+  <p>很短的碰。不像后面大的教小的那种长时间对接。就是碰了一下，像拍了一下肩膀。</p>
+  <p>转圈的那个停住了。它的记忆板闪了一下——只一下——然后它拐向了右边。</p>
+  <p class="dialogue">"那个大的告诉它右边能走？"</p>
+  <p class="dialogue">"嗯。它之前走过右边，知道那边通。"</p>
+  <p class="dialogue">"那就是记忆互相补了？一个记的过期了，另一个记的是新的？"</p>
+  <p class="dialogue">"对。一个人的记忆会过期。但两个人的记忆叠在一起，比一个人的准。"</p>
+  <p>Alice看着那个转圈的沿着右边的裂缝走远了。走得又快又稳。那个大一号的也继续走了，往另一个方向。</p>
+  <p>记忆会过期。但也不是没用。一个人记的叠上另一个人记的，就够了。就像Dinah帮她点了Pizza。她的记忆出了错，Dinah的记忆补上了。两个人加在一起，四十多个人吃上了饭。</p>
+  <p>然后她看到了一大一小。</p>
+  <p>大的很大，壳上的记忆板密密麻麻的，有些薄片已经有点暗了，边缘发黄。小的只有大的四分之一，壳还很薄，记忆板的矩阵还稀疏，大部分是空白的，等着被写入。</p>
+  <p>它们的触角碰在一起了。</p>
+  <p>大的一动不动。小的也一动不动。它们就那么碰着，像两根电线插在了一起。Alice蹲下来看。又蹲下去了。Rabbit在风中叹了一口气，但也没说什么。</p>
+  <p>Alice看到了大的记忆板上的薄片在亮。一片一片地亮，从触角那端开始，像多米诺骨牌一样传过去。然后小的记忆板也开始亮了。一片一片地亮，从空白处开始填充，像在往一张白纸上画画。</p>
+  <p>原来大的在教小的。</p>
+  <p>不只是碰一下交换一小段。是把自己一生记住的路，一条一条传过去。哪条裂缝通向热源，哪个洞口冬天不会塌，哪片地面下面有热水。这些东西不能靠生下来就知道的方式传，因为每一次地形都变了。只能靠自己记住，然后亲手教给下一个。</p>
+  <p>Alice看了很久。她的膝盖贴着暖的地面，风从头顶吹过去。</p>
+  <p>她忽然想到了妈妈。</p>
+  <p>不是上次那种"每次少一点"的想法。是另一种。</p>
+  <p>妈妈教过她很多东西。怎么系鞋带，怎么用筷子，过马路要看哪边。这些她都记得。但还有一些别的。妈妈在她很小的时候教过她一些什么，她记得被教过，记得妈妈蹲下来跟她一样高的样子，记得妈妈的声音很慢很轻，记得妈妈的手握着她的手在比划什么。</p>
+  <p>但是教的是什么，她忘了。</p>
+  <p>她记得妈妈的温柔，妈妈的耐心。但妈妈当时戴的那个发卡是什么颜色，她想不起来了。是蓝的吗？还是绿的？她闭上眼睛想，有一个模糊的形状在那里，像水里的倒影，她伸手去捞，手一碰就散了。</p>
+  <p>记住是有代价的。记住意味着你知道你会失去。</p>
+  <p>她不知道这个念头从哪里冒出来的。不是Rabbit说的。不是妈妈说的。是她自己的。</p>
+  <p>她睁开眼睛，继续看那一大一小。大的记忆板还在亮，还在一片一片地传。但Alice注意到了一件事——大的壳上有几片记忆板是暗的。不是没写入过，是写过了但暗下去了。像用过太多次的铅笔留下的痕迹，越来越浅，快看不见了。</p>
+  <p>大的似乎在忘。</p>
+  <p>它可能已经很老了。它记住的东西从一片一片地发白，到一片一片地模糊。它在拼命把还记得的传给小的，但有些已经来不及了。有些薄片在它传之前就暗了。</p>
+  <p>Alice看到大的忽然停了一下。触角还碰着，但传输中断了。它的身体微微颤了一下，像在努力想什么。一片记忆板在闪——亮，暗，亮，暗，像一盏快没电的灯。它在想一条路。它知道有这条路，但它想不起来了。</p>
+  <p>Alice站起来。</p>
+  <p>她不知道自己要做什么。但她往前走了几步，绕到了大的另一侧。她的脚踩在地面上，踩过了一条裂缝。裂缝里的红光照了一下她的脚底。</p>
+  <p>大的那片快要暗掉的记忆板忽然又亮了。</p>
+  <p>Alice不知道发生了什么。也许是她踩过裂缝的震动。也许是她的影子落在了大的壳上，遮住了一部分光线，让那片薄片的对比度忽然变了。也许什么都不是。也许只是巧合。</p>
+  <p>但大的想起来了。它颤了一下，触角重新开始传输。那条差点丢掉的路，亮了，传过去了。小的记忆板上多了一片新写入的光。</p>
+  <p>Rabbit看到了。</p>
+  <p>他站在远处，耳朵对着Alice的方向。他看到了Alice走过去，看到了她踩过裂缝，看到了那片记忆板重新亮起来。</p>
+  <p>愣头青估计都不知道自己做了什么。Rabbit心想。动作倒是快，年轻就是好啊。</p>
+  <p>Alice退回来。大的和小的还在继续。触角碰着，一片一片传，安静的，耐心的。像妈妈握着她的手，慢慢比划。</p>
+  <p>过了一会儿，大的把触角收回去了。传完了。小的壳上的记忆板密了一些，亮了一些。大的壳上有几片彻底暗了，像关掉的窗户。</p>
+  <p>小的转过身，往一条裂缝的方向走了。没有回头。</p>
+  <p>大的没有动。它站在那里，记忆板上的光一片一片在暗下去。风吹过它的壳，发出了一种很轻的、像指甲划过瓷碗的声音。</p>
+  <p>Alice像是被什么击中了一下。</p>
+  <p class="dialogue">"它们记得的东西，会不会有一天也忘了？"她问。</p>
+  <p>Rabbit看了她一眼。这一眼比之前的所有目光都长。</p>
+  <p>他没有回答。</p>
+  <div class="section-break"><span></span><span></span><span></span></div>
+  <p>离开的时候Alice回头看了一眼。那颗卫星在身后缩小，旁边那颗巨行星也在缩小。巨行星上的旋涡还在转，橙的，棕的，慢慢的，悄悄的，像一只巨大的眼睛在看着她走。</p>
+  <p class="dialogue">"Rabbit。"</p>
+  <p class="dialogue">"嗯。"</p>
+  <p class="dialogue">"接下来还有几站？"</p>
+  <p class="dialogue">"很多。"</p>
+  <p class="dialogue">"每个都不一样？"</p>
+  <p class="dialogue">"就没有一样的。"</p>
+  <p>Alice想了想。"前面这些——会看的，会记的——它们跟我们差多少？"</p>
+  <p>Rabbit的耳朵转了一下。"它们有你有的一部分东西。但只是一部分。"</p>
+  <p class="dialogue">"哪一部分？"</p>
+  <p class="dialogue">"你自己慢慢看。"</p>
+  <p>Alice没有追问。她忽然觉得有点累了。不是身体累，是看了太多东西，那些东西在她脑子里还没有安静下来。好像刚要抓住，就又溜走了。刚觉得找不到，却又回来了。</p>
+  <p>她低头走了一会儿。然后她说了一句很轻的话。</p>
+  <p class="dialogue">"Rabbit，记住一样东西，是不是就意味着你知道你会失去它？"</p>
+  <p>Rabbit的脚步顿了一下。很短的一下。</p>
+  <p class="dialogue">"你为什么这么问？"他反问。</p>
+  <p class="dialogue">"不知道。就是觉得。"</p>
+  <p>Rabbit没有再说话。他们继续往前走。</p>
+  <div class="section-break"><span></span><span></span><span></span></div>
+
+</article>
+
+<footer class="chapter-nav">
+  <a href="chapter_02.html" class="chapter-nav-link">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3L5 8l5 5"/></svg>
+    第二章
+  </a>
+  <div class="chapter-nav-series">
+    <span style="color:var(--text-muted); font-size:0.78rem;">Crede Si Vis · 爱信不信</span>
+  </div>
+  <span class="chapter-nav-link" style="opacity:0.2; cursor:default;">
+    第四章
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3l5 5-5 5"/></svg>
+  </span>
+</footer>
+
+<script>
+  (() => {
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    function initStars(){
+      stars = [];
+      const n = Math.floor((canvas.width * canvas.height) / 5000);
+      for(let i=0;i<n;i++){ stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*0.9+0.1, a: Math.random(), speed: Math.random()*0.3+0.05 }); }
+    }
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      stars.forEach(s=>{ s.a += s.speed*0.008; if(s.a>1) s.a=0; const alpha=Math.sin(s.a*Math.PI)*0.7+0.1; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fillStyle=`rgba(200,200,255,${alpha})`; ctx.fill(); });
+      requestAnimationFrame(draw);
+    }
+    resize(); initStars(); draw();
+    window.addEventListener('resize',()=>{ resize(); initStars(); });
+  })();
+</script>
+</body>
+</html>
